@@ -1,0 +1,17 @@
+{
+    "name": "daankats/wap-2",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "Daan Kats",
+            "email": "d.d.kats@st.hanze.nl"
+        }
+    ],
+    
+    "require": {}
+}
+ 
