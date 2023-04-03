@@ -50,3 +50,9 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+
+# Ignore .idea folder
+/.idea
+
+# ignore .env file
+/.env
