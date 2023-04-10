@@ -1,17 +1,14 @@
 <?php
+/** @var $this \app\core\View */
+/** @var $model \app\models\ContactModel */
 
+$this->title = 'Contact';
 ?>
 
 <h1>Contact</h1>
 
-<form action="" method="post">
-    <div class="form-group">
-        <label for="subject">Subject</label>
-        <input type="text" name="subject" id="subject" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="body">Body</label>
-        <textarea name="body" id="body" class="form-control"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+<?php $form = \app\core\form\Form::begin('', 'post') ?>
+<?php echo $form->field($model, 'subject') ?>
+<?php echo $form->TextareaField($model, 'body') ?>
+<button type="submit" class="btn btn-primary">Submit</button>
+<?php \app\core\form\Form::end() ?>

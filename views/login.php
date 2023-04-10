@@ -1,17 +1,18 @@
 <?php
+/** @var $model \app\models\User
+ */
+
+use app\core\form\Form;
+
 
 ?>
 
-<h1>Contact</h1>
+<h1>Inloggen</h1>
 
-<form action="" method="post">
-    <div class="form-group">
-        <label for="subject">Subject</label>
-        <input type="text" name="subject" id="subject" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="body">Body</label>
-        <textarea name="body" id="body" class="form-control"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+<!-- create register form -->
+<?php $form = Form::begin('', 'post') ?>
+    <?php echo $form->field($model, 'email') ?>
+    <?php echo $form->field($model, 'password')->passwordField() ?>
+    <br>
+    <button type="submit" class="btn btn-primary">Inloggen</button>
+<?php Form::end() ?>

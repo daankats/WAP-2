@@ -40,4 +40,8 @@ class Request {
         }
         return $body;
     }
+
+    public function get($key) {
+        return $_GET[$key] ?? null;
+    }
 }

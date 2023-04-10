@@ -1,14 +1,17 @@
 <?php
 
-namespace app\core;
+namespace app\core\db;
 
+use app\core\Model;
+use app\core\App;
+use app\models\User;
+/**
+ * Summary of DbModel
+ */
 abstract class DbModel extends Model{
-    
-        abstract public static function tableName(): string;
-    
-        abstract public function attributes(): array;
-    
-        abstract public function primaryKey(): string;
+    abstract public static function tableName(): string;
+    abstract public function attributes(): array;
+    abstract public function primaryKey(): string;
     
         public function save()
         {
@@ -23,21 +26,34 @@ abstract class DbModel extends Model{
             return true;
         }
     
-        public function findOne($where)
+        /**
+         * Summary of findOne
+         * @param mixed $where
+         * @return bool|object
+         */
+        public static function findOne($where)
         {
             $tableName = static::tableName();
             $attributes = array_keys($where);
-            $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+            $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
             $statement = self::prepare("SELECT * FROM $tableName WHERE $sql");
             foreach ($where as $key => $item) {
                 $statement->bindValue(":$key", $item);
             }
             $statement->execute();
-            return $statement->fetchObject(static::class);
+            $record = $statement->fetchObject(static::class);
+            return $record !== false ? $record : null;
         }
+        
+
     
         public static function prepare($sql)
         {
             return App::$app->db->pdo->prepare($sql);
         }
+
+        public function beforeSave(){
+            return true;
+        }
+        
 }

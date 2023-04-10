@@ -24,6 +24,9 @@ use app\models\User;
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
       </ul>
 
       <?php if (App::$app->isGuest()): ?>
@@ -40,24 +43,25 @@ use app\models\User;
       <?php else: ?>
 
         <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-        <!-- <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/profile">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/profile">
             Profile
            </a>
-        </li> -->
+        </li>
         <?php if (App::$app->isAdmin()): ?>
             <li class="nav-item">
                 <a class="nav-link" href="/admin">Admin</a>
             </li>
         <?php endif; ?>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/logout"><?php 
+          <a class="nav-link active" aria-current="page" href="/logout"><?php 
     $displayName = '';
     if (App::$app->user) {
         $displayName = App::$app->user->displayName();
         echo $displayName;
     }
 ?>
+
         (logout)
       </a>
         </li>

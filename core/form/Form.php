@@ -4,6 +4,7 @@ namespace app\core\form;
 
 use app\core\Model;
 use app\core\form\Field;
+use app\core\form\TextareaField;
 
 
 class Form {
@@ -19,6 +20,10 @@ class Form {
     
         public function field(Model $model, $attribute) {
             return new Field($model, $attribute);
+        }
+
+        public function TextareaField(Model $model, $attribute) {
+            return new TextareaField($model, $attribute);
         }
     }
 

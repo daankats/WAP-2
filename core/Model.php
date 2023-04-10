@@ -38,7 +38,7 @@ abstract class Model {
     {
         $this->errors[$attribute][] = $message;
     }
-
+    
     public function addErrorForRule(string $attribute, string $rule, $params = [])
     {
         $message = $this->errorMessages()[$rule] ?? '';
@@ -92,6 +92,7 @@ abstract class Model {
                     $this->addErrorForRule($attribute, self::RULE_MAX, $rule);
                 }
                 if ($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']}) {
+                    $rule['match'] = $this->getLabel($rule['match']);
                     $this->addErrorForRule($attribute, self::RULE_MATCH, $rule);
                 }
                 if ($ruleName === self::RULE_UNIQUE) {
@@ -105,10 +106,16 @@ abstract class Model {
                     if ($record) {
                         $this->addErrorForRule($attribute, self::RULE_UNIQUE, ['field' => $this->getLabel($attribute)]);
                     }
+
                 }
+
             }
+
         }
         return empty($this->errors);
     }
+    
+
+
 
 }

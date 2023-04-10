@@ -1,8 +1,9 @@
 <?php
 
-namespace app\core;
+namespace app\core\db;
 use Exception;
 use PDO;
+use app\core\App;
 
 /**
  * Summary of Database
@@ -11,7 +12,7 @@ class Database{
     public PDO $pdo;
 
     private function customgetenv($key) {
-        $envFilePath = __DIR__ . '/../.env'; // Path to your .env file
+        $envFilePath = __DIR__ . '/../../.env'; // Path to your .env file
         $envFile = fopen($envFilePath, 'r');
     
         if (!$envFile) {
