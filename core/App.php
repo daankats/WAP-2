@@ -47,7 +47,7 @@ class App {
         try {
             echo $this->router->resolve();
         } catch (\Exception $e) {
-            $this->response->setStatusCode($e->getCode());
+            $this->response->setStatusCode((int) $e->getCode());
             echo $this->view->renderView('_error', [
                 'exception' => $e
             ]);
@@ -82,8 +82,22 @@ class App {
 
     public static function isAdmin(): bool
     {
-        return self::$app->user->role === 'beheerder';
+        $user = self::$app->user;
+        return $user && $user->role === 'beheerder';
     }
+
+    public static function isDocent(): bool
+    {
+        $user = self::$app->user;
+        return $user && $user->role === 'docent';
+    }
+
+    public static function isStudent(): bool
+    {
+        $user = self::$app->user;
+        return $user && $user->role === 'student';
+    }
+
 
 }
 

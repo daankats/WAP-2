@@ -33,11 +33,14 @@ abstract class BaseField {
     }
 
     private function getLabel(): string {
-        return $this->model->labels()[$this->attribute];
+        $labels = $this->model->labels();
+        return isset($labels[$this->attribute]) ? $labels[$this->attribute] : '';
     }
     
     private function getError(): string {
-        return $this->model->getFirstError($this->attribute);
+        $error = $this->model->getFirstError($this->attribute);
+        return $error ? '<span class="error-message">' . $error . '</span>' : '';
     }
+    
 
 }

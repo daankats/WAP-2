@@ -27,6 +27,7 @@ class Field extends BaseField{
     public const TYPE_PASSWORD = 'password';
     public const TYPE_NUMBER = 'number';
 
+
     /**
      * Summary of __construct
      * @param Model $model
@@ -61,5 +62,32 @@ class Field extends BaseField{
     public function numberField(): Field {
         $this->type = self::TYPE_NUMBER;
         return $this;
+    }
+    public function dropdownField($options) {
+        $html = sprintf('<select name="%s" class="form-control %s">', $this->attribute, $this->model->hasError($this->attribute) ? 'is-invalid' : '');
+        if ($options) {
+            foreach ($options as $key => $value) {
+                $html .= sprintf('<option value="%s">%s</option>', $key, $value);
+            }
+        }
+        $html .= '</select>';
+        return $html;
+    }
+    
+
+    public function dateField() {
+        return sprintf('<input type="date" name="%s" value="%s" class="form-control %s">',
+            $this->attribute,
+            $this->model->{$this->attribute},
+            $this->model->hasError($this->attribute) ? 'is-invalid' : ''
+        );
+    }
+
+    public function timeField() {
+        return sprintf('<input type="time" name="%s" value="%s" class="form-control %s">',
+            $this->attribute,
+            $this->model->{$this->attribute},
+            $this->model->hasError($this->attribute) ? 'is-invalid' : ''
+        );
     }
 }

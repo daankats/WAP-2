@@ -1,11 +1,22 @@
-<h1>Users</h1>
-<table>
+<?php
+
+$this->title = 'Admin dashboard';
+?>
+
+<h1>Gebruikers</h1>
+
+    <div class="row p-3">
+        <div class="col-12">
+        <a href="/register" class="btn btn-primary">Nieuwe gebruiker toevoegen</a>
+    </div>
+    </div>
+<table class="table">
     <thead>
         <tr>
             <th>ID</th>
             <th>Email</th>
-            <th>Role</th>
-            <th>Action</th>
+            <th>Rol</th>
+            <th>Actie</th>
         </tr>
     </thead>
     <tbody>
@@ -14,11 +25,11 @@
                 <td><?= $user->id ?></td>
                 <td><?= $user->email ?></td>
                 <td><?= $user->role ?></td>
-                <td><a href="<?= '/admin/edit?id=' . $user->id ?>">Edit</a></td>
-                <form method="post" action="/admin/delete">
+                <td><button class="btn btn-primary"><a style="color:white;" href="<?= '/admin/edit?id=' . $user->id ?>">Wijzigen</a></button></td>
+                <td><form method="post" action="/admin/delete">
     <input type="hidden" name="id" value="<?= $user->id ?>">
-    <button type="submit">Delete</button>
-</form>
+    <button class="btn btn-danger" type="submit">Verwijderen</button>
+</form></td>
 
             </tr>
         <?php endforeach; ?>

@@ -17,7 +17,6 @@ class User extends UserModel
     public const STATUS_DELETED = 'deleted';
     public int $id = 0;
     public string $created_at = '';
-
     public string $firstName = '';
     public string $lastName = '';
     public string $email = '';
@@ -39,7 +38,7 @@ class User extends UserModel
      */
     public function attributes(): array
     {
-        return ['firstName', 'lastName', 'email', 'status', 'password'];
+        return ['firstName', 'lastName', 'email', 'status', 'password', 'role'];
     }
 
     /**
@@ -130,11 +129,16 @@ class User extends UserModel
      * @return bool
      */
     public function register(): bool
-    {
+{
+    if (App::isAdmin()) {
         $this->status = self::STATUS_ACTIVE;
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
         return $this->save();
+    } else {
+        App::$app->session->setFlash('error', 'You are not authorized to register new users.');
+        return false;
     }
+}
 
     /**
      * Summary of getDisplayName
@@ -179,6 +183,11 @@ class User extends UserModel
         $this->email = $data['email'] ?? $this->email;
         $this->password = $data['password'] ?? $this->password;
         $this->role = $data['role'] ?? $this->role;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->firstName . ' ' . $this->lastName;
     }
 
 

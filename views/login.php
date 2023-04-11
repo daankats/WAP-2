@@ -3,8 +3,6 @@
  */
 
 use app\core\form\Form;
-
-
 ?>
 
 <h1>Inloggen</h1>

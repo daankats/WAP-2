@@ -4,18 +4,18 @@ namespace app\core;
 class View{
     public string $title = '';
 
-     
-
+    
     public function renderView($view, $params = []) {
         $viewContent = $this->renderOnlyView($view, $params);
         $layoutContent = $this->layoutContent();
-        return str_replace('{{content}}', $viewContent, $layoutContent);
+        return str_replace('{{content}}', "<div class='col p-5'>$viewContent</div>", $layoutContent);
     }
-
+    
     public function renderContent($viewContent) {
         $layoutContent = $this->layoutContent();
-        return str_replace('{{content}}', $viewContent, $layoutContent);
+        return str_replace('{{content}}', "<div class='col p-5'>$viewContent</div>", $layoutContent);
     }
+    
 
     protected function layoutContent() {
         $layout = App::$app->layout;

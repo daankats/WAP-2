@@ -22,7 +22,9 @@ abstract class DbModel extends Model{
             foreach ($attributes as $attribute) {
                 $statement->bindValue(":$attribute", $this->{$attribute});
             }
-            $statement->execute();
+            if (!$statement->execute()) {
+                throw new \Exception("Failed to save record to the database.");
+            }
             return true;
         }
     

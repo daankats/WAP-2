@@ -13,6 +13,7 @@ class AdminController extends Controller
 {   
     public function __construct()
     {
+        $this->setLayout('main');
         $adminMiddleware = new AdminMiddleware(['index']);
         $adminMiddleware->execute();
     }
@@ -58,7 +59,7 @@ class AdminController extends Controller
             }
         }
     
-        $this->setLayout('admin');
+        $this->setLayout('main');
         return $this->render('admin/edit', [
             'user' => $user
         ]);

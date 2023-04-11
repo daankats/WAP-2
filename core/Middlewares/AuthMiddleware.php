@@ -11,12 +11,22 @@ class AuthMiddleware extends BaseMiddleware {
         $this->actions = $actions;
     }
 
-    public function execute() {
-        if (App::isGuest()) {
-            $controller = App::$app->controller;
-            if (!$controller || (empty($this->actions) || in_array($controller->action, $this->actions))) {
-                throw new ForbiddenException();
-            }
+    public function execute()
+{
+    $controller = App::$app->controller;
+    if ($controller->action === 'logout') {
+        return;
+    }
+    
+    if (App::isGuest()) {
+        if (empty($this->actions) || in_array($controller->action, $this->actions)) {
+            throw new ForbiddenException();
+        }
+    } else {
+        if (!App::isAdmin()) {
+            throw new ForbiddenException();
         }
     }
+}
+
 }

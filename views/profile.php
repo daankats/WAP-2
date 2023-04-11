@@ -3,16 +3,12 @@
 $this->title = 'Profile';
 ?>
 
-<h1>profile</h1>
+<h1>Mijn profiel</h1>
 
-<form action="" method="post">
-    <div class="form-group">
-        <label for="subject">Subject</label>
-        <input type="text" name="subject" id="subject" class="form-control">
+<div class="row">
+    <div class="col-md-6">
+        <p><strong>Name:</strong> <?php echo $user->firstName . ' ' . $user->lastName ?></p>
+        <p><strong>Email:</strong> <?php echo $user->email ?></p>
+        <p><strong>Role:</strong> <?php echo $user->role ?></p>
     </div>
-    <div class="form-group">
-        <label for="body">Body</label>
-        <textarea name="body" id="body" class="form-control"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+</div>
