@@ -25,8 +25,8 @@ $this->title = 'Admin dashboard';
                 <td><?= $user->id ?></td>
                 <td><?= $user->email ?></td>
                 <td><?= $user->role ?></td>
-                <td><button class="btn btn-primary"><a style="color:white;" href="<?= '/admin/edit?id=' . $user->id ?>">Wijzigen</a></button></td>
-                <td><form method="post" action="/admin/delete">
+                <td><button class="btn btn-primary"><a style="color:white;" href="<?= '/admin/edit?id=' . $user->id ?>">Wijzigen</a></button>
+                <form method="post" action="/admin/delete">
     <input type="hidden" name="id" value="<?= $user->id ?>">
     <button class="btn btn-danger" type="submit">Verwijderen</button>
 </form></td>

@@ -1,7 +1,7 @@
 <?php
 use app\core\App;
 
-$this->title = 'Courses';
+$this->title = 'Cursussen';
 
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
@@ -14,7 +14,7 @@ if (isset($_SESSION['error'])) {
 }
 ?>
 
-<h1>Courses</h1>
+<h1><?= $this->title ?> </h1>
 <?php if (App::isDocent() || App::isAdmin()): ?>
 <p><a href="/courses/create" class="btn btn-primary">Voeg cursus toe</a></p>
 <?php endif ?>
@@ -37,7 +37,7 @@ if (isset($_SESSION['error'])) {
         <td><?php echo date('d-m-Y H:i:s', strtotime($course->created_at)) ?></td>
         <td>
             <?php if (App::isDocent() || App::isAdmin()): ?>
-                <a href="/courses/update?id=<?php echo $course->id ?>" class="btn btn-sm btn-primary">Wijzigen</a>
+                <a href="/courses/edit?id=<?php echo $course->id ?>" class="btn btn-sm btn-primary">Wijzigen</a>
                 <form action="/courses/delete" method="post" style="display:inline">
                     <input type="hidden" name="id" value="<?php echo $course->id ?>">
                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this course?')">Verwijderen</button>

@@ -73,33 +73,27 @@ class CourseController extends Controller
         }
     }
     
-
-    public function edit(Request $request, Response $response)
+    public function update(Request $request, Response $response)
     {
-        $course = CourseModel::findOne(['id' => $request->getBody()['id']]);
-        $user = User::findOne(['id' => App::$app->user->id]);
-        if (App::isDocent() || App::isAdmin()) {
-            if ($course->loadData($request->getBody())) {
-                // Set the updated_by and updated_at properties
-                $course->updated_by = $user->id;
-                $course->updated_at = date('Y-m-d H:i:s');
-                if ($course->validate() && $course->save()) {
-                    // Redirect to the course index page upon successful update
-                    header('Location: /courses');
-                    exit;
-                }
-                return $this->render('/courses/edit', [
-                    'model' => $course,
-                ]);
+        $id = $_GET['id'];
+        $course = CourseModel::findOne(['id' => $id]);
+    
+        if ($course !== null && $request->isPost()) {
+            $course->loadData($_POST);
+            if ($course->validate() && $course->update()) {
+                $response->redirect('/courses');
+                return;
+            } else {
+                $exception = new \Exception("Failed to update the course.");
+                return $this->render('/_error', [], $exception);
             }
-            return $this->render('/courses/edit', [
-                'model' => $course,
-            ]);
         }
         return $this->render('/courses/edit', [
             'model' => $course,
         ]);
     }
+    
+    
 
     public function delete(Request $request, Response $response)
     {

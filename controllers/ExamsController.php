@@ -62,27 +62,34 @@ class ExamsController extends Controller {
         $response->redirect('/exams');
     }
     
-    
-    public function edit(Request $request, Response $response, $id) {
+    public function update(Request $request, Response $response)
+    {
+        $id = $_GET['id'];
         $exam = ExamsModel::findOne(['id' => $id]);
+
+        if ($exam !== null && $request->isPost()) {
+            $exam->loadData($_POST);
+            if ($exam->validate() && $exam->update()) {
+                
+                $response->redirect('/exams');
+                return;
+            } 
+        }
+        return $this->render('/exams/edit', [
+            'model' => $exam,
+        ]);
+    }
+
+    public function delete(Request $request, Response $response)
+    {
+        $exam = ExamsModel::findOne(['id' => $request->getBody()['id']]);
         if (!$exam) {
             $response->setStatusCode(404);
             return $this->render('/error/404');
         }
-        $user = User::findOne(['id' => App::$app->user->id]);
         if (App::isDocent() || App::isAdmin()) {
-            if ($request->isPost()) {
-                $exam->loadData($request->getBody());
-                $exam->created_by = $user->id;
-                $exam->created_at = date('Y-m-d H:i:s');
-                if ($exam->validate() && $exam->save()) {
-                    $response->redirect('/exams');
-                    exit;
-                }
-            }
-            return $this->render('/exams/update', [
-                'model' => $exam,
-            ]);
+            $exam->delete();
+            $response->redirect('/exams');
         }
         $response->redirect('/exams');
     }

@@ -13,6 +13,8 @@ class CourseModel extends DbModel
     public string $code = '';
     public string $created_by = '';
     public string $created_at = '';
+    public string $updated_by = '';
+    public string $updated_at = '';
 
     public function primaryKey(): string
     {
@@ -30,8 +32,8 @@ class CourseModel extends DbModel
 
     public function attributes(): array
     {
-        return ['name', 'code', 'created_by', 'created_at'];
-    }
+        return ['name', 'code', 'created_by', 'created_at', 'updated_by', 'updated_at'];
+    }    
 
     public function rules(): array
     {
@@ -58,6 +60,25 @@ class CourseModel extends DbModel
         $this->created_at = date('Y-m-d H:i:s');
         return parent::save();
     }
+
+    public function update()
+    {
+        $this->updated_by = App::$app->user->id;
+        $this->updated_at = date('Y-m-d H:i:s');
+        return parent::update();
+    }
+    
+       
+
+    public function delete()
+    {
+        $db = App::$app->db;
+        $SQL = "DELETE FROM courses WHERE id = :id";
+        $stmt = $db->pdo->prepare($SQL);
+        $stmt->bindValue(':id', $this->id);
+        return $stmt->execute();
+    }
+
 
     public static function findAllObjects(): array
     {

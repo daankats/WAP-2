@@ -23,10 +23,12 @@ class Controller
         $this->layout = $layout;
     }
 
-    public function render($view, $params = [])
+    public function render($view, $params = [], $exception = null)
     {
+        $params['exception'] = $exception;
         return App::$app->view->renderView($view, $params);
     }
+    
 
     public function registerMiddleware(BaseMiddleware $middleware)
     {

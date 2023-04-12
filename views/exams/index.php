@@ -52,11 +52,12 @@ $this->title = 'Exams';
                             <p>Je moet ingeschreven zijn voor de bijbehorende cursus om te kunnen inschrijven voor dit examen.</p>
                         <?php endif; ?>
                     <?php elseif (App::isDocent() || App::isAdmin()) : ?>
-                        <a href="/exams/<?= $exam->id ?>/edit" class="btn btn-sm btn-primary">Bewerk</a>
-                        <form action="/exams/<?= $exam->id ?>" method="post" class="d-inline">
-                            <input type="hidden" name="_method" value="delete">
-                            <button type="submit" class="btn btn-sm btn-danger">Verwijder</button>
-                        </form>
+                     <!-- add button to edit -->
+                     <a href="/exams/edit?id=<?php echo $exam->id ?>" class="btn btn-sm btn-primary">Wijzigen</a>
+                <form action="/exams/delete" method="post" style="display:inline">
+                    <input type="hidden" name="id" value="<?php echo $exam->id ?>">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this course?')">Verwijderen</button>
+                </form>
                     <?php endif; ?>
                 </td>
 

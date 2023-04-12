@@ -18,6 +18,8 @@ class ExamsModel extends DbModel
     public string $exam_duration = '';
     public string $start_time = '';
     public int $duration = 0; 
+    public string $updated_at = '';
+    public int $updated_by = 0;
     
     public function primaryKey(): string
     {
@@ -31,7 +33,7 @@ class ExamsModel extends DbModel
 
     public function attributes(): array
     {
-        return ['name', 'course_id', 'created_by', 'created_at', 'exam_date', 'exam_time', 'exam_place', 'exam_duration'];
+        return ['name', 'course_id', 'created_by', 'created_at', 'exam_date', 'exam_time', 'exam_place', 'exam_duration', 'updated_at', 'updated_by'];
     }
 
     public function rules(): array
@@ -145,6 +147,22 @@ class ExamsModel extends DbModel
         $statement->execute();
         $row = $statement->fetchObject();
         return $row !== false;
+    }
+    
+    public function update()
+    {
+        $this->updated_by = App::$app->user->id;
+        $this->updated_at = date('Y-m-d H:i:s');
+        return parent::update();
+    }
+
+    public function delete()
+    {
+        $db = App::$app->db;
+        $SQL = "DELETE FROM exams WHERE id = :id";
+        $stmt = $db->pdo->prepare($SQL);
+        $stmt->bindValue(':id', $this->id);
+        return $stmt->execute();
     }
     
     

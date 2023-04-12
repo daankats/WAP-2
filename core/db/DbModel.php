@@ -27,7 +27,31 @@ abstract class DbModel extends Model{
             }
             return true;
         }
-    
+
+        public function update()
+        {
+            $tableName = $this->tableName();
+            $primaryKey = $this->primaryKey();
+            $attributes = $this->attributes();
+            $params = array_map(fn($attr) => "$attr = :$attr", $attributes);
+            $params = array_filter($params, function($param) {
+                return !str_contains($param, 'created_at') && !str_contains($param, 'created_by');
+            }); // exclude created_at and created_by fields from the update
+            $statement = self::prepare("UPDATE $tableName SET ".implode(',', $params)." WHERE $primaryKey = :id");
+            foreach ($attributes as $attribute) {
+                if (!str_contains($attribute, 'created_at') && !str_contains($attribute, 'created_by')) {
+                    $statement->bindValue(":$attribute", $this->{$attribute});
+                }
+            }
+            $statement->bindValue(":$primaryKey", $this->{$primaryKey});
+            if (!$statement->execute()) {
+                throw new \Exception("Failed to update record to the database.");
+            }
+            return true;
+        }
+
+        
+        
         /**
          * Summary of findOne
          * @param mixed $where
