@@ -20,6 +20,7 @@ class ExamsModel extends DbModel
     public int $duration = 0; 
     public string $updated_at = '';
     public int $updated_by = 0;
+    public $user_id;
     
     public function primaryKey(): string
     {
@@ -63,22 +64,13 @@ class ExamsModel extends DbModel
         ];
     }
 
-    public function save()
-    {
-        $this->created_by = App::$app->user->id;
-        $this->created_at = date('Y-m-d H:i:s');
-        $this->exam_date = date('Y-m-d', strtotime($this->exam_date));
-        $this->exam_time = date('H:i:s', strtotime($this->exam_time));
-        $this->exam_duration = date('H:i:s', strtotime($this->exam_duration));
-        return parent::save();
-    }
-
     public static function findAllObjects()
     {
         $statement = self::prepare("SELECT * FROM " . static::tableName());
         $statement->execute();
         return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
+
 
     public function getCourses()
     {
@@ -95,31 +87,29 @@ class ExamsModel extends DbModel
         $course = CourseModel::findOne(['id' => $this->course_id]);
         return $course->name;
     }    
-
-    public function isRegistered(): bool
-    {
-        $db = App::$app->db;
-        $sql = "SELECT COUNT(*) FROM registrations WHERE student_id = :student_id AND exam_id = :exam_id";
-        $statement = $db->pdo->prepare($sql);
-        $statement->bindValue(':student_id', App::$app->user->id);
-        $statement->bindValue(':exam_id', $this->id);
-        $statement->execute();
-        
-        return $statement->fetchColumn() > 0;
-    }
     
-
-    public function register()
+    public function beforeSave()
     {
-        $db = App::$app->db;
-        $sql = "INSERT INTO registrations (exam_id, student_id, created_at) VALUES (:exam_id, :student_id, :created_at)";
-        $statement = $db->pdo->prepare($sql);
-        $statement->bindValue(':exam_id', $this->id);
-        $statement->bindValue(':student_id', App::$app->user->id);
-        $statement->bindValue(':created_at', date('Y-m-d H:i:s'));
-        $statement->execute();
+        if (!parent::beforeSave()) {
+            return false;
+        }
+
+        // Set the created_at and updated_at fields
+        $this->created_at = date('Y-m-d H:i:s');
+        $this->updated_at = date('Y-m-d H:i:s');
+
+        return true;
     }
-    
+
+    public function save()
+    {
+        $this->created_by = App::$app->user->id;
+        $this->created_at = date('Y-m-d H:i:s');
+        $this->exam_date = date('Y-m-d', strtotime($this->exam_date));
+        $this->exam_time = date('H:i:s', strtotime($this->exam_time));
+        $this->exam_duration = date('H:i:s', strtotime($this->exam_duration));
+        return parent::save();
+    }
 
     public function getCreator(): ?string
     {
@@ -137,13 +127,13 @@ class ExamsModel extends DbModel
         return $row->firstname . ' ' . $row->lastname;
     }
     
-    public function isEnrollable()
+    public function isEnrolled($course_id)
     {
         $db = App::$app->db;
         $sql = "SELECT * FROM enrollment WHERE student_id = :student_id AND course_id = :course_id";
         $statement = $db->pdo->prepare($sql);
         $statement->bindValue(':student_id', App::$app->user->id);
-        $statement->bindValue(':course_id', $this->course_id);
+        $statement->bindValue(':course_id', $course_id);
         $statement->execute();
         $row = $statement->fetchObject();
         return $row !== false;

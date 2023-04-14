@@ -8,6 +8,8 @@ use app\controllers\AdminController;
 use app\controllers\CourseController;
 use app\controllers\ProfileController;
 use app\controllers\ExamsController;
+use app\controllers\GradesController;
+use app\controllers\ProgressController;
 
 use app\core\App;
 
@@ -16,8 +18,6 @@ $app = new App(dirname(__DIR__));
 
 // SITE
 $app->router->get('/', [SiteController::class, 'home']);
-$app->router->get('/contact', [SiteController::class, 'contact']);
-$app->router->post('/contact', [SiteController::class, 'contact']);
 
 // AUTH
 $app->router->get('/login', [AuthController::class, 'login']);
@@ -39,8 +39,8 @@ $app->router->get('/courses/create', [CourseController::class, 'create']);
 $app->router->post('/courses/create', [CourseController::class, 'create']);
 $app->router->get('/courses/enroll', [CourseController::class, 'enroll']);
 $app->router->post('/courses/enroll', [CourseController::class, 'enroll']);
-$app->router->get('/courses/leave', [CourseController::class, 'leave']);
-$app->router->post('/courses/leave', [CourseController::class, 'leave']);
+$app->router->get('/courses/leave', [CourseController::class, 'unenroll']);
+$app->router->post('/courses/leave', [CourseController::class, 'unenroll']);
 $app->router->get('/courses/edit', [CourseController::class, 'update']);
 $app->router->post('/courses/edit', [CourseController::class, 'update']);
 $app->router->get('/courses/delete', [CourseController::class, 'delete']);
@@ -55,9 +55,20 @@ $app->router->post('/exams/edit', [ExamsController::class, 'update']);
 $app->router->get('/exams/delete', [ExamsController::class, 'delete']);
 $app->router->post('/exams/delete', [ExamsController::class, 'delete']);
 
-// REGISTER EXAM
-$app->router->get('/registerexam', [ExamsController::class, 'registerexam']);
-$app->router->post('/registerexam', [ExamsController::class, 'registerexam']);
+// REGISTER EXAM ADN GRADES
+$app->router->get('/exams/registerexam', [ExamsController::class, 'registerExam']);
+$app->router->post('/exams/registerexam', [ExamsController::class, 'registerExam']);
+$app->router->get('/exams/unregisterexam', [ExamsController::class, 'unregisterExam']);
+$app->router->post('/exams/unregisterexam', [ExamsController::class, 'unregisterExam']);
+$app->router->get('/exams/addgrades', [ExamsController::class, 'addGrades']);
+$app->router->post('/exams/addgrades', [ExamsController::class, 'addGrades']);
+$app->router->get('/exams/updategrade', [ExamsController::class, 'updateGrade']);
+$app->router->post('/exams/updategrade', [ExamsController::class, 'updateGrade']);
+
+
+// MY PROGRESS
+$app->router->get('/myprogress', [ProgressController::class, 'myProgress']);
+
 
 
 

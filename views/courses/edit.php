@@ -22,6 +22,7 @@ if (!$model) {
     exit;
 }
 
+
 $form = Form::begin('', 'post');
 ?>
 

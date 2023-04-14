@@ -1,4 +1,4 @@
-<h1>Edit User</h1>
+<h1>Gebruiker wijzigen</h1>
 <form method="post">
     <div>
         <label for="email">Email</label>

@@ -2,7 +2,6 @@
 /** @var $model \app\models\User
  */
 
-use app\core\form\Form;
 use app\core\App;
 
 $session = App::$app->session;
@@ -19,23 +18,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <h1>Nieuwe gebruiker aanmaken</h1>
-
 <!-- create register form -->
-<!-- create register form -->
-<?php $form = Form::begin('', 'post') ?>
-    <?php echo $form->field($model, 'firstName') ?>
-    <?php echo $form->field($model, 'lastName') ?>
-    <?php echo $form->field($model, 'email') ?>
-    <?php echo $form->field($model, 'password')->passwordField() ?>
-    <?php echo $form->field($model, 'confirmPassword')->passwordField() ?>
-    <?php echo $form->field($model, 'role')->dropdownField([
-        'student' => 'Student',
-        'docent' => 'Docent',
-        'beheerder' => 'Beheerder'
-    ]) ?>
+<form method="POST">
+    <div class="form-group">
+        <label for="firstName">Voornaam</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" value="<?php echo htmlspecialchars($model->firstName) ?>" required>
+    </div>
+    <div class="form-group">
+        <label for="lastName">Achternaam</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" value="<?php echo htmlspecialchars($model->lastName) ?>" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Emailadres</label>
+        <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($model->email) ?>" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Wachtwoord</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <div class="form-group">
+        <label for="confirmPassword">Wachtwoord bevestigen</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+    </div>
+    <div class="form-group">
+        <label for="role">Rol</label>
+        <select class="form-control" id="role" name="role">
+            <option value="student" <?php echo $model->role === 'student' ? 'selected' : '' ?>>Student</option>
+            <option value="docent" <?php echo $model->role === 'docent' ? 'selected' : '' ?>>Docent</option>
+            <option value="beheerder" <?php echo $model->role === 'beheerder' ? 'selected' : '' ?>>Beheerder</option>
+        </select>
+    </div>
     <br>
     <button type="submit" class="btn btn-primary">Aanmaken</button>
-<?php Form::end() ?>
+</form>
+
 

@@ -2,7 +2,7 @@
 class w0008_add_exam_duration{
     public function up(){
         $db = \app\core\App::$app->db;
-        $SQL = "ALTER TABLE exams ADD exam_duration DATE NOT NULL;";
+        $SQL = "ALTER TABLE exams ADD exam_duration TIME NOT NULL;";
         $db->pdo->exec($SQL);
     }
 

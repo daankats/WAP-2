@@ -15,7 +15,7 @@ class CourseController extends Controller
 {
     public function __construct()
     {
-        $this->registerMiddleware(new CourseMiddleware(['create', 'edit', 'delete']));
+        $this->registerMiddleware(new CourseMiddleware(['create', 'store', 'edit', 'update', 'delete']));
     }
 
     public function index()
@@ -111,19 +111,41 @@ class CourseController extends Controller
     }
     
     public function enroll(Request $request, Response $response)
-{
-    $courseId = $request->getBody()['course_id'];
-    $enrollment = new EnrollmentModel();
-    $enrollment->student_id = App::$app->user->id;
-    $enrollment->course_id = $courseId;
-
-    if ($enrollment->save()) {
-        // Redirect to the course index page upon successful enrollment
-        $response->redirect('/courses');
-    } else {
-        // Handle enrollment failure
-        $response->setStatusCode(500);
+    {
+        $courseId = $request->getBody()['course_id'];
+        $enrollment = new EnrollmentModel();
+        $enrollment->student_id = App::$app->user->id;
+        $enrollment->course_id = $courseId;
+    
+        if ($enrollment->save()) {
+            // Set a success flash message
+            App::$app->session->setFlash('success', 'You have successfully enrolled in the course!');
+            // Redirect to the course index page upon successful enrollment
+            $response->redirect('/courses');
+        } else {
+            // Handle enrollment failure
+            $response->setStatusCode(500);
+        }
     }
-}
+    
+    
+    public function unenroll(Request $request, Response $response)
+    {
+        $courseId = $request->getBody()['course_id'];
+        $enrollment = EnrollmentModel::findOne(['course_id' => $courseId, 'student_id' => App::$app->user->id]);
+    
+        if ($enrollment->delete()) {
+            // Set a success flash message
+            App::$app->session->setFlash('success', 'You have successfully unenrolled from the course!');
+            // Redirect to the course index page upon successful unenrollment
+            $response->redirect('/courses');
+        } else {
+            // Handle unenrollment failure
+            $response->setStatusCode(500);
+        }
+    
+    }
+    
+    
 
 }

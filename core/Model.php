@@ -16,8 +16,11 @@ abstract class Model {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
                 $this->{$key} = $value;
+            }else {
+                echo "Property {$key} does not exist in the model";
             }
         }
+        return $this;
     }
     
     abstract public function rules(): array;
@@ -105,7 +108,7 @@ abstract class Model {
         return empty($this->errors);
     }
     
-    private function addError(string $attribute, string $rule, $params = []) {
+    public function addError(string $attribute, string $rule, $params = []) {
         $message = $this->errorMessages()[$rule] ?? '';
         foreach ($params as $key => $value) {
             $message = str_replace("{{$key}}", $value, $message);

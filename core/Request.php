@@ -44,4 +44,8 @@ class Request {
     public function get($key) {
         return $_GET[$key] ?? null;
     }
+
+    public function getUri() {
+        return $_SERVER['REQUEST_URI'];
+    }
 }

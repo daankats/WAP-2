@@ -37,10 +37,12 @@ use app\core\App;
               <a class="nav-link" aria-current="page" href="/login">Inloggen</a>
             </li>
             <?php else: ?>
-              <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/progress">Mijn voortgang</a>
+            <?php if (App::isStudent()): ?>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/myprogress">Mijn voortgang</a>
             </li>
-              <li class="nav-item">
+            <?php endif; ?>
+            <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/courses">Cursussen</a>
             </li>
             <li class="nav-item">
@@ -77,18 +79,21 @@ use app\core\App;
               <li><a class="dropdown-item" href="/logout">Log uit</a></li>
             </ul>
             <?php endif; ?>
-          </div>
-      
 
-        <?php if (App::$app->session->getFlash('success')): ?>
-        <div class="alert alert-success">
-          <?php echo App::$app->session->getFlash('success'); 
-            endif ?>
+          </div>
+          <?php if ($message = App::$app->session->getFlash('success')): ?>
+          <div class="alert alert-success"><?= $message ?></div>
+          <?php endif ?>
+
+          <?php if ($message = App::$app->session->getFlash('error')): ?>
+          <div class="alert alert-danger"><?= $message ?></div>
+          <?php endif ?>
         </div>
-        </div>
-      {{content}} 
       </div>
+
+      {{content}}
     </div>
+  </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"

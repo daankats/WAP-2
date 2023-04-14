@@ -74,16 +74,15 @@ class EnrollmentModel extends DbModel
         return true;
     }
 
-    public function enroll($studentId)
+    public function delete()
     {
         $db = App::$app->db;
-        $sql = "INSERT INTO enrollment (student_id, course_id) VALUES (:student_id, :course_id)";
+        $sql = "DELETE FROM enrollment WHERE id = :id";
         $statement = $db->pdo->prepare($sql);
-        $statement->bindValue(':student_id', $studentId);
-        $statement->bindValue(':course_id', $this->id);
-        return $statement->execute();
+        $statement->bindValue(':id', $this->id);
+        $statement->execute();
+        return true;
     }
 
-    
 
 }

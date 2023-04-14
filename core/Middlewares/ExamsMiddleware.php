@@ -7,14 +7,18 @@ use app\core\exception\ForbiddenException;
 
 class ExamsMiddleware extends BaseMiddleware
 {
+   
     public function execute()
     {
-       if (App::isDocent() || App::isAdmin()) {
-           return true;
-       }elseif(App::isStudent()) {
-              return true;
-       }else{
+        $request = App::$app->request;
+        $uri = $request->getUri();
+
+        // Check if the user is a student and is trying to access the courses index page
+        if ($uri === '/exams' || $uri === '/exams/registerexam' || $uri === '/exams/unregisterexam' && App::isStudent()) {
+            return;
+        }
+
+        // If the user is not a student or is trying to access a different page, throw a ForbiddenException
         throw new ForbiddenException();
-       }
     }
 }
