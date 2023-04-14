@@ -1,8 +1,7 @@
 <?php
 
-$this->title = 'Create Course';
+$this->title = 'Cursus aanmaken';
 
-use app\core\form\Form;
 use app\core\App;
 use app\models\CourseModel;
 
@@ -26,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$form = new Form();
 ?>
 
 <div class="row">
@@ -37,12 +35,19 @@ $form = new Form();
                 <?= $session->getFlash('error') ?>
             </div>
         <?php endif; ?>
-        <?php $form = Form::begin('', 'post') ?>
-        <?= $form->field($model, 'name') ?>
-        <?= $form->field($model, 'code') ?>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Create</button>
-        </div>
-        <?php Form::end() ?>
+        <form action="" method="post">
+            <div class="form-group">
+                <label for="name">Course Name</label>
+                <input type="text" required id="name" name="name" class="form-control" value="<?= $model->name ?>">
+                    
+            </div>
+            <div class="form-group">
+                <label for="code">Course Code</label>
+                <input type="text" required id="code" name="code" class="form-control" value="<?= $model->code ?>">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
     </div>
 </div>

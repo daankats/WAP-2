@@ -18,11 +18,6 @@ class AdminController extends Controller
         $adminMiddleware->execute();
     }
 
-    public function beforeAction($action)
-    {
-        $adminMiddleware = new AdminMiddleware(['index', 'edit', 'delete']);
-        $adminMiddleware->execute();
-    }
 
     public function index() {
         $users = User::findAllObjects();
@@ -60,7 +55,7 @@ class AdminController extends Controller
         }
     
         $this->setLayout('main');
-        return $this->render('admin/edit', [
+        return $this->render('/admin/edit', [
             'user' => $user
         ]);
     }

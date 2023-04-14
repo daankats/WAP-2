@@ -4,7 +4,6 @@ namespace app\core\db;
 
 use app\core\Model;
 use app\core\App;
-use app\models\User;
 /**
  * Summary of DbModel
  */

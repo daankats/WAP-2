@@ -11,6 +11,7 @@ abstract class Model {
     public const RULE_MATCH = 'match';
     public const RULE_UNIQUE = 'unique';
 
+
     public function loadData($data)
     {
         foreach ($data as $key => $value) {

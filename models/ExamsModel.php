@@ -126,6 +126,17 @@ class ExamsModel extends DbModel
     
         return $row->firstname . ' ' . $row->lastname;
     }
+
+    public static function findAllByUserId($user_id)
+    {   
+        $db = App::$app->db;
+        $sql = "SELECT * FROM exams WHERE created_by = :user_id";
+        $statement = $db->pdo->prepare($sql);
+        $statement->bindValue(':user_id', App::$app->user->id);
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
+    
     
     public function isEnrolled($course_id)
     {

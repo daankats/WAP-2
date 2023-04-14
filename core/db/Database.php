@@ -32,11 +32,13 @@ class Database{
         return null;
     }
     public function __construct(){
-
+        try {
         $this->pdo = new PDO('mysql:host=' . $this->customgetenv('DB_HOST') . ';port=' . $this->customgetenv('DB_PORT') . ';dbname=' . $this->customgetenv('DB_DATABASE'), $this->customgetenv('DB_USERNAME'), $this->customgetenv('DB_PASSWORD'));
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
-
 
     public function applyMigrations(){
         $this->createMigrationsTable();

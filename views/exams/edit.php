@@ -2,7 +2,6 @@
 
 $this->title = 'Examen bewerken';
 
-use app\core\form\Form;
 use app\core\App;
 use app\models\ExamsModel;
 
@@ -22,8 +21,6 @@ if (!$model) {
     exit;
 }
 
-
-$form = new Form();
 ?>
 
 <div class="row">
@@ -34,21 +31,39 @@ $form = new Form();
                 <?= $session->getFlash('error') ?>
             </div>
         <?php endif; ?>
-        <?php $form = Form::begin('', 'post') ?>
-        <?= $form->field($model, 'name') ?>
-        Cursus
-        <?= $form->field($model, 'course_id')->dropdownField($model->getCourses()) ?>
-        <?= $form->field($model, 'exam_place') ?>
-        Datum
-        <?= $form->field($model, 'exam_date')->dateField() ?>
-        Tijd
-        <?= $form->field($model, 'exam_time')->timeField() ?>
-        Tijdsduur
-        <?= $form->field($model, 'exam_duration')->timeField() ?>
-        <br>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Examen bewerken</button>
-        </div>
-        <?php Form::end() ?>
+        <form action="" method="post">
+            <div class="form-group">
+                <label for="name">Naam</label>
+                <input type="text" id="name" name="name" value="<?= $model->name ?>" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="course_id">Cursus</label>
+                <select id="course_id" name="course_id" required class="form-control">
+                    <?php foreach ($model->getCourses() as $key => $value) : ?>
+                        <option value="<?= $key ?>" <?= $key == $model->course_id ? 'selected' : '' ?>><?= $value ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exam_place">Examenplaats</label>
+                <input type="text" id="exam_place" required name="exam_place" value="<?= $model->exam_place ?>" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="exam_date">Datum</label>
+                <input type="date" id="exam_date" required name="exam_date" value="<?= $model->exam_date ?>" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="exam_time">Tijd</label>
+                <input type="time" id="exam_time" required name="exam_time" value="<?= $model->exam_time ?>" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="exam_duration">Tijdsduur</label>
+                <input type="time" id="exam_duration" required name="exam_duration" value="<?= $model->exam_duration ?>" class="form-control">
+            </div>
+            <br>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Examen bewerken</button>
+            </div>
+        </form>
     </div>
 </div>

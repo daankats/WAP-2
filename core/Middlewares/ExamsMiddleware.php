@@ -17,6 +17,9 @@ class ExamsMiddleware extends BaseMiddleware
         if ($uri === '/exams' || $uri === '/exams/registerexam' || $uri === '/exams/unregisterexam' && App::isStudent()) {
             return;
         }
+        elseif(App::isAdmin() || App::isDocent()){
+            return;
+        }
 
         // If the user is not a student or is trying to access a different page, throw a ForbiddenException
         throw new ForbiddenException();

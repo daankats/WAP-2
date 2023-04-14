@@ -67,7 +67,6 @@ $user = User::findOne(['id' => App::$app->user->id]);
                     <?php elseif (App::isDocent() || App::isAdmin()) : ?>
                         <?php if ($exam->exam_date < date('Y-m-d')) : ?>
                             <a href="/exams/addgrades?id=<?php echo $exam->id ?>" class="btn btn-sm btn-success">Cijfers invoeren</a>
-                            <a href="/exams/grades?id=<?php echo $exam->id ?>" class="btn btn-sm btn-info">Cijfers bekijken</a>
                         <?php endif; ?>
                      <!-- add button to edit -->
                      <a href="/exams/edit?id=<?php echo $exam->id ?>" class="btn btn-sm btn-primary">Wijzigen</a>

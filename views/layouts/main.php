@@ -41,6 +41,10 @@ use app\core\App;
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/myprogress">Mijn voortgang</a>
             </li>
+            <?php elseif (App::isDocent()): ?>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/exams/results">Resultaten</a>
+            </li>
             <?php endif; ?>
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/courses">Cursussen</a>

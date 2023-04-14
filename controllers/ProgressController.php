@@ -13,10 +13,10 @@ class ProgressController extends Controller
     public function myProgress()
     {
         $user = User::findOne(['id' => App::$app->user->id]);
-
+    
         $gradesModel = new GradesModel();
-        $grades = $gradesModel->findAll();
-
+        $grades = $gradesModel->findById($user->id);
+    
         $exams = [];
         foreach ($grades as $grade) {
             $exam = ExamsModel::findOne(['id' => $grade->exam_id]);
@@ -24,11 +24,13 @@ class ProgressController extends Controller
                 $exams[$grade->exam_id] = $exam;
             }
         }
-
+    
         return $this->render('myprogress', [
             'grades' => $grades,
             'exams' => $exams,
             'user' => $user,
         ]);
     }
+    
+    
 }

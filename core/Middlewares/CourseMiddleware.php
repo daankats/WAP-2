@@ -15,6 +15,8 @@ class CourseMiddleware extends BaseMiddleware
         // Check if the user is a student and is trying to access the courses index page
         if ($uri === '/courses' || $uri === '/courses/enroll' || $uri === '/courses/leave' && App::isStudent()) {
             return;
+        }elseif(App::isAdmin() || App::isDocent()){
+            return;
         }
 
         // If the user is not a student or is trying to access a different page, throw a ForbiddenException

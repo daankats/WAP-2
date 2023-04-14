@@ -8,7 +8,6 @@ use app\controllers\AdminController;
 use app\controllers\CourseController;
 use app\controllers\ProfileController;
 use app\controllers\ExamsController;
-use app\controllers\GradesController;
 use app\controllers\ProgressController;
 
 use app\core\App;
@@ -65,8 +64,12 @@ $app->router->post('/exams/addgrades', [ExamsController::class, 'addGrades']);
 $app->router->get('/exams/updategrade', [ExamsController::class, 'updateGrade']);
 $app->router->post('/exams/updategrade', [ExamsController::class, 'updateGrade']);
 
+// GRADES FOR TEACHERS
+$app->router->get('/exams/results', [ExamsController::class, 'showGrades']);
+$app->router->post('/exams/results', [ExamsController::class, 'showGrades']);
 
-// MY PROGRESS
+
+// MY PROGRESS FOR STUDENTS
 $app->router->get('/myprogress', [ProgressController::class, 'myProgress']);
 
 

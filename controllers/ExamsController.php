@@ -191,6 +191,19 @@ class ExamsController extends Controller {
         }
     }
 
+    public function showGrades()
+    {
+        $user = User::findOne(['id' => App::$app->user->id]);
+        $this->layout = 'main';
+        $exams = new Examsmodel();
+        $exams = ExamsModel::findAllByUserId($user->id);
+        return $this->render('/exams/results', [
+            'exams' => $exams,
+            'user' => $user,
+        ]);
+    }
+    
+    
     public function updateGrade(Request $request, Response $response)
     {
         $grade = new GradesModel();

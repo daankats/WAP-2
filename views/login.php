@@ -2,15 +2,17 @@
 /** @var $model \app\models\User
  */
 
-use app\core\form\Form;
 ?>
-
 <h1>Inloggen</h1>
-
-<!-- create register form -->
-<?php $form = Form::begin('', 'post') ?>
-    <?php echo $form->field($model, 'email') ?>
-    <?php echo $form->field($model, 'password')->passwordField() ?>
-    <br>
+<!-- create login form -->
+<form method="post">
+    <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" name="email" id="email" class="form-control" value="<?php echo $model->email ?>" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Wachtwoord</label>
+        <input type="password" name="password" id="password" class="form-control" required>
+    </div>
     <button type="submit" class="btn btn-primary">Inloggen</button>
-<?php Form::end() ?>
+</form> 

@@ -6,7 +6,7 @@ use app\core\db\DbModel;
 
 class GradesModel extends DbModel
 {
-    public int $id;
+    public int $id = 0;
     public string $user_id = '';
     public string $exam_id = '';
     public string $grade = '';
@@ -79,11 +79,12 @@ class GradesModel extends DbModel
         return true;
     }
 
-    public function findAll()
-    {
+    public static function findAll($user_id)
+    {   
         $db = App::$app->db;
-        $sql = "SELECT * FROM " . self::tableName();
+        $sql = "SELECT * FROM " . self::tableName() . " WHERE exam_id = :exam_id";
         $statement = $db->pdo->prepare($sql);
+        $statement->bindValue(':exam_id', $user_id['exam_id']);
         $statement->execute();
         $grades = [];
         while ($row = $statement->fetchObject(static::class)) {
@@ -91,6 +92,22 @@ class GradesModel extends DbModel
         }
         return $grades;
     }
+    
+    
+    public function findById(int $id)
+    {
+        $db = App::$app->db;
+        $sql = "SELECT * FROM " . self::tableName() . " WHERE user_id = :user_id";
+        $statement = $db->pdo->prepare($sql);
+        $statement->bindValue(':user_id', $id);
+        $statement->execute();
+        $grades = [];
+        while ($row = $statement->fetchObject(static::class)) {
+            $grades[] = $row;
+        }
+        return $grades;
+    }
+    
     
 
 }

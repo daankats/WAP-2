@@ -23,27 +23,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form method="POST">
     <div class="form-group">
         <label for="firstName">Voornaam</label>
-        <input type="text" class="form-control" id="firstName" name="firstName" value="<?php echo htmlspecialchars($model->firstName) ?>" required>
+        <input type="text" class="form-control" required id="firstName" name="firstName" value="<?php echo htmlspecialchars($model->firstName) ?>" required>
     </div>
     <div class="form-group">
         <label for="lastName">Achternaam</label>
-        <input type="text" class="form-control" id="lastName" name="lastName" value="<?php echo htmlspecialchars($model->lastName) ?>" required>
+        <input type="text" class="form-control" required id="lastName" name="lastName" value="<?php echo htmlspecialchars($model->lastName) ?>" required>
     </div>
     <div class="form-group">
         <label for="email">Emailadres</label>
-        <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($model->email) ?>" required>
+        <input type="email" class="form-control"  required id="email" name="email" value="<?php echo htmlspecialchars($model->email) ?>" required>
     </div>
     <div class="form-group">
         <label for="password">Wachtwoord</label>
-        <input type="password" class="form-control" id="password" name="password" required>
+        <input type="password" class="form-control" required id="password" name="password" required>
     </div>
     <div class="form-group">
         <label for="confirmPassword">Wachtwoord bevestigen</label>
-        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+        <input type="password" class="form-control" required id="confirmPassword" name="confirmPassword" required>
     </div>
     <div class="form-group">
         <label for="role">Rol</label>
-        <select class="form-control" id="role" name="role">
+        <select class="form-control" required id="role" name="role">
             <option value="student" <?php echo $model->role === 'student' ? 'selected' : '' ?>>Student</option>
             <option value="docent" <?php echo $model->role === 'docent' ? 'selected' : '' ?>>Docent</option>
             <option value="beheerder" <?php echo $model->role === 'beheerder' ? 'selected' : '' ?>>Beheerder</option>

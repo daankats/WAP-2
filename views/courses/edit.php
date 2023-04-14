@@ -1,10 +1,8 @@
 <?php
-$this->title = 'Edit Course';
+$this->title = 'Cursus aanpassen';
 
-use app\core\form\Form;
 use app\core\App;
 use app\models\CourseModel;
-use app\models\User;
 
 $session = App::$app->session;
 
@@ -22,8 +20,6 @@ if (!$model) {
     exit;
 }
 
-
-$form = Form::begin('', 'post');
 ?>
 
 <div class="row">
@@ -35,13 +31,18 @@ $form = Form::begin('', 'post');
             </div>
         <?php endif; ?>
 
-        <?= $form->field($model, 'name') ?>
-        <?= $form->field($model, 'code') ?>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Update</button>
-        </div>
+        <form method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" required id="name" name="name" class="form-control" value="<?= $model->name ?>">
+            </div>
+            <div class="form-group">
+                <label for="code">Code</label>
+                <input type="text" required id="code" name="code" class="form-control" value="<?= $model->code ?>">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
     </div>
 </div>
-
-<?php Form::end() ?>
