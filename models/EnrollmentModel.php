@@ -67,7 +67,6 @@ class EnrollmentModel extends DbModel
             return false;
         }
 
-        // Set the created_at and updated_at fields
         $this->created_at = date('Y-m-d H:i:s');
         $this->updated_at = date('Y-m-d H:i:s');
 

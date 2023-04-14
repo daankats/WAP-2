@@ -94,24 +94,20 @@ class ExamsController extends Controller {
                 $register->student_id = $user->id;
                 
                 if ($register->save()) {
-                    // Add success flash message and redirect to exam index page upon successful registration
                     App::$app->session->setFlash('success', 'You have successfully registered for the exam.');
                     header('Location: /exams');
                     exit;
                 } else {
-                    // Handle save error and add error flash message
                     App::$app->session->setFlash('error', 'There was an error saving your exam registration.');
                     $this->layout = 'main';
                     return 'There was an error saving your exam registration.';
                 }
             } else {
-                // Handle validation error and add error flash message
                 App::$app->session->setFlash('error', 'There was an error with your exam registration request.');
                 $this->layout = 'main';
                 return 'There was an error with your exam registration request.';
             }
         } else {
-            // Handle user not authorized error and add error flash message
             App::$app->session->setFlash('error', 'You must be a student to register for an exam.');
             $this->layout = 'main';
             return 'You must be a student to register for an exam.';
@@ -124,13 +120,11 @@ class ExamsController extends Controller {
         $register = RegisterModel::findOne(['exam_id' => $_POST['exam_id'], 'student_id' => App::$app->user->id]);
         if ($register) {
             if ($register->delete()) {
-                // Add success flash message and redirect to the exam index page upon successful unenrollment
                 App::$app->session->setFlash('success', 'You have successfully unregistered from the exam.');
                 header('Location: /exams');
                 exit;
             }
         }
-        // Handle error and add error flash message
         App::$app->session->setFlash('error', 'There was an error with your unenrollment request.');
         $this->layout = 'main';
         return $this->render('/_error', [
@@ -179,7 +173,6 @@ class ExamsController extends Controller {
                 App::$app->session->setFlash('error', 'Failed to add grade');
             }
             
-            // Redirect to the exam page
             header('Location: /exams/addgrades?id=' . $exam_id);
             exit;
         } else {
@@ -223,7 +216,6 @@ class ExamsController extends Controller {
             App::$app->session->setFlash('error', 'Failed to update grade');
         }
         
-        // Redirect back to the exam page
         header('Location: /exams/addgrades?id=' . $grade->exam_id);
         exit;
     }

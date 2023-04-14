@@ -19,8 +19,6 @@ $this->title = 'Mijn voortgang';
 <a href="/exams" class="btn btn-primary mb-3">Naar examens</a>
 
 
-<p>Welkom <?= $user->firstName ?></p>
-
 <table class="table">
     <thead>
         <tr>

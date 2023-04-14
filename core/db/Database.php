@@ -5,14 +5,11 @@ use Exception;
 use PDO;
 use app\core\App;
 
-/**
- * Summary of Database
- */
 class Database{
     public PDO $pdo;
 
     private function customgetenv($key) {
-        $envFilePath = __DIR__ . '/../../.env'; // Path to your .env file
+        $envFilePath = __DIR__ . '/../../.env';
         $envFile = fopen($envFilePath, 'r');
     
         if (!$envFile) {

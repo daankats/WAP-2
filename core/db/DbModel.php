@@ -4,9 +4,7 @@ namespace app\core\db;
 
 use app\core\Model;
 use app\core\App;
-/**
- * Summary of DbModel
- */
+
 abstract class DbModel extends Model{
     abstract public static function tableName(): string;
     abstract public function attributes(): array;
@@ -70,8 +68,6 @@ abstract class DbModel extends Model{
             return $record !== false ? $record : null;
         }
         
-
-    
         public static function prepare($sql)
         {
             return App::$app->db->pdo->prepare($sql);

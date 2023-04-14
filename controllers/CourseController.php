@@ -46,13 +46,11 @@ class CourseController extends Controller
         $course = new CourseModel();
         $user = User::findOne(['id' => App::$app->user->id]);
         if (App::isDocent() || App::isAdmin()) {
-            // display the page if the user is a docent or admin
+
             if ($course->loadData($_POST)) {
-                // Set the created_by and created_at properties
                 $course->created_by = $user->id;
                 $course->created_at = date('Y-m-d H:i:s');
                 if ($course->validate() && $course->save()) {
-                    // Redirect to the course index page upon successful creation
                     header('Location: /courses');
                     exit;
                 }
@@ -64,11 +62,9 @@ class CourseController extends Controller
                 'model' => $course,
             ]);
         } elseif (App::isStudent()) {
-            // redirect students to the index page if they try to access the create page
             header('Location: /courses');
             exit;
         } else {
-            // display the forbidden page for guests
             return $this->render('/forbidden');
         }
     }
@@ -100,7 +96,6 @@ class CourseController extends Controller
         $course = CourseModel::findOne(['id' => $request->getBody()['id']]);
         if (App::isDocent() || App::isAdmin()) {
             if ($course->delete()) {
-                // Redirect to the course index page upon successful deletion
                 header('Location: /courses');
                 exit;
             }
@@ -118,12 +113,9 @@ class CourseController extends Controller
         $enrollment->course_id = $courseId;
     
         if ($enrollment->save()) {
-            // Set a success flash message
             App::$app->session->setFlash('success', 'You have successfully enrolled in the course!');
-            // Redirect to the course index page upon successful enrollment
             $response->redirect('/courses');
         } else {
-            // Handle enrollment failure
             $response->setStatusCode(500);
         }
     }
@@ -135,12 +127,9 @@ class CourseController extends Controller
         $enrollment = EnrollmentModel::findOne(['course_id' => $courseId, 'student_id' => App::$app->user->id]);
     
         if ($enrollment->delete()) {
-            // Set a success flash message
             App::$app->session->setFlash('success', 'You have successfully unenrolled from the course!');
-            // Redirect to the course index page upon successful unenrollment
             $response->redirect('/courses');
         } else {
-            // Handle unenrollment failure
             $response->setStatusCode(500);
         }
     

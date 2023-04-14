@@ -94,7 +94,6 @@ class ExamsModel extends DbModel
             return false;
         }
 
-        // Set the created_at and updated_at fields
         $this->created_at = date('Y-m-d H:i:s');
         $this->updated_at = date('Y-m-d H:i:s');
 
@@ -127,7 +126,7 @@ class ExamsModel extends DbModel
         return $row->firstname . ' ' . $row->lastname;
     }
 
-    public static function findAllByUserId($user_id)
+    public static function findAllByUserId()
     {   
         $db = App::$app->db;
         $sql = "SELECT * FROM exams WHERE created_by = :user_id";

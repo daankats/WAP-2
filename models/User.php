@@ -78,19 +78,6 @@ class User extends UserModel
     }
 
     /**
-     * Hashes the user's password using the `password_hash` function.
-     * @return bool
-     */
-    // public function beforeSave(): bool
-    // {
-    //     if (parent::beforeSave()) {
-    //         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    /**
      * Validates the confirm password field.
      * @return bool
      */

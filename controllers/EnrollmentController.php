@@ -23,13 +23,11 @@ class EnrollmentController extends Controller
         if ($user->role == 'student') {
             if ($enrollment->loadData($_POST)) {
                 if ($enrollment->validate() && $enrollment->save()) {
-                    // Redirect to the course index page upon successful enrollment
                     header('Location: /courses');
                     exit;
                 }
             }
         }
-        // If something went wrong, or if the user is not a student, show an error message
         $this->layout = 'main';
         return $this->render('/enrollments/error', [
             'message' => 'There was an error with your enrollment request.'

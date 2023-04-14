@@ -4,7 +4,7 @@
 
 ?>
 <h1>Inloggen</h1>
-<!-- create login form -->
+
 <form method="post">
     <div class="form-group">
         <label for="email">E-mail</label>

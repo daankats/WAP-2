@@ -124,11 +124,9 @@ class CourseModel extends DbModel
         $statement->bindValue(':course_id', $course_id);
         $statement->execute();
         $row = $statement->fetchObject();
-        return $row !== false; // return true if a row is found, false otherwise
+        return $row !== false; 
     }
     
-
-    // get the firstname and lastname of the user who created the course
     public function getCreator(): ?string
     {
         $db = App::$app->db;
