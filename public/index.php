@@ -7,6 +7,6 @@ use app\core\App;
 $app = new App(dirname(__DIR__), $_ENV);
 
 // Laad de routes
-require_once __DIR__.'/../routes.php';
+require_once __DIR__ . '/app/routes/routes.php';
 
 $app->run();
