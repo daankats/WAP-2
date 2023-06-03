@@ -4,12 +4,12 @@
 
 ?>
 
-<?php if ($exception !== null): ?>
+<?php if ($exception !== null) : ?>
 
-<h1><?php echo $exception->getCode() ?> - <?php echo $exception->getMessage() ?></h1>
+    <h1><?php echo $exception->getCode() ?> - <?php echo $exception->getMessage() ?></h1>
 
-<?php else: ?>
+<?php else : ?>
 
-<h1>Unknown Error</h1>
+    <h1>Unknown Error</h1>
 
 <?php endif; ?>

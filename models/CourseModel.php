@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app\models;
 
@@ -21,10 +21,6 @@ class CourseModel extends DbModel
         return 'id';
     }
 
-    public function __construct()
-    {
-    }
-
     public static function tableName(): string
     {
         return 'courses';
@@ -33,7 +29,7 @@ class CourseModel extends DbModel
     public function attributes(): array
     {
         return ['name', 'code', 'created_by', 'created_at', 'updated_by', 'updated_at'];
-    }    
+    }
 
     public function rules(): array
     {
@@ -67,101 +63,54 @@ class CourseModel extends DbModel
         $this->updated_at = date('Y-m-d H:i:s');
         return parent::update();
     }
-    
-       
 
     public function delete()
     {
-        $db = App::$app->db;
-        $SQL = "DELETE FROM courses WHERE id = :id";
-        $stmt = $db->pdo->prepare($SQL);
-        $stmt->bindValue(':id', $this->id);
-        return $stmt->execute();
+        $enrollments = EnrollmentModel::findAll(['course_id' => $this->id]);
+        foreach ($enrollments as $enrollment) {
+            $enrollment->delete();
+        }
+        return parent::delete();
     }
-
 
     public static function findAllObjects(): array
     {
         $db = App::$app->db;
-        $sql = "SELECT * FROM courses";
-        $statement = $db->pdo->prepare($sql);
+        $tableName = static::tableName();
+        $sql = "SELECT * FROM $tableName";
+        $statement = $db->prepare($sql);
         $statement->execute();
-        $users = [];
+        $objects = [];
         while ($row = $statement->fetchObject(static::class)) {
-            $users[] = $row;
+            $objects[] = $row;
         }
-        return $users;
+        return $objects;
     }
 
-    public static function findCourseByCode($code)
+    public static function findAll($id = null)
     {
-        $db = App::$app->db;
-        $sql = "SELECT * FROM courses WHERE code = :code";
-        $statement = $db->pdo->prepare($sql);
-        $statement->bindValue(':code', $code);
-        $statement->execute();
-        $row = $statement->fetchObject(static::class);
-        return $row;
+        $sql = "SELECT * FROM " . self::tableName() . " WHERE created_by = :id";
+        $stmt = App::$app->db->prepare($sql);
+        $stmt->bindValue(":id", $id);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
-    public static function findCourseById($id)
-    {
-        $db = App::$app->db;
-        $sql = "SELECT * FROM courses WHERE id = :id";
-        $statement = $db->pdo->prepare($sql);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-        $row = $statement->fetchObject(static::class);
-        return $row;
-    }
 
-    public function isEnrolled($course_id)
-    {
-        $db = App::$app->db;
-        $sql = "SELECT * FROM enrollment WHERE student_id = :student_id AND course_id = :course_id";
-        $statement = $db->pdo->prepare($sql);
-        $statement->bindValue(':student_id', App::$app->user->id);
-        $statement->bindValue(':course_id', $course_id);
-        $statement->execute();
-        $row = $statement->fetchObject();
-        return $row !== false; 
-    }
-    
     public function getCreator(): ?string
     {
-        $db = App::$app->db;
-        $sql = "SELECT firstname, lastname FROM users WHERE id = :id";
-        $statement = $db->pdo->prepare($sql);
-        $statement->bindValue(':id', $this->created_by);
-        $statement->execute();
-        $row = $statement->fetchObject();
-    
-        if (!$row) {
-            return null;
-        }
-    
-        $user = new User();
-        $user->firstName = $row->firstname;
-        $user->lastName = $row->lastname;
-    
-        return $user->getFullName();
+        $user = User::findOne(['id' => $this->created_by]);
+        return $user ? $user->getFullName() : null;
     }
-    
+
+    public function isEnrolled($student_id)
+    {
+        $enrollment = EnrollmentModel::findOne(['student_id' => $student_id, 'course_id' => $this->id]);
+        return $enrollment ? true : false;
+    }
 
     public function getEnrolledStudents()
     {
-        $db = App::$app->db;
-        $sql = "SELECT * FROM enrollment WHERE course_id = :course_id";
-        $statement = $db->pdo->prepare($sql);
-        $statement->bindValue(':course_id', $this->id);
-        $statement->execute();
-        $users = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $users[] = $row;
-        }
-        return $users;
+        return EnrollmentModel::findAll(['course_id' => $this->id]);
     }
-    
-    
-    
 }

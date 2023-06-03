@@ -10,11 +10,12 @@ use app\core\db\Database;
 use app\core\Session;
 use app\core\db\DbModel;
 
-class App {
+class App
+{
     public static string $ROOT_DIR;
     public static App $app;
-    public string $layout = 'main';
-    public string $userClass = '';
+    public string $template = 'main';
+    public string $userClass;
     public Router $router;
     public Request $request;
     public Response $response;
@@ -24,16 +25,17 @@ class App {
     public ?User $user = null;
     public View $view;
 
-    public function __construct($rootPath) {
+    public function __construct($rootPath, array $config)
+    {
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
+        $this->userClass = $config['userClass'] ?? User::class;
         $this->request = new Request();
         $this->response = new Response();
         $this->session = new Session();
         $this->router = new Router($this->request, $this->response);
         $this->view = new View();
-        $this->db = new Database();
-        $this->userClass = User::class;
+        $this->db = new Database($config);
     
         $primaryValue = $this->session->get('user');
         if ($primaryValue) {
@@ -43,7 +45,8 @@ class App {
         }
     }
 
-    public function run() {
+    public function run()
+    {
         try {
             echo $this->router->resolve();
         } catch (\Exception $e) {
@@ -54,15 +57,8 @@ class App {
         }
     }
 
-    public function getController() {
-        return $this->controller;
-    }
-
-    public function setController(Controller $controller) {
-        $this->controller = $controller;
-    }
-
-    public function login(DbModel $user) {
+    public function login(DbModel $user)
+    {
         $this->user = $user;
         $primaryKey = $user->primaryKey();
         $primaryValue = $user->{$primaryKey};
@@ -70,7 +66,8 @@ class App {
         return true;
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->user = null;
         $this->session->remove('user');
     }
@@ -97,7 +94,4 @@ class App {
         $user = self::$app->user;
         return $user && $user->role === 'student';
     }
-
-
 }
-

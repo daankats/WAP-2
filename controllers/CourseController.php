@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app\controllers;
 
@@ -30,7 +30,6 @@ class CourseController extends Controller
                 $enrolled = true;
             }
         }
-        $this->layout = 'main';
         return $this->render('/courses/index', [
             'courses' => $courses,
             'enrollments' => $enrollments,
@@ -68,12 +67,12 @@ class CourseController extends Controller
             return $this->render('/forbidden');
         }
     }
-    
+
     public function update(Request $request, Response $response)
     {
         $id = $_GET['id'];
         $course = CourseModel::findOne(['id' => $id]);
-    
+
         if ($course !== null && $request->isPost()) {
             $course->loadData($_POST);
             if ($course->validate() && $course->update()) {
@@ -88,8 +87,8 @@ class CourseController extends Controller
             'model' => $course,
         ]);
     }
-    
-    
+
+
 
     public function delete(Request $request, Response $response)
     {
@@ -104,14 +103,14 @@ class CourseController extends Controller
             'model' => $course,
         ]);
     }
-    
+
     public function enroll(Request $request, Response $response)
     {
         $courseId = $request->getBody()['course_id'];
         $enrollment = new EnrollmentModel();
         $enrollment->student_id = App::$app->user->id;
         $enrollment->course_id = $courseId;
-    
+
         if ($enrollment->save()) {
             App::$app->session->setFlash('success', 'You have successfully enrolled in the course!');
             $response->redirect('/courses');
@@ -119,22 +118,18 @@ class CourseController extends Controller
             $response->setStatusCode(500);
         }
     }
-    
-    
+
+
     public function unenroll(Request $request, Response $response)
     {
         $courseId = $request->getBody()['course_id'];
         $enrollment = EnrollmentModel::findOne(['course_id' => $courseId, 'student_id' => App::$app->user->id]);
-    
+
         if ($enrollment->delete()) {
             App::$app->session->setFlash('success', 'You have successfully unenrolled from the course!');
             $response->redirect('/courses');
         } else {
             $response->setStatusCode(500);
         }
-    
     }
-    
-    
-
 }

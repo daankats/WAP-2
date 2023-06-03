@@ -10,5 +10,5 @@ abstract class UserModel extends DbModel
      * Returns the display name of the user.
      * @return string
      */
-    abstract public function displayName(): string;
+    // abstract public function displayName(): string;
 }
