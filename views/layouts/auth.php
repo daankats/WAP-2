@@ -91,8 +91,7 @@ use app\core\App;
         </div>
       </div>
 
-      {{ content }}
-
+      {{content}}
     </div>
   </div>
   </div>

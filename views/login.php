@@ -1,5 +1,4 @@
 <?php
-
 /** @var $model \app\models\User
  */
 
@@ -16,4 +15,4 @@
         <input type="password" name="password" id="password" class="form-control" required>
     </div>
     <button type="submit" class="btn btn-primary">Inloggen</button>
-</form>
+</form> 

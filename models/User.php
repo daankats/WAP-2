@@ -2,10 +2,15 @@
 
 namespace app\models;
 
-use app\core\db\DbModel;
+use app\core\DbModel;
+use app\core\UserModel;
 use app\core\App;
 
-class User extends DbModel
+/**
+ * Class User
+ * @package app\models
+ */
+class User extends UserModel
 {
     public const STATUS_INACTIVE = 'inactive';
     public const STATUS_ACTIVE = 'active';
@@ -20,21 +25,33 @@ class User extends DbModel
     public string $confirmPassword = '';
     public string $role = '';
 
+    /**
+     * @inheritDoc
+     */
     public static function tableName(): string
     {
         return 'users';
     }
 
+    /**
+     * @inheritDoc
+     */
     public function attributes(): array
     {
         return ['firstName', 'lastName', 'email', 'status', 'password', 'role'];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function primaryKey(): string
     {
         return 'id';
     }
 
+    /**
+     * @inheritDoc
+     */
     public function rules(): array
     {
         return [
@@ -46,6 +63,9 @@ class User extends DbModel
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function labels(): array
     {
         return [
@@ -57,6 +77,10 @@ class User extends DbModel
         ];
     }
 
+    /**
+     * Validates the confirm password field.
+     * @return bool
+     */
     public function validateConfirmPassword(): bool
     {
         if ($this->password !== $this->confirmPassword) {
@@ -66,33 +90,50 @@ class User extends DbModel
         return true;
     }
 
+    /**
+     * Finds a user by email.
+     * @param string $email
+     * @return User|null
+     */
     public function findByEmail(string $email): ?User
     {
         return self::findOne(['email' => $email]);
     }
+
+    /**
+     * Finds a user by id.
+     * @param int $id
+     * @return User|null
+     */
 
     public function findById(int $id): ?User
     {
         return self::findOne(['id' => $id]);
     }
 
+    /**
+     * Registers a user.
+     * @return bool
+     */
     public function register(): bool
-    {
-        if (App::isAdmin()) {
-            $this->status = self::STATUS_ACTIVE;
-            $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-            return $this->save();
-        } else {
-            App::$app->session->setFlash('error', 'You are not authorized to register new users.');
-            return false;
-        }
+{
+    if (App::isAdmin()) {
+        $this->status = self::STATUS_ACTIVE;
+        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+        return $this->save();
+    } else {
+        App::$app->session->setFlash('error', 'You are not authorized to register new users.');
+        return false;
     }
+}
 
-    public function displayName(): string
-    {
+    /**
+     * Summary of getDisplayName
+     * @return string
+     */
+    public function displayName(): string {
         return $this->firstName . ' ' . $this->lastName;
     }
-
     public function getRole(): string
     {
         return $this->role;
@@ -107,7 +148,7 @@ class User extends DbModel
     {
         $db = App::$app->db;
         $sql = "SELECT * FROM users";
-        $statement = $db->prepare($sql);
+        $statement = $db->pdo->prepare($sql);
         $statement->execute();
         $users = [];
         while ($row = $statement->fetchObject(static::class)) {
@@ -116,21 +157,26 @@ class User extends DbModel
         return $users;
     }
 
-    public function delete()
+    public static function Delete($id)
     {
-        $tableName = $this->tableName();
-        $primaryKey = $this->primaryKey();
-        $statement = App::$app->db->prepare("DELETE FROM $tableName WHERE $primaryKey = :id");
-        $statement->bindValue(':id', $this->{$primaryKey});
-        if (!$statement->execute()) {
-            throw new \Exception("Failed to delete record from the database.");
-        }
-        return true;
+        $db = App::$app->db;
+        $sql = "DELETE FROM users WHERE id = :id";
+        $statement = $db->pdo->prepare($sql);
+        $statement->bindValue(':id', $id);
+        $statement->execute();
     }
 
+    public function setUser($data) {
+        $this->email = $data['email'] ?? $this->email;
+        $this->password = $data['password'] ?? $this->password;
+        $this->role = $data['role'] ?? $this->role;
+    }
 
     public function getFullName(): string
     {
         return $this->firstName . ' ' . $this->lastName;
     }
+
+
+
 }

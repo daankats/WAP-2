@@ -10,17 +10,17 @@ use app\core\middlewares\BaseMiddleware;
 class Controller
 {
 
-    public string $template = 'main';
+    public string $layout = 'main';
     public string $action = '';
     /**
      * Summary of middlewares
      * @var \app\core\middlewares\BaseMiddleware[]
      */
     protected array $middlewares = [];
-
-    public function setTemplate($template)
+    
+    public function setLayout($layout)
     {
-        $this->template = $template;
+        $this->layout = $layout;
     }
 
     public function render($view, $params = [], $exception = null)
@@ -28,12 +28,12 @@ class Controller
         $params['exception'] = $exception;
         return App::$app->view->renderView($view, $params);
     }
-
+    
 
     public function registerMiddleware(BaseMiddleware $middleware)
     {
         $this->middlewares[] = $middleware;
-    }
+    }    
 
     /**
      * Summary of getMiddlewares
@@ -43,4 +43,6 @@ class Controller
     {
         return $this->middlewares;
     }
+
+
 }

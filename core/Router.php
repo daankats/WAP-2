@@ -4,74 +4,53 @@ namespace app\core;
 
 use app\core\exception\NotFoundException;
 
-class Router
-{
+
+class Router{
+
     public Request $request;
     public Response $response;
     protected array $routes = [];
 
-    public function __construct(Request $request, Response $response)
-    {
+    public function __construct(Request $request, Response $response) {
         $this->request = $request;
         $this->response = $response;
     }
 
-    public function get($path, $callback)
-    {
-        $this->routes['GET'][$path] = $callback;
+    public function get($path, $callback) {
+        $this->routes['get'][$path] = $callback;
     }
 
-    public function post($path, $callback)
-    {
-        $this->routes['POST'][$path] = $callback;
+    public function post($path, $callback) {
+        $this->routes['post'][$path] = $callback;
     }
 
-    public function resolve()
-    {
+    public function resolve() {
         $path = $this->request->getPath();
         $method = $this->request->method();
         $callback = $this->routes[$method][$path] ?? false;
-
         if ($callback === false) {
             $this->response->setStatusCode(404);
             throw new NotFoundException();
         }
-
         if (is_string($callback)) {
-            [$controller, $action] = explode('@', $callback);
-            $controller = "app\\controllers\\$controller";
-            $controllerInstance = new $controller();
-            $controllerInstance->$action($this->request, $this->response);
-            return;
+            return App::$app->view->renderView($callback);
         }
-
         if (is_array($callback)) {
+            /** @var \app\core\Controller $controller */
             $controller = new $callback[0]();
-            $action = $callback[1];
-            $controller->$action($this->request, $this->response);
-            return;
+            App::$app->controller = $controller;
+            $controller->action = $callback[1];
+            $callback[0] = $controller;
+            foreach ($controller->getMiddlewares() as $middleware) {
+                $middleware->execute();
+            }
         }
-
-        if (is_callable($callback)) {
-            call_user_func($callback, $this->request, $this->response);
-            return;
-        }
-
-        throw new \Exception('Invalid route callback.');
+        return call_user_func($callback, $this->request, $this->response);
     }
 
-    public function delete($path, $callback)
-    {
-        $this->routes['DELETE'][$path] = $callback;
+    public function delete($path, $callback) {
+        $this->routes['delete'][$path] = $callback;
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
     
     
 }
-=======
-}
->>>>>>> parent of 8861080 (no message)
-=======
-}
->>>>>>> f3833bb6c855df2aac1677c84f01df6f994a58f6

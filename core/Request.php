@@ -2,10 +2,9 @@
 
 namespace app\core;
 
-class Request
-{
-    public function getPath()
-    {
+class Request {
+
+    public function getPath() {
         $path = $_SERVER['REQUEST_URI'] ?? '/';
         $position = strpos($path, '?');
         if ($position === false) {
@@ -14,23 +13,20 @@ class Request
         return substr($path, 0, $position);
     }
 
-    public function method()
-    {
+    public function method() {
         return strtolower($_SERVER['REQUEST_METHOD']);
+
     }
 
-    public function isGet()
-    {
+    public function isGet() {
         return $this->method() === 'get';
     }
 
-    public function isPost()
-    {
+    public function isPost() {
         return $this->method() === 'post';
     }
 
-    public function getBody()
-    {
+    public function getBody() {
         $body = [];
         if ($this->method() === 'get') {
             foreach ($_GET as $key => $value) {
@@ -45,13 +41,11 @@ class Request
         return $body;
     }
 
-    public function get($key)
-    {
+    public function get($key) {
         return $_GET[$key] ?? null;
     }
 
-    public function getUri()
-    {
+    public function getUri() {
         return $_SERVER['REQUEST_URI'];
     }
 }

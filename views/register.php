@@ -1,5 +1,4 @@
 <?php
-
 /** @var $model \app\models\User
  */
 
@@ -32,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="form-group">
         <label for="email">Emailadres</label>
-        <input type="email" class="form-control" required id="email" name="email" value="<?php echo htmlspecialchars($model->email) ?>" required>
+        <input type="email" class="form-control"  required id="email" name="email" value="<?php echo htmlspecialchars($model->email) ?>" required>
     </div>
     <div class="form-group">
         <label for="password">Wachtwoord</label>
@@ -53,3 +52,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <br>
     <button type="submit" class="btn btn-primary">Aanmaken</button>
 </form>
+
+
