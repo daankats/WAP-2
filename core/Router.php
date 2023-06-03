@@ -51,6 +51,20 @@ class Router{
     public function delete($path, $callback) {
         $this->routes['delete'][$path] = $callback;
     }
+<<<<<<< HEAD
 
 
 }
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    
+    
+}
+=======
+}
+>>>>>>> parent of 8861080 (no message)
+=======
+}
+>>>>>>> f3833bb6c855df2aac1677c84f01df6f994a58f6
+>>>>>>> ce681fc087022242e44b929fb55f939c18a076ee

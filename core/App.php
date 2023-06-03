@@ -32,9 +32,23 @@ class App {
         $this->session = new Session();
         $this->router = new Router($this->request, $this->response);
         $this->view = new View();
+<<<<<<< HEAD
         $this->db = new Database();
         $this->userClass = User::class;
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        $this->db = new Database();
+        $this->userClass = User::class;
+=======
+        $this->db = new Database($config);
+>>>>>>> parent of 8861080 (no message)
+=======
+        $this->db = new Database($config);
+>>>>>>> f3833bb6c855df2aac1677c84f01df6f994a58f6
+    
+>>>>>>> ce681fc087022242e44b929fb55f939c18a076ee
         $primaryValue = $this->session->get('user');
         if ($primaryValue) {
             $userInstance = new $this->userClass();
