@@ -3,10 +3,9 @@
 namespace app\models;
 
 use app\core\db\DbModel;
-use app\core\app;
+use app\core\App;
 
-
-class EnrollmentModel extends DbModel 
+class EnrollmentModel extends DbModel
 {
     public int $id = 0;
     public int $student_id = 0;
@@ -14,12 +13,14 @@ class EnrollmentModel extends DbModel
     public int $status = 0;
     public string $created_at = '';
     public string $updated_at = '';
-    public $user_id;
+    public int $user_id = 0;
+
 
     public static function tableName(): string
     {
         return 'enrollment';
     }
+
     public function primaryKey(): string
     {
         return 'id';
@@ -48,19 +49,6 @@ class EnrollmentModel extends DbModel
         ];
     }
 
-    public static function findAllObjects(): array
-    {
-        $db = App::$app->db;
-        $sql = "SELECT * FROM enrollment";
-        $statement = $db->pdo->prepare($sql);
-        $statement->execute();
-        $users = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $users[] = $row;
-        }
-        return $users;
-    }
-
     public function beforeSave()
     {
         if (!parent::beforeSave()) {
@@ -73,15 +61,26 @@ class EnrollmentModel extends DbModel
         return true;
     }
 
-    public function delete()
+    public static function findAllObjects(): array
     {
         $db = App::$app->db;
-        $sql = "DELETE FROM enrollment WHERE id = :id";
-        $statement = $db->pdo->prepare($sql);
-        $statement->bindValue(':id', $this->id);
+        $tableName = static::tableName();
+        $sql = "SELECT * FROM $tableName";
+        $statement = $db->prepare($sql);
         $statement->execute();
-        return true;
+        $objects = [];
+        while ($row = $statement->fetchObject(static::class)) {
+            $objects[] = $row;
+        }
+        return $objects;
     }
 
-
+    public static function findAll($id = null)
+    {
+        $sql = "SELECT * FROM " . self::tableName() . " WHERE student_id = :id";
+        $stmt = App::$app->db->prepare($sql);
+        $stmt->bindValue(":id", $id);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }

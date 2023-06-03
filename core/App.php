@@ -36,11 +36,15 @@ class App
         $this->router = new Router($this->request, $this->response);
         $this->view = new View();
 <<<<<<< HEAD
+<<<<<<< HEAD
         $this->db = new Database();
         $this->userClass = User::class;
 =======
         $this->db = new Database($config);
 >>>>>>> parent of 8861080 (no message)
+=======
+        $this->db = new Database($config);
+>>>>>>> f3833bb6c855df2aac1677c84f01df6f994a58f6
     
         $primaryValue = $this->session->get('user');
         if ($primaryValue) {
@@ -100,4 +104,3 @@ class App
         return $user && $user->role === 'student';
     }
 }
-

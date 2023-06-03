@@ -7,16 +7,22 @@ class View
     public string $title = '';
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     public function renderView($view, $params = []) {
 =======
     public function renderView($view, $params = [])
     {
 >>>>>>> parent of 8861080 (no message)
+=======
+    public function renderView($view, $params = [])
+    {
+>>>>>>> f3833bb6c855df2aac1677c84f01df6f994a58f6
         $viewContent = $this->renderOnlyView($view, $params);
         $TemplateContent = $this->TemplateContent();
         return str_replace('{{content}}', $viewContent, $TemplateContent);
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
     
     public function renderContent($viewContent) {
@@ -36,6 +42,12 @@ class View
     {
         $template = $this->getTemplate();
 >>>>>>> parent of 8861080 (no message)
+=======
+
+    protected function TemplateContent()
+    {
+        $template = $this->getTemplate();
+>>>>>>> f3833bb6c855df2aac1677c84f01df6f994a58f6
         ob_start();
         include_once App::$ROOT_DIR . "/views/templates/$template.php";
         return ob_get_clean();

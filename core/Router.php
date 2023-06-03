@@ -65,9 +65,13 @@ class Router
         $this->routes['DELETE'][$path] = $callback;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     
 }
 =======
 }
 >>>>>>> parent of 8861080 (no message)
+=======
+}
+>>>>>>> f3833bb6c855df2aac1677c84f01df6f994a58f6
