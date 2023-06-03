@@ -12,8 +12,13 @@ use app\controllers\ProgressController;
 
 use app\core\App;
 
-$app = new App(dirname(__DIR__));
+$app = new App(dirname(__DIR__), $_ENV);
 
+<<<<<<< HEAD
+=======
+// Laad de routes
+require_once __DIR__ . '/app/routes/routes.php';
+>>>>>>> parent of 8861080 (no message)
 
 // SITE
 $app->router->get('/', [SiteController::class, 'home']);
