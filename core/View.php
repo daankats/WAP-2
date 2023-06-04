@@ -4,37 +4,28 @@ namespace app\core;
 
 class View
 {
-    public string $title = '';
-
-    public function renderView($view, $params = [])
+    public static function render($view, $data = [])
     {
-        $viewContent = $this->renderOnlyView($view, $params);
-        $layoutContent = $this->layoutContent();
-        return str_replace('{{content}}', "<div class='col p-5'>$viewContent</div>", $layoutContent);
-    }
+        $viewFile = __DIR__ . '/../views/' . $view . '.php';
 
-    public function renderContent($viewContent)
-    {
-        $layoutContent = $this->layoutContent();
-        return str_replace('{{content}}', "<div class='col p-5'>$viewContent</div>", $layoutContent);
-    }
+        if (file_exists($viewFile)) {
+            // Extract the data array into variables
+            extract($data);
 
-    protected function layoutContent()
-    {
-        $layout = App::$app->layout;
-        if (App::$app->controller) {
-            $layout = App::$app->controller->layout;
+            // Start output buffering
+            ob_start();
+
+            // Include the view file
+            require_once $viewFile;
+
+            // Get the rendered view content
+            $content = ob_get_clean();
+
+            // Return the rendered view
+            return $content;
         }
-        ob_start();
-        include App::$ROOT_DIR . "/views/layouts/$layout.php";
-        return ob_get_clean();
-    }
 
-    protected function renderOnlyView($view, $params)
-    {
-        extract($params); // Extract the associative array into variables
-        ob_start();
-        include App::$ROOT_DIR . "/views/$view.php";
-        return ob_get_clean();
+        // Return an empty string if the view file does not exist
+        return '';
     }
 }

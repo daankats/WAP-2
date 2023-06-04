@@ -20,5 +20,6 @@ $router = new Router($request, $response);
 require_once __DIR__ . '/../routes/routes.php';
 
 // Resolve the request
-$response->setContent($router->resolve());
+$content = $router->resolve();
+$response->setContent($content);
 $response->send();

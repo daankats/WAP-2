@@ -2,19 +2,15 @@
 
 namespace app\controllers;
 
-use app\core\App;
-use app\core\Controller;
-use app\core\Request;
+use app\core\View;
 
-
-
-class HomeController extends Controller
+class HomeController
 {
-    public function home()
+    public function index()
     {
-        return $this->render('home');
+        // Render the "home" view
+        return View::render('home');
     }
-    
 }
- 
+
 
