@@ -1,5 +1,5 @@
 <?php 
-use app\controllers\SiteController;
+use app\controllers\HomeController;
 use app\controllers\AuthController;
 use app\controllers\AdminController;
 use app\controllers\CourseController;
@@ -8,7 +8,7 @@ use app\controllers\ExamsController;
 use app\controllers\ProgressController;
 
 // SITE
-$app->router->get('/', [SiteController::class, 'home']);
+$app->router->get('/', [HomeController::class, 'home']);
 
 // AUTH
 $app->router->get('/login', [AuthController::class, 'login']);

@@ -20,8 +20,5 @@ $router = new Router($request, $response);
 require_once __DIR__ . '/../routes/routes.php';
 
 // Resolve the request
-try {
-    $response->setContent($router->resolve());
-} catch (\app\core\exception\NotFoundException $e) {
-}
+$response->setContent($router->resolve());
 $response->send();

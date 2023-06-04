@@ -17,11 +17,7 @@ class Response {
     }
 
     public function send() {
-        if (ob_get_level() > 0) {
-            ob_end_flush();
-        }
-        exit;
+        ob_end_flush();
     }
-
 }
 

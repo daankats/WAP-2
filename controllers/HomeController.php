@@ -8,7 +8,7 @@ use app\core\Request;
 
 
 
-class SiteController extends Controller
+class HomeController extends Controller
 {
     public function home()
     {
