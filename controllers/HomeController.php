@@ -6,11 +6,13 @@ use app\core\View;
 
 class HomeController
 {
-    public function index()
+    public function index(): string
     {
-        // Render the "home" view
-        return View::render('home');
+        $data = [
+            'title' => 'Home',
+            'content' => View::render('home', [], false)
+        ];
+
+        return View::render('layouts/main', $data);
     }
 }
-
-

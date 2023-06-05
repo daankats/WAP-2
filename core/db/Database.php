@@ -3,7 +3,6 @@
 namespace app\core\db;
 use Exception;
 use PDO;
-use app\core\App;
 
 class Database{
     public PDO $pdo;

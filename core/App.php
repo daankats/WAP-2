@@ -2,18 +2,14 @@
 
 namespace app\core;
 
-use app\core\Controller;
-use app\models\User;
-use app\core\Request;
-use app\core\Response;
 use app\core\db\Database;
-use app\core\Session;
 use app\core\db\DbModel;
+use app\models\User;
 
-class App {
+class App
+{
     public static string $ROOT_DIR;
     public static App $app;
-    public string $layout = 'main';
     public string $userClass = '';
     public Router $router;
     public Request $request;
@@ -24,7 +20,8 @@ class App {
     public ?User $user = null;
     public View $view;
 
-    public function __construct($rootPath) {
+    public function __construct($rootPath)
+    {
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
         $this->request = new Request();
@@ -34,7 +31,7 @@ class App {
         $this->view = new View();
         $this->db = new Database();
         $this->userClass = User::class;
-    
+
         $primaryValue = $this->session->get('user');
         if ($primaryValue) {
             $userInstance = new $this->userClass();
@@ -43,26 +40,34 @@ class App {
         }
     }
 
-    public function run() {
+    public function run()
+    {
         try {
-            echo $this->router->resolve();
+            $response = $this->router->resolve();
+            $this->response->setContent($response);
+            $this->response->send();
         } catch (\Exception $e) {
-            $this->response->setStatusCode((int) $e->getCode());
-            echo $this->view->renderView('_error', [
+            $this->response->setStatusCode((int)$e->getCode());
+            $content = $this->view->renderView('_error', [
                 'exception' => $e
             ]);
+            $this->response->setContent($content);
+            $this->response->send();
         }
     }
 
-    public function getController() {
+    public function getController()
+    {
         return $this->controller;
     }
 
-    public function setController(Controller $controller) {
+    public function setController(Controller $controller)
+    {
         $this->controller = $controller;
     }
 
-    public function login(DbModel $user) {
+    public function login(DbModel $user)
+    {
         $this->user = $user;
         $primaryKey = $user->primaryKey();
         $primaryValue = $user->{$primaryKey};
@@ -70,7 +75,8 @@ class App {
         return true;
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->user = null;
         $this->session->remove('user');
     }
@@ -97,7 +103,5 @@ class App {
         $user = self::$app->user;
         return $user && $user->role === 'student';
     }
-
-
 }
 
