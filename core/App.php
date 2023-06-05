@@ -10,6 +10,7 @@ class App
 {
     public static string $ROOT_DIR;
     public static App $app;
+    private static ?self $instance = null;
     public string $userClass = '';
     public Router $router;
     public Request $request;
@@ -24,6 +25,7 @@ class App
     {
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
+        self::$instance = $this;
         $this->request = new Request();
         $this->response = new Response();
         $this->session = new Session();
@@ -40,6 +42,11 @@ class App
         }
     }
 
+    public static function getInstance(): self
+    {
+        return self::$instance;
+    }
+
     public function run()
     {
         try {
@@ -54,16 +61,6 @@ class App
             $this->response->setContent($content);
             $this->response->send();
         }
-    }
-
-    public function getController()
-    {
-        return $this->controller;
-    }
-
-    public function setController(Controller $controller)
-    {
-        $this->controller = $controller;
     }
 
     public function login(DbModel $user)

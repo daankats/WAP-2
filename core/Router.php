@@ -4,32 +4,33 @@ namespace app\core;
 
 class Router
 {
-    private Request $request;
-    private Response $response;
-    private array $routes = [];
+    public $routes;
+    public $request;
+    public $response;
 
-    public function __construct(Request $request, Response $response)
+    public function __construct($request, $response)
     {
+        $this->routes = [];
         $this->request = $request;
         $this->response = $response;
     }
 
-    public function get(string $path, $callback)
+    public function get(string $path, $callback): void
     {
         $this->addRoute('GET', $path, $callback);
     }
 
-    public function post(string $path, $callback)
+    public function post(string $path, $callback): void
     {
         $this->addRoute('POST', $path, $callback);
     }
 
-    private function addRoute(string $method, string $path, $callback)
+    private function addRoute(string $method, string $path, $callback): void
     {
         $this->routes[$method][$path] = $callback;
     }
 
-    public function resolve()
+    public function resolve(): false|string|null
     {
         $path = $this->request->getPath();
         $method = $this->request->getMethod();
@@ -86,7 +87,7 @@ class Router
         return null;
     }
 
-    private function matchRoute(string $route, string $path)
+    private function matchRoute(string $route, string $path): false|int
     {
         $pattern = preg_replace('/\//', '\\/', $route);
         $pattern = '/^' . $pattern . '$/';
@@ -99,7 +100,4 @@ class Router
         return View::render($view);
     }
 
-    public function getRoutes() {
-        return $this->routes;
-    }
 }

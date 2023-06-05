@@ -1,6 +1,5 @@
 <?php
 
-use app\core\App;
 use app\controllers\HomeController;
 use app\controllers\AuthController;
 use app\controllers\AdminController;
@@ -9,11 +8,7 @@ use app\controllers\ProfileController;
 use app\controllers\ExamsController;
 use app\controllers\ProgressController;
 
-echo 'Routes file is included!';
 
-$app = new App(dirname(__DIR__));
-
-var_dump($app->router->getRoutes());
 // SITE
 $app->router->get('/', [HomeController::class, 'index']);
 
