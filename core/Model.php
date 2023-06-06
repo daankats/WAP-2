@@ -2,28 +2,28 @@
 
 namespace app\core;
 
-abstract class Model {
+use app\database\Database;
+use app\utils\Validation;
 
-    public const RULE_REQUIRED = 'required';
-    public const RULE_EMAIL = 'email';
-    public const RULE_MIN = 'min';
-    public const RULE_MAX = 'max';
-    public const RULE_MATCH = 'match';
-    public const RULE_UNIQUE = 'unique';
-
+abstract class Model
+{
+    protected function getDb()
+    {
+        return Database::getInstance();
+    }
 
     public function loadData($data)
     {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
                 $this->{$key} = $value;
-            }else {
+            } else {
                 echo "Property {$key} does not exist in the model";
             }
         }
         return $this;
     }
-    
+
     abstract public function rules(): array;
 
     public function labels(): array
@@ -37,89 +37,61 @@ abstract class Model {
     }
 
     public array $errors = [];
-    
-    public function addErrorForRule(string $attribute, string $rule, $params = [])
-    {
-        $message = $this->errorMessages()[$rule] ?? '';
-        foreach ($params as $key => $value) {
-            $message = str_replace("{{$key}}", $value, $message);
-        }
-        $this->errors[$attribute][] = $message;
-    }
 
-    public function errorMessages()
-    {
-        return [
-            self::RULE_REQUIRED => 'This field is required',
-            self::RULE_EMAIL => 'This field must be a valid email address',
-            self::RULE_MIN => 'Min length of this field must be {min}',
-            self::RULE_MAX => 'Max length of this field must be {max}',
-            self::RULE_MATCH => 'This field must be the same as {match}',
-            self::RULE_UNIQUE => 'Record with this {field} already exists',
-        ];
-    }
+    public string $email = '';
 
-    public function hasError($attribute)
-    {
-        return $this->errors[$attribute] ?? false;
-    }
+    public string $password = '';
 
     public function validate()
     {
+        $this->errors = [];
+
+        if (empty($this->email)) {
+            $this->addError('email', 'Email is required.');
+        }
+
+        if (empty($this->password)) {
+            $this->addError('password', 'Password is required.');
+        }
+
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            $this->addError('email', 'Email must be a valid email address.');
+        }
+
         foreach ($this->rules() as $attribute => $rules) {
             $value = $this->{$attribute};
             foreach ($rules as $rule) {
-                $ruleName = $rule;
-                if (!is_string($ruleName)) {
-                    $ruleName = $rule[0];
-                }
-                if ($ruleName === self::RULE_REQUIRED && !$value) {
-                    $this->addError($attribute, self::RULE_REQUIRED);
-                }
-                if ($ruleName === self::RULE_EMAIL && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                    $this->addError($attribute, self::RULE_EMAIL);
-                }
-                if ($ruleName === self::RULE_MIN && strlen($value) < $rule['min']) {
-                    $this->addError($attribute, self::RULE_MIN, $rule);
-                }
-                if ($ruleName === self::RULE_MAX && strlen($value) > $rule['max']) {
-                    $this->addError($attribute, self::RULE_MAX, $rule);
-                }
-                if ($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']}) {
-                    $rule['match'] = $this->getLabel($rule['match']);
-                    $this->addError($attribute, self::RULE_MATCH, $rule);
-                }
-                if ($ruleName === self::RULE_UNIQUE) {
-                    $className = $rule['class'];
-                    $uniqueAttr = $rule['attribute'] ?? $attribute;
-                    $tableName = $className::tableName();
-                    $statement = App::$app->db->pdo->prepare("SELECT * FROM $tableName WHERE $uniqueAttr = :attr");
-                    $statement->bindValue(":attr", $value);
-                    $statement->execute();
-                    $record = $statement->fetchObject();
-                    if ($record) {
-                        $this->addError($attribute, self::RULE_UNIQUE, ['field' => $this->getLabel($attribute)]);
+                if (is_callable($rule)) {
+                    if (!$rule($value)) {
+                        $this->addError($attribute, 'Custom validation rule failed.');
                     }
+                } elseif (is_array($rule)) {
+                    $ruleName = $rule[0];
+                    $params = array_slice($rule, 1);
     
+                    if (is_callable($ruleName)) {
+                        if (!$ruleName($value, $params)) {
+                            $this->addError($attribute, 'Custom validation rule failed.');
+                        }
+                    } elseif (method_exists(Validation::class, $ruleName)) {
+                        $validationMethod = [Validation::class, $ruleName];
+                        if (!call_user_func($validationMethod, $value, $params)) {
+                            $this->addError($attribute, 'Validation rule failed.');
+                        }
+                    }
+                } elseif (method_exists(Validation::class, $rule)) {
+                    if (!call_user_func([Validation::class, $rule], $value)) {
+                        $this->addError($attribute, 'Validation rule failed.');
+                    }
                 }
-    
             }
-    
         }
+    
         return empty($this->errors);
     }
-    
-    public function addError(string $attribute, string $rule, $params = []) {
-        $message = $this->errorMessages()[$rule] ?? '';
-        foreach ($params as $key => $value) {
-            $message = str_replace("{{$key}}", $value, $message);
-        }
+
+    public function addError(string $attribute, string $message)
+    {
         $this->errors[$attribute][] = $message;
     }
-    
-    public function getFirstError(string $attribute) {
-        return $this->errors[$attribute][0] ?? false;
-    }
-    
-
 }

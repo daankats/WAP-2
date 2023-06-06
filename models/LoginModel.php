@@ -4,8 +4,9 @@ namespace app\models;
 
 use app\core\Model;
 use app\models\UserModel;
-use app\core\App;
 use app\core\Auth;
+use app\utils\Validation;
+
 
 class LoginModel extends Model
 {
@@ -15,8 +16,8 @@ class LoginModel extends Model
     public function rules(): array
     {
         return [
-            'email' => [self::RULE_REQUIRED, self::RULE_EMAIL],
-            'password' => [self::RULE_REQUIRED]
+            'email' => [Validation::RULE_REQUIRED, Validation::RULE_EMAIL],
+            'password' => [Validation::RULE_REQUIRED]
         ];
     }
 
@@ -33,12 +34,12 @@ class LoginModel extends Model
         $user = UserModel::findOne(['email' => $this->email]);
 
         if (!$user) {
-            $this->addError('email', 'UserModel does not exist with this email');
+            $this->addError('email', 'Email bestaat niet');
             return false;
         }
 
         if (!password_verify($this->password, $user->password)) {
-            $this->addError('password', 'Password is incorrect');
+            $this->addError('password', 'Oeps, het wachtwoord is niet correct');
             return false;
         }
 

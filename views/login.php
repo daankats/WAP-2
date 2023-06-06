@@ -1,12 +1,22 @@
 <?php
-/** @var $model \app\models\UserModel
- */
+/** @var $model \app\models\UserModel */
+
+use app\core\Validation;
 
 ?>
+
 <h1>Inloggen</h1>
 
-<?php if (!empty($errorMessage)) : ?>
-    <div class="alert alert-danger"><?= $errorMessage ?></div>
+<?php if (!empty($model->errors)) : ?>
+    <div class="alert alert-danger">
+        <ul>
+            <?php foreach ($model->errors as $attribute => $errors) : ?>
+                <?php foreach ($errors as $error) : ?>
+                    <li><?= $error ?></li>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 <?php endif; ?>
 
 <form method="post">
@@ -19,4 +29,4 @@
         <input type="password" name="password" id="password" class="form-control" required>
     </div>
     <button type="submit" class="btn btn-primary">Inloggen</button>
-</form> 
+</form>

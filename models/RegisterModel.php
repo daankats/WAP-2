@@ -38,9 +38,9 @@ class RegisterModel extends DbModel
     
     public static function findAllObjects(): array
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->execute();
         $users = [];
         while ($row = $statement->fetchObject(static::class)) {
@@ -50,9 +50,9 @@ class RegisterModel extends DbModel
     }
     public static function findAllObjectsByStudentId($student_id): array
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations WHERE student_id = :student_id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':student_id', $student_id);
         $statement->execute();
         $users = [];
@@ -64,9 +64,9 @@ class RegisterModel extends DbModel
 
     public function isRegistered($exam_id, $student_id)
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations WHERE exam_id = :exam_id AND student_id = :student_id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':exam_id', $exam_id);
         $statement->bindValue(':student_id', $student_id);
         $statement->execute();
@@ -79,9 +79,9 @@ class RegisterModel extends DbModel
 
     public function delete()
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "DELETE FROM registrations WHERE exam_id = :exam_id AND student_id = :student_id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':exam_id', $this->exam_id);
         $statement->bindValue(':student_id', $this->student_id);
         $statement->execute();
@@ -90,9 +90,9 @@ class RegisterModel extends DbModel
 
     public function getRegisteredExams($student_id)
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations WHERE student_id = :student_id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':student_id', $student_id);
         $statement->execute();
         $exams = [];
@@ -104,9 +104,9 @@ class RegisterModel extends DbModel
 
     public static function findAll()
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->execute();
         $registrations = [];
         while ($row = $statement->fetchObject(static::class)) {

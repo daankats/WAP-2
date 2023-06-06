@@ -41,16 +41,11 @@ class GradesModel extends DbModel
         ];
     }
 
-
-    public function getErrors(): array
-    {
-        return $this->errors;
-    }
     public static function findAllObjects(): array
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM " . self::tableName();
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->execute();
         $users = [];
         while ($row = $statement->fetchObject(static::class)) {
@@ -61,9 +56,9 @@ class GradesModel extends DbModel
 
     public function update()
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "UPDATE " . self::tableName() . " SET grade = :grade WHERE id = :id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':grade', $this->grade);
         $statement->bindValue(':id', $this->id);
         $statement->execute();
@@ -72,9 +67,9 @@ class GradesModel extends DbModel
 
     public static function findAll($user_id)
     {   
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM " . self::tableName() . " WHERE exam_id = :exam_id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':exam_id', $user_id['exam_id']);
         $statement->execute();
         $grades = [];
@@ -87,9 +82,9 @@ class GradesModel extends DbModel
     
     public function findById(int $id)
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM " . self::tableName() . " WHERE user_id = :user_id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':user_id', $id);
         $statement->execute();
         $grades = [];
