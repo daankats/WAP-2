@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\core\Auth;
 use app\core\db\DbModel;
 use app\core\App;
 
@@ -11,15 +12,12 @@ use app\core\App;
  */
 class UserModel extends DbModel
 {
-    public const STATUS_INACTIVE = 'inactive';
-    public const STATUS_ACTIVE = 'active';
-    public const STATUS_DELETED = 'deleted';
     public int $id = 0;
     public string $created_at = '';
     public string $firstName = '';
     public string $lastName = '';
     public string $email = '';
-    public string $status = self::STATUS_INACTIVE;
+    public string $status = '';
     public string $password = '';
     public string $confirmPassword = '';
     public string $role = '';
@@ -116,8 +114,8 @@ class UserModel extends DbModel
      */
     public function register(): bool
 {
-    if (App::isAdmin()) {
-        $this->status = self::STATUS_ACTIVE;
+    if (Auth::isAdmin()) {
+        $this->status = 'active';
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
         return $this->save();
     } else {

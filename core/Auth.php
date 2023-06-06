@@ -6,24 +6,24 @@ use app\models\UserModel;
 
 class Auth
 {
-    public static function isGuest()
+    public static function isGuest(): bool
     {
         return !App::$app->user;
     }
 
-    public static function isStudent()
+    public static function isStudent(): bool
     {
         return App::$app->user->role === 'student';
     }
 
-    public static function isAdmin()
+    public static function isAdmin(): bool
     {
-        return App::$app->user->role === 'admin';
+        return App::$app->user->role === 'beheerder';
     }
 
-    public static function isTeacher()
+    public static function isTeacher(): bool
     {
-        return App::$app->user->role === 'teacher';
+        return App::$app->user->role === 'docent';
     }
 
     public static function login(UserModel $user)
