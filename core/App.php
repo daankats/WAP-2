@@ -10,8 +10,6 @@ class App
 {
     public static string $ROOT_DIR;
     public static App $app;
-    private static ?self $instance = null;
-    public string $userClass = '';
     public Router $router;
     public Request $request;
     public Response $response;
@@ -19,20 +17,20 @@ class App
     public Database $db;
     public Session $session;
     public ?User $user = null;
+    public string $userClass = User::class;
     public View $view;
 
     public function __construct($rootPath)
     {
         self::$ROOT_DIR = $rootPath;
         self::$app = $this;
-        self::$instance = $this;
         $this->request = new Request();
         $this->response = new Response();
         $this->session = new Session();
         $this->router = new Router($this->request, $this->response);
-        $this->view = new View();
         $this->db = new Database();
         $this->userClass = User::class;
+        $this->view = new View();
 
         $primaryValue = $this->session->get('user');
         if ($primaryValue) {
@@ -42,25 +40,20 @@ class App
         }
     }
 
-    public static function getInstance(): self
-    {
-        return self::$instance;
-    }
-
     public function run()
     {
         try {
-            $response = $this->router->resolve();
-            $this->response->setContent($response);
-            $this->response->send();
+            $this->router->resolve($this->request);
         } catch (\Exception $e) {
             $this->response->setStatusCode((int)$e->getCode());
-            $content = $this->view->renderView('_error', [
-                'exception' => $e
-            ]);
-            $this->response->setContent($content);
-            $this->response->send();
+            $this->response->setContent($e->getMessage());
         }
+
+        $this->response->send();
+    }
+    public function isGuest()
+    {
+        return !$this->user;
     }
 
     public function login(DbModel $user)
@@ -77,28 +70,4 @@ class App
         $this->user = null;
         $this->session->remove('user');
     }
-
-    public static function isGuest(): bool
-    {
-        return self::$app->user === null;
-    }
-
-    public static function isAdmin(): bool
-    {
-        $user = self::$app->user;
-        return $user && $user->role === 'beheerder';
-    }
-
-    public static function isDocent(): bool
-    {
-        $user = self::$app->user;
-        return $user && $user->role === 'docent';
-    }
-
-    public static function isStudent(): bool
-    {
-        $user = self::$app->user;
-        return $user && $user->role === 'student';
-    }
 }
-

@@ -4,100 +4,54 @@ namespace app\core;
 
 class Router
 {
-    public $routes;
-    public $request;
-    public $response;
+    protected array $routes = [];
+    protected array $controllers = [];
 
-    public function __construct($request, $response)
+    public function get($path, $callback)
     {
-        $this->routes = [];
-        $this->request = $request;
-        $this->response = $response;
+        $this->routes['get'][$path] = $callback;
     }
 
-    public function get(string $path, $callback): void
+    public function post($path, $callback)
     {
-        $this->addRoute('GET', $path, $callback);
+        $this->routes['post'][$path] = $callback;
     }
 
-    public function post(string $path, $callback): void
+    public function resolve(Request $request)
     {
-        $this->addRoute('POST', $path, $callback);
-    }
+        $path = $request->getPath();
+        $method = $request->getMethod();
+        $callback = $this->routes[$method][$path] ?? false;
 
-    private function addRoute(string $method, string $path, $callback): void
-    {
-        $this->routes[$method][$path] = $callback;
-    }
-
-    public function resolve(): false|string|null
-    {
-        $path = $this->request->getPath();
-        $method = $this->request->getMethod();
-
-        echo "Request Method: $method<br>";
-        echo "Request Path: $path<br>";
-
-        $callback = $this->findRoute($method, $path);
-
-        if ($callback === null) {
-            $this->response->setStatusCode(404);
-            echo "Route not found<br>";
-            return "404 Not Found";
+        if (!$callback) {
+            throw new \Exception('Page not found', 404);
         }
 
         if (is_string($callback)) {
-            echo "Rendering view: $callback<br>";
             return $this->renderView($callback);
         }
 
         if (is_array($callback)) {
-            [$controllerClass, $method] = $callback;
+            $controllerClass = $callback[0];
+            $action = $callback[1];
 
-            if (!class_exists($controllerClass)) {
-                echo "Controller class $controllerClass not found<br>";
-                throw new \Exception("Controller class $controllerClass not found");
+            if (!isset($this->controllers[$controllerClass])) {
+                $this->controllers[$controllerClass] = new $controllerClass();
             }
 
-            $controller = new $controllerClass();
+            $controller = $this->controllers[$controllerClass];
 
-            if (!method_exists($controller, $method)) {
-                echo "Method $method not found in controller $controllerClass<br>";
-                throw new \Exception("Method $method not found in controller $controllerClass");
-            }
-
-            return $controller->$method();
+            return call_user_func([$controller, $action], $request);
         }
 
-        return null;
+        return call_user_func($callback, $request);
     }
 
-
-
-    private function findRoute(string $method, string $path)
+    protected function renderView($view)
     {
-        if (isset($this->routes[$method])) {
-            foreach ($this->routes[$method] as $route => $callback) {
-                if ($this->matchRoute($route, $path)) {
-                    return $callback;
-                }
-            }
-        }
-
-        return null;
+        ob_start();
+        include_once App::$ROOT_DIR . "/views/$view.php";
+        return ob_get_clean();
     }
-
-    private function matchRoute(string $route, string $path): false|int
-    {
-        $pattern = preg_replace('/\//', '\\/', $route);
-        $pattern = '/^' . $pattern . '$/';
-
-        return preg_match($pattern, $path);
-    }
-
-    private function renderView(string $view)
-    {
-        return View::render($view);
-    }
-
 }
+

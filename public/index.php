@@ -1,13 +1,15 @@
 <?php
 
 use app\core\App;
+use app\core\Request;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$app = new App(dirname(__DIR__));
+$request = new Request();
+$rootDir = dirname(__DIR__);
 
-// Include routes file
+$app = new App($rootDir, $request);
+
 require_once __DIR__ . '/../routes/routes.php';
 
-// Start de applicatie
 $app->run();

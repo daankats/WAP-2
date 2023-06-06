@@ -8,7 +8,6 @@ use app\controllers\ProfileController;
 use app\controllers\ExamsController;
 use app\controllers\ProgressController;
 
-
 // SITE
 $app->router->get('/', [HomeController::class, 'index']);
 

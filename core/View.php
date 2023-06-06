@@ -4,64 +4,25 @@ namespace app\core;
 
 class View
 {
-    protected static string $defaultLayout = 'main';
+    protected string $layout = 'main';
 
-    public static function render($view, $data = [], $useLayout = true): false|string
+    public function render($view, $data = [])
     {
-        $viewFile = __DIR__ . '/../views/' . $view . '.php';
+        extract($data);
+        ob_start();
+        include_once "../views/$view.php";
+        $content = ob_get_clean();
 
-        if (file_exists($viewFile)) {
-            // Extract the data array into variables
-            extract($data);
+        // Toevoeging: Maak $content beschikbaar als parameter aan de layout
+        ob_start();
+        include_once "../views/layouts/$this->layout.php";
+        $layoutContent = ob_get_clean();
 
-            // Start output buffering
-            ob_start();
+        // Vervang de {{content}} tag met de daadwerkelijke inhoud van de view
+        $layoutContent = str_replace('{{content}}', $content, $layoutContent);
 
-            // Include the view file
-            require_once $viewFile;
-
-            // Get the rendered view content
-            $content = ob_get_clean();
-
-            // Return the rendered view with or without the layout
-            if ($useLayout) {
-                return self::renderLayout(static::$defaultLayout, ['content' => $content]);
-            } else {
-                return $content;
-            }
-        }
-
-        // Return an empty string if the view file does not exist
-        return '';
+        // Echo de layout met de inhoud
+        echo $layoutContent;
     }
 
-    public static function renderLayout($layout, $data = []): false|string
-    {
-        $layoutFile = __DIR__ . '/../views/layouts/' . $layout . '.php';
-
-        if (file_exists($layoutFile)) {
-            // Extract the data array into variables
-            extract($data);
-
-            // Start output buffering
-            ob_start();
-
-            // Include the layout file
-            require_once $layoutFile;
-
-            // Get the rendered layout content
-            $content = ob_get_clean();
-
-            // Return the rendered layout
-            return $content;
-        }
-
-        // Return an empty string if the layout file does not exist
-        return '';
-    }
-
-    public static function setDefaultLayout($layout)
-    {
-        static::$defaultLayout = $layout;
-    }
 }
