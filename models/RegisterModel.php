@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use app\core\db\DbModel;
+use app\database\DbModel;
 use app\core\app;
 
 
@@ -35,15 +35,7 @@ class RegisterModel extends DbModel
             'student_id' => 'Student ID'
         ];
     }
-
-    public function rules(): array
-    {
-        return [
-            'exam_id' => [self::RULE_REQUIRED],
-            'student_id' => [self::RULE_REQUIRED],
-        ];
-    }
-
+    
     public static function findAllObjects(): array
     {
         $db = App::$app->db;

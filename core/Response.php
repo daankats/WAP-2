@@ -2,10 +2,6 @@
 
 namespace app\core;
 
-use app\core\App;
-use db\Database;
-use db\DbModel;
-use app\models\UserModel;
 
 class Response {
     public function setStatusCode(int $code) {

@@ -3,7 +3,7 @@
 namespace app\models;
 
 use app\core\Auth;
-use app\core\db\DbModel;
+use app\database\DbModel;
 use app\core\App;
 
 /**
@@ -46,23 +46,7 @@ class UserModel extends DbModel
         return 'id';
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function rules(): array
-    {
-        return [
-            'firstName' => [self::RULE_REQUIRED],
-            'lastName' => [self::RULE_REQUIRED],
-            'email' => [self::RULE_REQUIRED, self::RULE_EMAIL, [self::RULE_UNIQUE, 'class' => self::class]],
-            'password' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 8], [self::RULE_MAX, 'max' => 24]],
-            'confirmPassword' => [self::RULE_REQUIRED, [self::RULE_MATCH, 'match' => 'password']],
-        ];
-    }
 
-    /**
-     * @inheritDoc
-     */
     public function labels(): array
     {
         return [
@@ -81,37 +65,24 @@ class UserModel extends DbModel
     public function validateConfirmPassword(): bool
     {
         if ($this->password !== $this->confirmPassword) {
-            $this->addError('confirmPassword', 'Wachtwoorden komen niet overeen');
             return false;
         }
         return true;
     }
 
-    /**
-     * Finds a user by email.
-     * @param string $email
-     * @return UserModel|null
-     */
+ 
     public function findByEmail(string $email): ?UserModel
     {
         return self::findOne(['email' => $email]);
     }
 
-    /**
-     * Finds a user by id.
-     * @param int $id
-     * @return UserModel|null
-     */
 
     public function findById(int $id): ?UserModel
     {
         return self::findOne(['id' => $id]);
     }
 
-    /**
-     * Registers a user.
-     * @return bool
-     */
+
     public function register(): bool
 {
     if (Auth::isAdmin()) {
@@ -119,7 +90,7 @@ class UserModel extends DbModel
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
         return $this->save();
     } else {
-        App::$app->session->setFlash('error', 'You are not authorized to register new users.');
+        
         return false;
     }
 }
@@ -143,9 +114,9 @@ class UserModel extends DbModel
 
     public static function findAllObjects(): array
     {
-        $db = App::$app->db;
+        $db =self::getDb();
         $sql = "SELECT * FROM users";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->execute();
         $users = [];
         while ($row = $statement->fetchObject(static::class)) {
@@ -156,9 +127,9 @@ class UserModel extends DbModel
 
     public static function Delete($id)
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "DELETE FROM users WHERE id = :id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':id', $id);
         $statement->execute();
     }

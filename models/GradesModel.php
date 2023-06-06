@@ -2,7 +2,7 @@
 namespace app\models;
 
 use app\core\App;
-use app\core\db\DbModel;
+use app\database\DbModel;
 
 class GradesModel extends DbModel
 {
@@ -30,15 +30,6 @@ class GradesModel extends DbModel
     public function attributes(): array
     {
         return ['user_id', 'exam_id', 'grade'];
-    }
-
-    public function rules(): array
-    {
-        return [
-            'user_id' => [self::RULE_REQUIRED],
-            'exam_id' => [self::RULE_REQUIRED],
-            'grade' => [self::RULE_REQUIRED],
-        ];
     }
 
     public function labels(): array

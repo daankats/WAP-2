@@ -2,11 +2,10 @@
 
 namespace app\models;
 
-use app\core\db\DbModel;
-use app\core\app;
+use app\database\DbModel;
+use app\core\App;
 
-
-class EnrollmentModel extends DbModel 
+class EnrollmentModel extends DbModel
 {
     public int $id = 0;
     public int $student_id = 0;
@@ -20,6 +19,7 @@ class EnrollmentModel extends DbModel
     {
         return 'enrollment';
     }
+
     public function primaryKey(): string
     {
         return 'id';
@@ -39,20 +39,11 @@ class EnrollmentModel extends DbModel
         ];
     }
 
-    public function rules(): array
-    {
-        return [
-            'student_id' => [self::RULE_REQUIRED],
-            'course_id' => [self::RULE_REQUIRED],
-            'status' => [self::RULE_REQUIRED]
-        ];
-    }
-
     public static function findAllObjects(): array
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM enrollment";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->execute();
         $users = [];
         while ($row = $statement->fetchObject(static::class)) {
@@ -61,27 +52,13 @@ class EnrollmentModel extends DbModel
         return $users;
     }
 
-    public function beforeSave()
-    {
-        if (!parent::beforeSave()) {
-            return false;
-        }
-
-        $this->created_at = date('Y-m-d H:i:s');
-        $this->updated_at = date('Y-m-d H:i:s');
-
-        return true;
-    }
-
     public function delete()
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "DELETE FROM enrollment WHERE id = :id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':id', $this->id);
         $statement->execute();
         return true;
     }
-
-
 }

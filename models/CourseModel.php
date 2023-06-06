@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use app\core\db\DbModel;
+use app\database\DbModel;
 use app\core\App;
 use app\models\UserModel;
 
@@ -35,14 +35,6 @@ class CourseModel extends DbModel
         return ['name', 'code', 'created_by', 'created_at', 'updated_by', 'updated_at'];
     }    
 
-    public function rules(): array
-    {
-        return [
-            'name' => [self::RULE_REQUIRED],
-            'code' => [self::RULE_REQUIRED],
-            'created_by' => [self::RULE_REQUIRED],
-        ];
-    }
 
     public function labels(): array
     {
@@ -72,9 +64,9 @@ class CourseModel extends DbModel
 
     public function delete()
     {
-        $db = App::$app->db;
+        $db = $this->getDb();
         $SQL = "DELETE FROM courses WHERE id = :id";
-        $stmt = $db->pdo->prepare($SQL);
+        $stmt = $db->prepare($SQL);
         $stmt->bindValue(':id', $this->id);
         return $stmt->execute();
     }
@@ -82,9 +74,9 @@ class CourseModel extends DbModel
 
     public static function findAllObjects(): array
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM courses";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->execute();
         $users = [];
         while ($row = $statement->fetchObject(static::class)) {
@@ -92,34 +84,34 @@ class CourseModel extends DbModel
         }
         return $users;
     }
-
+    
     public static function findCourseByCode($code)
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM courses WHERE code = :code";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':code', $code);
         $statement->execute();
         $row = $statement->fetchObject(static::class);
         return $row;
     }
-
+    
     public static function findCourseById($id)
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM courses WHERE id = :id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':id', $id);
         $statement->execute();
         $row = $statement->fetchObject(static::class);
         return $row;
     }
-
+    
     public function isEnrolled($course_id)
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM enrollment WHERE student_id = :student_id AND course_id = :course_id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':student_id', App::$app->user->id);
         $statement->bindValue(':course_id', $course_id);
         $statement->execute();
@@ -129,9 +121,9 @@ class CourseModel extends DbModel
     
     public function getCreator(): ?string
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT firstname, lastname FROM users WHERE id = :id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':id', $this->created_by);
         $statement->execute();
         $row = $statement->fetchObject();
@@ -147,12 +139,12 @@ class CourseModel extends DbModel
         return $user->getFullName();
     }
     
-
+    
     public function getEnrolledStudents()
     {
-        $db = App::$app->db;
+        $db = self::getDb();
         $sql = "SELECT * FROM enrollment WHERE course_id = :course_id";
-        $statement = $db->pdo->prepare($sql);
+        $statement = $db->prepare($sql);
         $statement->bindValue(':course_id', $this->id);
         $statement->execute();
         $users = [];
@@ -161,7 +153,6 @@ class CourseModel extends DbModel
         }
         return $users;
     }
-    
     
     
 }

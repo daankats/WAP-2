@@ -1,42 +1,33 @@
 <?php
 
+
 namespace app\core;
 
-use app\core\db\Database;
-use app\core\Auth;
+use app\database\Database;
 use app\models\UserModel;
-
+use app\core\Request;
+use app\core\Response;
+use app\core\Router;
+use app\core\Session;
 
 class App
 {
-    public static string $ROOT_DIR;
     public static App $app;
     public Router $router;
     public Request $request;
     public Response $response;
-    public ?Controller $controller = null;
-    public Database $db;
     public Session $session;
     public ?UserModel $user = null;
-    public string $userClass = UserModel::class;
 
-    public function __construct($rootPath)
+    public function __construct(Router $router, Request $request, Response $response, Session $session, UserModel $user = null)
     {
-        self::$ROOT_DIR = $rootPath;
         self::$app = $this;
-        $this->request = new Request();
-        $this->response = new Response();
-        $this->session = new Session();
-        $this->router = new Router($this);
-        $this->db = new Database();
-        $this->userClass = UserModel::class;
-
-        $primaryValue = $this->session->get('user');
-        if ($primaryValue) {
-            $userInstance = new $this->userClass();
-            $primaryKey = $userInstance->primaryKey();
-            $this->user = $this->userClass::findOne([$primaryKey => $primaryValue]);
-        }
+        $this->router = $router;
+        $this->request = $request;
+        $this->response = $response;
+        $this->session = $session;
+        $this->user = $user;
+        
     }
 
     public function run()
@@ -50,6 +41,4 @@ class App
 
         $this->response->send();
     }
-
-
 }

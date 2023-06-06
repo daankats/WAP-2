@@ -9,6 +9,7 @@ use app\models\UserModel;
 use app\models\LoginModel;
 use app\core\middlewares\AuthMiddleware;
 use app\core\Auth;
+use app\core\App;
 
 
 
@@ -22,7 +23,6 @@ class AuthController extends Controller
         parent::__construct();
         $this->registerMiddleware(new AuthMiddleware(['profile', 'register', 'logout']));
     }
-
 
     public function login(Request $request): View
     {
@@ -49,6 +49,7 @@ class AuthController extends Controller
     }
 
 
+
     public function register(Request $request)
     {
         $user = new UserModel();
@@ -57,7 +58,6 @@ class AuthController extends Controller
             $user->loadData($request->getBody());
 
             if ($user->validate() && $user->register()) {
-                $this->setFlash('success', 'Account created successfully.');
                 return $this->redirect('/dashboard');
             }
         }

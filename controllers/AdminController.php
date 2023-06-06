@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app\controllers;
 
@@ -10,20 +10,21 @@ use app\core\Response;
 use app\models\UserModel;
 
 class AdminController extends Controller
-{   
+{
     public function __construct()
     {
-        $this->setLayout('main');
-        $adminMiddleware = new AdminMiddleware(['index']);
-        $adminMiddleware->execute();
+        parent::__construct();
+        $adminMiddleware = new AdminMiddleware(['index', 'edit', 'delete']);
     }
 
 
-    public function index() {
+    public function index()
+    {
         $users = UserModel::findAllObjects();
-        return $this->render('admin/index', [
+        $this->view->title = 'Admin';
+        $this->view->render('admin/index', [
             'users' => $users
-        ]);
+        ], 'admin');
     }
 
     public function middlewares(): array
@@ -39,27 +40,26 @@ class AdminController extends Controller
     {
         $id = $request->get('id');
         $user = UserModel::findOne(['id' => $id]);
-    
+
         if (!$user) {
             $response->redirect('/admin');
         }
-    
-        if ($request->method() === 'post') {
+
+        if ($request->isPost()) {
             $data = $request->getBody();
             $user->loadData($data);
-    
+
             if ($user->save()) {
                 App::$app->session->setFlash('success', 'UserModel updated successfully');
                 $response->redirect('/admin');
             }
         }
-    
-        $this->setLayout('main');
-        return $this->render('/admin/edit', [
+        $this->view->title = 'Admin';
+        $this->view->render('/admin/edit', [
             'user' => $user
-        ]);
+        ], 'admin');
     }
-    
+
     public function delete(Request $request, Response $response)
     {
         $id = $request->getBody()['id'] ?? null;

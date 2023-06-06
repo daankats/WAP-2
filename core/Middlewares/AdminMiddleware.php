@@ -1,24 +1,23 @@
 <?php
 
-namespace app\core\middlewares;
+namespace app\core\Middlewares;
 
-use app\core\App;
+use app\core\Auth;
 use app\core\exception\ForbiddenException;
 use app\core\Request;
 use app\core\Response;
 
 class AdminMiddleware extends BaseMiddleware
 {
-    public function execute()
+    public function handle(Request $request, Response $response)
     {
-        if (App::isGuest() || !App::isAdmin()) {
-            throw new ForbiddenException();
+        if (Auth::isGuest() || !Auth::isAdmin()) {
+            // Gebruiker is niet ingelogd, doorverwijzen naar de inlogpagina
+            $response->redirect('/login');
+            return $response;
         }
-    }
 
-    public function handle(Request $request, Response $response, callable $next)
-    {
-        $this->execute();
-        return $next($request, $response);
+        // Voer de volgende middleware of controller actie uit
+        return null;
     }
 }

@@ -4,15 +4,26 @@ use app\core\App;
 use app\core\Request;
 use app\core\Response;
 use app\core\Router;
+use app\core\Session;
+use app\models\UserModel;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $request = new Request();
 $response = new Response();
-$rootDir = dirname(__DIR__);
+$router = new Router();
+$session = new Session();
 
-$app = new App($rootDir, $request, $response);
-$app->router = new Router($app); // Initialiseer de Router en wijs deze toe aan de router-eigenschap van de App-instantie
+// Inlogproces
+$user = null;
+$primaryValue = $session->getSessionUser();
+if ($primaryValue) {
+    $userInstance = new UserModel();
+    $primaryKey = $userInstance->primaryKey();
+    $user = UserModel::findOne([$primaryKey => $primaryValue]);
+}
+
+$app = new App($router, $request, $response, $session, $user);
 
 require_once __DIR__ . '/../routes/routes.php';
 
