@@ -1,7 +1,7 @@
 <?php
 use app\core\App;
 use app\models\ExamsModel;
-use app\models\User;
+use app\models\UserModel;
 use app\models\GradesModel;
 
 $this->title = 'Tentamenresultaten';
@@ -33,7 +33,7 @@ if (!empty($errors)): ?>
             <?php
                 $grades = GradesModel::findAll(['exam_id' => $exam->id]);
                 foreach ($grades as $grade) :
-                    $student = User::findOne(['id' => $grade->user_id]);
+                    $student = UserModel::findOne(['id' => $grade->user_id]);
             ?>
                     <tr>
                         <td><?= $exam->name ?></td>

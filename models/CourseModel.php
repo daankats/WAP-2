@@ -4,7 +4,7 @@ namespace app\models;
 
 use app\core\db\DbModel;
 use app\core\App;
-use app\models\User;
+use app\models\UserModel;
 
 class CourseModel extends DbModel
 {
@@ -140,7 +140,7 @@ class CourseModel extends DbModel
             return null;
         }
     
-        $user = new User();
+        $user = new UserModel();
         $user->firstName = $row->firstname;
         $user->lastName = $row->lastname;
     

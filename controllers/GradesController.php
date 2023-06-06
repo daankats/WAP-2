@@ -9,7 +9,7 @@ use app\core\Response;
 use app\models\CourseModel;
 use app\models\EnrollmentModel;
 use app\models\ExamsModel;
-use app\models\User;
+use app\models\UserModel;
 use app\core\middlewares\ExamsMiddleware;
 use app\models\GradesModel;
 use app\models\RegisterModel;
@@ -23,10 +23,10 @@ class GradesController extends Controller {
     
     public function index()
 {
-    $user = User::findOne(['id' => App::$app->user->id]);
+    $user = UserModel::findOne(['id' => App::$app->user->id]);
     $grades = GradesModel::findAllObjects();
     $courses = CourseModel::findAllObjects();
-    $users = User::findAllObjects();
+    $users = UserModel::findAllObjects();
     $registers = EnrollmentModel::findAllObjects();
     $registered = false;
     $exams = RegisterModel::findAllObjects();
@@ -52,7 +52,7 @@ class GradesController extends Controller {
     
     public function create(Request $request, Response $response) {
         $grade = new GradesModel();
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         if (App::isDocent() || App::isAdmin()) {
             if ($request->isPost()) {
                 $grade->loadData($request->getBody());
@@ -72,7 +72,7 @@ class GradesController extends Controller {
     
     public function edit(Request $request, Response $response) {
         $grade = GradesModel::findOne(['id' => $request->getBody()['id']]);
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         if (App::isDocent() || App::isAdmin()) {
             if ($request->isPost()) {
                 $grade->loadData($request->getBody());

@@ -6,11 +6,27 @@ use app\core\middlewares\BaseMiddleware;
 
 class Controller
 {
-    protected Request $request;
+    protected array $middlewares = [];
+    protected ?View $view = null;
 
-    public function __construct(Request $request)
+    public function __construct()
     {
-        $this->request = $request;
+        $this->view = new View();
     }
 
+    public function registerMiddleware(BaseMiddleware $middleware): void
+    {
+        $this->middlewares[] = $middleware;
+    }
+
+    public function getMiddlewares(): array
+    {
+        return $this->middlewares;
+    }
+
+    public function redirect(string $url)
+    {
+        header('Location: ' . $url);
+        exit;
+    }
 }

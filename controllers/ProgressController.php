@@ -5,14 +5,14 @@ namespace app\controllers;
 use app\core\Controller;
 use app\models\GradesModel;
 use app\models\ExamsModel;
-use app\models\User;
+use app\models\UserModel;
 use app\core\App;
 
 class ProgressController extends Controller
 {
     public function myProgress()
     {
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
     
         $gradesModel = new GradesModel();
         $grades = $gradesModel->findById($user->id);

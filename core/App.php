@@ -3,8 +3,9 @@
 namespace app\core;
 
 use app\core\db\Database;
-use app\core\db\DbModel;
-use app\models\User;
+use app\core\Auth;
+use app\models\UserModel;
+
 
 class App
 {
@@ -16,9 +17,8 @@ class App
     public ?Controller $controller = null;
     public Database $db;
     public Session $session;
-    public ?User $user = null;
-    public string $userClass = User::class;
-    public View $view;
+    public ?UserModel $user = null;
+    public string $userClass = UserModel::class;
 
     public function __construct($rootPath)
     {
@@ -29,8 +29,7 @@ class App
         $this->session = new Session();
         $this->router = new Router($this->request, $this->response);
         $this->db = new Database();
-        $this->userClass = User::class;
-        $this->view = new View();
+        $this->userClass = UserModel::class;
 
         $primaryValue = $this->session->get('user');
         if ($primaryValue) {
@@ -51,23 +50,6 @@ class App
 
         $this->response->send();
     }
-    public function isGuest()
-    {
-        return !$this->user;
-    }
 
-    public function login(DbModel $user)
-    {
-        $this->user = $user;
-        $primaryKey = $user->primaryKey();
-        $primaryValue = $user->{$primaryKey};
-        $this->session->set('user', $primaryValue);
-        return true;
-    }
 
-    public function logout()
-    {
-        $this->user = null;
-        $this->session->remove('user');
-    }
 }

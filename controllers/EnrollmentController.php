@@ -7,7 +7,7 @@ use app\core\Controller;
 use app\core\middlewares\EnrollmentMiddleware;
 use app\models\CourseModel;
 use app\models\EnrollmentModel;
-use app\models\User;
+use app\models\UserModel;
 
 class EnrollmentController extends Controller
 {
@@ -19,7 +19,7 @@ class EnrollmentController extends Controller
     public function enroll()
     {
         $enrollment = new EnrollmentModel();
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         if ($user->role == 'student') {
             if ($enrollment->loadData($_POST)) {
                 if ($enrollment->validate() && $enrollment->save()) {

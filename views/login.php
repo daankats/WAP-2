@@ -1,9 +1,13 @@
 <?php
-/** @var $model \app\models\User
+/** @var $model \app\models\UserModel
  */
 
 ?>
 <h1>Inloggen</h1>
+
+<?php if (!empty($errorMessage)) : ?>
+    <div class="alert alert-danger"><?= $errorMessage ?></div>
+<?php endif; ?>
 
 <form method="post">
     <div class="form-group">

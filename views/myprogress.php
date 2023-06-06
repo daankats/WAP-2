@@ -3,11 +3,11 @@
 use app\core\App;
 use app\models\GradesModel;
 use app\models\ExamsModel;
-use app\models\User;
+use app\models\UserModel;
 
 /** @var GradesModel[] $grades */
 /** @var ExamsModel[] $exams */
-/** @var User $user */
+/** @var UserModel $user */
 
 $this->title = 'Mijn voortgang';
 ?>

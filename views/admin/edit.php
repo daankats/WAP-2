@@ -5,13 +5,13 @@ use app\core\App;
 <title><?= $this->title ?> </title>
 
 <?php
-$model = new \app\models\User();
+$model = new \app\models\UserModel();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $model->loadData($_POST);
 
     if ($model->validate() && $model->update()) {
-        App::$app->session->setFlash('success', 'User updated successfully.');
+        App::$app->session->setFlash('success', 'UserModel updated successfully.');
         header('Location: /users');
         exit;
     }

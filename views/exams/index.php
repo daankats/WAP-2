@@ -1,11 +1,11 @@
 <?php
 use app\core\App;
 use app\models\RegisterModel;
-use app\models\User;
+use app\models\UserModel;
 
 $this->title = 'Exams';
 $registerModel = new RegisterModel();
-$user = User::findOne(['id' => App::$app->user->id]);
+$user = UserModel::findOne(['id' => App::$app->user->id]);
 ?>
 
 <?php if ($message = App::$app->session->getFlash('success')): ?>

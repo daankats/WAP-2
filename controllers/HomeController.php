@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
-class HomeController
+use app\core\Controller;
+
+class HomeController extends Controller
 {
     public function index()
     {
-        $view = new \app\core\View();
-        $view->render('home');
+        $this->view->title = 'Home';
+        $this->view->render('home', [], 'main');
     }
 }
+

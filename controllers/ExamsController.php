@@ -9,7 +9,7 @@ use app\core\Response;
 use app\models\CourseModel;
 use app\models\EnrollmentModel;
 use app\models\ExamsModel;
-use app\models\User;
+use app\models\UserModel;
 use app\core\middlewares\ExamsMiddleware;
 use app\models\GradesModel;
 use app\models\RegisterModel;
@@ -24,8 +24,8 @@ class ExamsController extends Controller {
     public function index() {
         $exams = ExamsModel::findAllObjects();
         $courses = CourseModel::findAllObjects();
-        $users = User::findAllObjects();
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $users = UserModel::findAllObjects();
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         $enrollments = EnrollmentModel::findAllObjects();
         $enrolled = false;
         foreach ($enrollments as $enrollment) {
@@ -46,7 +46,7 @@ class ExamsController extends Controller {
     
     public function create(Request $request, Response $response) {
         $exam = new ExamsModel();
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         if (App::isDocent() || App::isAdmin()) {
             if ($request->isPost()) {
                 $exam->loadData($request->getBody());
@@ -85,7 +85,7 @@ class ExamsController extends Controller {
     public function registerExam()
     {
         $register = new RegisterModel();
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         
         if ($user->role == 'student') {
             $register->student_id = $user->id;
@@ -149,7 +149,7 @@ class ExamsController extends Controller {
     public function addGrades(Request $request, Response $response)
     {   
         $grade = new GradesModel();
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         $this->layout = 'main';
         
         if ($request->isPost()) {
@@ -186,7 +186,7 @@ class ExamsController extends Controller {
 
     public function showGrades()
     {
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         $this->layout = 'main';
         $exams = new Examsmodel();
         $exams = ExamsModel::findAllByUserId($user->id);

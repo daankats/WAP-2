@@ -2,15 +2,14 @@
 
 namespace app\models;
 
-use app\core\DbModel;
-use app\core\UserModel;
+use app\core\db\DbModel;
 use app\core\App;
 
 /**
- * Class User
+ * Class UserModel
  * @package app\models
  */
-class User extends UserModel
+class UserModel extends DbModel
 {
     public const STATUS_INACTIVE = 'inactive';
     public const STATUS_ACTIVE = 'active';
@@ -93,9 +92,9 @@ class User extends UserModel
     /**
      * Finds a user by email.
      * @param string $email
-     * @return User|null
+     * @return UserModel|null
      */
-    public function findByEmail(string $email): ?User
+    public function findByEmail(string $email): ?UserModel
     {
         return self::findOne(['email' => $email]);
     }
@@ -103,10 +102,10 @@ class User extends UserModel
     /**
      * Finds a user by id.
      * @param int $id
-     * @return User|null
+     * @return UserModel|null
      */
 
-    public function findById(int $id): ?User
+    public function findById(int $id): ?UserModel
     {
         return self::findOne(['id' => $id]);
     }

@@ -7,7 +7,7 @@ use app\core\Controller;
 use app\core\middlewares\CourseMiddleware;
 use app\models\CourseModel;
 use app\models\EnrollmentModel;
-use app\models\User;
+use app\models\UserModel;
 use app\core\Request;
 use app\core\Response;
 
@@ -22,8 +22,8 @@ class CourseController extends Controller
     {
         $courses = CourseModel::findAllObjects();
         $enrollments = EnrollmentModel::findAllObjects();
-        $users = User::findAllObjects();
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $users = UserModel::findAllObjects();
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         $enrolled = false;
         foreach ($enrollments as $enrollment) {
             if ($enrollment->user_id == $user->id) {
@@ -44,7 +44,7 @@ class CourseController extends Controller
     public function create()
     {
         $course = new CourseModel();
-        $user = User::findOne(['id' => App::$app->user->id]);
+        $user = UserModel::findOne(['id' => App::$app->user->id]);
         if (App::isDocent() || App::isAdmin()) {
 
             if ($course->loadData($_POST)) {

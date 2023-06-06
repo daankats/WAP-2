@@ -7,7 +7,7 @@ use app\core\Controller;
 use app\core\middlewares\AdminMiddleware;
 use app\core\Request;
 use app\core\Response;
-use app\models\User;
+use app\models\UserModel;
 
 class AdminController extends Controller
 {   
@@ -20,7 +20,7 @@ class AdminController extends Controller
 
 
     public function index() {
-        $users = User::findAllObjects();
+        $users = UserModel::findAllObjects();
         return $this->render('admin/index', [
             'users' => $users
         ]);
@@ -38,7 +38,7 @@ class AdminController extends Controller
     public function edit(Request $request, Response $response)
     {
         $id = $request->get('id');
-        $user = User::findOne(['id' => $id]);
+        $user = UserModel::findOne(['id' => $id]);
     
         if (!$user) {
             $response->redirect('/admin');
@@ -49,7 +49,7 @@ class AdminController extends Controller
             $user->loadData($data);
     
             if ($user->save()) {
-                App::$app->session->setFlash('success', 'User updated successfully');
+                App::$app->session->setFlash('success', 'UserModel updated successfully');
                 $response->redirect('/admin');
             }
         }
@@ -66,7 +66,7 @@ class AdminController extends Controller
         if (!$id) {
             throw new \Exception("ID is required");
         }
-        User::delete($id);
+        UserModel::delete($id);
         $response->redirect('/admin');
     }
 }

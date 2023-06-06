@@ -2,7 +2,7 @@
 use app\core\App;
 use app\models\ExamsModel;
 use app\models\RegisterModel;
-use app\models\User;
+use app\models\UserModel;
 use app\models\GradesModel;
 
 $this->title = 'Cijfer toevoegen';
@@ -36,7 +36,7 @@ if (!empty($errors)): ?>
     </thead>
     <tbody>
         <?php foreach ($registrations as $registration) : ?>
-            <?php $student = User::findOne(['id' => $registration->student_id]) ?>
+            <?php $student = UserModel::findOne(['id' => $registration->student_id]) ?>
 
             <?php
             $grade = GradesModel::findOne(['exam_id' => $exam->id, 'user_id' => $student->id]);
