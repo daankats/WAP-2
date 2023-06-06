@@ -1,9 +1,10 @@
 <?php
+
 use app\core\App;
 use app\models\RegisterModel;
 use app\models\UserModel;
+use app\core\Auth;
 
-$this->title = 'Exams';
 $registerModel = new RegisterModel();
 $user = UserModel::findOne(['id' => App::$app->user->id]);
 ?>
@@ -18,7 +19,7 @@ $user = UserModel::findOne(['id' => App::$app->user->id]);
 
 <h1>Examens</h1>
 
-<?php if (App::isDocent() || App::isAdmin()) : ?>
+<?php if (Auth::isTeacher() || Auth::isAdmin()) : ?>
     <a href="/exams/create" class="btn btn-primary mb-3">Voeg examen toe</a>
 <?php endif; ?>
 
@@ -46,7 +47,7 @@ $user = UserModel::findOne(['id' => App::$app->user->id]);
                 <td><?= $exam->exam_duration ?> minuten</td>
                 <td><?= $exam->exam_place ?></td>
                 <td>
-                    <?php if (App::isStudent()) : ?>
+                    <?php if (Auth::isStudent()) : ?>
                         <?php if ($exam->isEnrolled($exam->course_id)) : ?>
                             <?php if ($registerModel->isRegistered($exam->id, $user->id)) : ?>
                                 <form action="/exams/unregisterexam" method="post" class="d-inline">
@@ -64,7 +65,7 @@ $user = UserModel::findOne(['id' => App::$app->user->id]);
                         <?php else : ?>
                             <p>Je moet ingeschreven zijn voor de bijbehorende cursus om te kunnen inschrijven voor dit examen.</p>
                         <?php endif; ?>
-                    <?php elseif (App::isDocent() || App::isAdmin()) : ?>
+                    <?php elseif (Auth::isTeacher() || Auth::isAdmin()) : ?>
                         <?php if ($exam->exam_date < date('Y-m-d')) : ?>
                             <a href="/exams/addgrades?id=<?php echo $exam->id ?>" class="btn btn-sm btn-success">Cijfers invoeren</a>
                         <?php endif; ?>

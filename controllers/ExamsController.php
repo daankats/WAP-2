@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\core\App;
+use app\core\Auth;
 use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
@@ -18,7 +19,8 @@ class ExamsController extends Controller {
 
     public function __construct()
     {
-        $this->registerMiddleware(new ExamsMiddleware(['create', 'edit', 'delete', 'update', 'view', 'grade', 'updategrade', 'addgrade', 'addGrades']));
+        parent::__construct();
+        $this->registerMiddleware(new ExamsMiddleware(['index','create', 'edit', 'delete', 'update', 'view', 'grade', 'updategrade', 'addgrade', 'addGrades']));
     }
     
     public function index() {
@@ -33,21 +35,21 @@ class ExamsController extends Controller {
                 $enrolled = true;
             }
         }
-        $this->layout = 'main';
-        return $this->render('/exams/index', [
+        $this->view->title = 'Exams';
+         $this->view->render('/exams/index', [
             'exams' => $exams,
             'courses' => $courses,
             'users' => $users,
             'user' => $user,
             'enrolled' => $enrolled,
             'app' => App::$app,
-        ]);
+        ], 'auth');
     }
     
     public function create(Request $request, Response $response) {
         $exam = new ExamsModel();
         $user = UserModel::findOne(['id' => App::$app->user->id]);
-        if (App::isDocent() || App::isAdmin()) {
+        if (Auth::isTeacher()|| Auth::isAdmin()) {
             if ($request->isPost()) {
                 $exam->loadData($request->getBody());
                 $exam->course_id = $_POST['course_id'];
@@ -58,9 +60,10 @@ class ExamsController extends Controller {
                     exit;
                 }
             }
-            return $this->render('/exams/create', [
+            $this->view->title = 'Create Exam';
+            $this->view->render('/exams/create', [
                 'model' => $exam,
-            ]);
+            ], 'auth');
         }
         $response->redirect('/exams');
     }
@@ -77,9 +80,10 @@ class ExamsController extends Controller {
                 return;
             } 
         }
-        return $this->render('/exams/edit', [
+        $this->view->title = 'Update Exam';
+        $this->view->render('/exams/edit', [
             'model' => $exam,
-        ]);
+        ], 'auth');
     }
 
     public function registerExam()
@@ -87,7 +91,7 @@ class ExamsController extends Controller {
         $register = new RegisterModel();
         $user = UserModel::findOne(['id' => App::$app->user->id]);
         
-        if ($user->role == 'student') {
+        if ($user == !Auth::isStudent()) {
             $register->student_id = $user->id;
             if ($register->loadData($_POST) && $register->validate()) {
                 $register->exam_id = $_POST['exam_id'];
@@ -99,17 +103,17 @@ class ExamsController extends Controller {
                     exit;
                 } else {
                     App::$app->session->setFlash('error', 'There was an error saving your exam registration.');
-                    $this->layout = 'main';
+
                     return 'There was an error saving your exam registration.';
                 }
             } else {
                 App::$app->session->setFlash('error', 'There was an error with your exam registration request.');
-                $this->layout = 'main';
+
                 return 'There was an error with your exam registration request.';
             }
         } else {
             App::$app->session->setFlash('error', 'You must be a student to register for an exam.');
-            $this->layout = 'main';
+
             return 'You must be a student to register for an exam.';
         }
     }
@@ -126,10 +130,10 @@ class ExamsController extends Controller {
             }
         }
         App::$app->session->setFlash('error', 'There was an error with your unenrollment request.');
-        $this->layout = 'main';
-        return $this->render('/_error', [
+
+        $this->view->render('/_error', [
             'message' => 'There was an error with your unenrollment request.'
-        ]);
+        ], 'auth');
     }
     
     public function delete(Request $request, Response $response)
@@ -137,9 +141,9 @@ class ExamsController extends Controller {
         $exam = ExamsModel::findOne(['id' => $request->getBody()['id']]);
         if (!$exam) {
             $response->setStatusCode(404);
-            return $this->render('/error/404');
+            $this->view->render('/error/404');
         }
-        if (App::isDocent() || App::isAdmin()) {
+        if (Auth::isTeacher() || Auth::isAdmin()) {
             $exam->delete();
             $response->redirect('/exams');
         }
@@ -150,7 +154,6 @@ class ExamsController extends Controller {
     {   
         $grade = new GradesModel();
         $user = UserModel::findOne(['id' => App::$app->user->id]);
-        $this->layout = 'main';
         
         if ($request->isPost()) {
             $exam_id = $_POST['exam_id'] ?? null;
@@ -177,23 +180,24 @@ class ExamsController extends Controller {
             exit;
         } else {
             $exams = GradesModel::findAllObjects();
-            return $this->render('/exams/addgrades', [
+            $this->view->title = 'Add Grades';
+            $this->view->render('/exams/addgrades', [
                 'exams' => $exams,
                 'user' => $user,
-            ]);
+            ], 'auth');
         }
     }
 
     public function showGrades()
     {
         $user = UserModel::findOne(['id' => App::$app->user->id]);
-        $this->layout = 'main';
         $exams = new Examsmodel();
         $exams = ExamsModel::findAllByUserId($user->id);
-        return $this->render('/exams/results', [
+        $this->view->title = 'Exam Results';
+        $this->view->render('/exams/results', [
             'exams' => $exams,
             'user' => $user,
-        ]);
+        ], 'auth');
     }
     
     

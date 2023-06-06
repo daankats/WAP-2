@@ -5,38 +5,35 @@ namespace app\core;
 class Router
 {
     protected array $routes = [];
-    protected array $middlewares = [];
 
     public function get($path, $callback, $middleware = null)
     {
-        $this->routes['get'][$path] = $callback;
-
-        if ($middleware !== null) {
-            $this->middlewares['get'][$path] = $middleware;
-        }
+        $this->routes['get'][$path] = [
+            'callback' => $callback,
+            'middleware' => $middleware,
+        ];
     }
 
     public function post($path, $callback, $middleware = null)
     {
-        $this->routes['post'][$path] = $callback;
-
-        if ($middleware !== null) {
-            $this->middlewares['post'][$path] = $middleware;
-        }
+        $this->routes['post'][$path] = [
+            'callback' => $callback,
+            'middleware' => $middleware,
+        ];
     }
 
     public function resolve(Request $request)
     {
         $path = $request->getPath();
         $method = $request->getMethod();
-        $callback = $this->routes[$method][$path] ?? false;
+        $route = $this->routes[$method][$path] ?? null;
 
-        if ($callback === false) {
+        if ($route === null) {
             // Handle route not found
             return;
         }
 
-        $middlewares = $this->middlewares[$method][$path] ?? [];
+        $middlewares = $this->getMiddlewares($route['middleware']);
         $resolvedMiddlewares = $this->resolveMiddlewares($middlewares);
 
         $response = $this->executeMiddlewares($resolvedMiddlewares, $request, new Response());
@@ -47,8 +44,9 @@ class Router
             return;
         }
 
+        $callback = $route['callback'];
+
         // Call the callback
-        // $callback is either a closure or an array containing the controller class name or object and the method name
         if ($callback instanceof \Closure) {
             $callback($request);
         } else {
@@ -66,30 +64,18 @@ class Router
         }
     }
 
-    public function getMiddlewares(string $route): array
+    public function getMiddlewares($middleware): array
     {
-        $middlewares = [];
-
-        foreach ($this->middlewares as $method => $routes) {
-            foreach ($routes as $routePattern => $callback) {
-                if ($this->matchRoute($routePattern, $route)) {
-                    if (isset($callback) && is_array($callback)) {
-                        $middlewares = array_merge($middlewares, $callback);
-                    }
-                }
-            }
+        if (is_array($middleware)) {
+            return $middleware;
+        } elseif ($middleware !== null) {
+            return [$middleware];
         }
 
-        return $middlewares;
+        return [];
     }
 
-    private function matchRoute(string $routePattern, string $route): bool
-    {
-        $pattern = '#^' . rtrim($routePattern, '/') . '/?$#i';
-        return preg_match($pattern, $route);
-    }
-
-    public function resolveMiddlewares(array $middlewares): array
+    private function resolveMiddlewares(array $middlewares): array
     {
         $resolvedMiddlewares = [];
 

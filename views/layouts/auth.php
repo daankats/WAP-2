@@ -29,8 +29,8 @@ $user = $app->user;
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="/" class="nav-link" aria-current="page">
-                            Home
+                        <a href="/dashboard" class="nav-link" aria-current="page">
+                            Dashboard
                         </a>
                     </li>
                     <?php if (Auth::isGuest()) : ?>

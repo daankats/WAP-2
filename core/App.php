@@ -27,7 +27,7 @@ class App
         $this->request = new Request();
         $this->response = new Response();
         $this->session = new Session();
-        $this->router = new Router($this->request, $this->response);
+        $this->router = new Router($this);
         $this->db = new Database();
         $this->userClass = UserModel::class;
 

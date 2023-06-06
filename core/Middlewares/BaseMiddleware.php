@@ -7,5 +7,5 @@ use app\core\Response;
 
 abstract class BaseMiddleware
 {
-    abstract public function handle(Request $request, Response $response, callable $next);
+    abstract public function handle(Request $request, Response $response);
 }

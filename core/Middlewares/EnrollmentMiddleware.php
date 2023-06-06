@@ -1,15 +1,15 @@
 <?php
 
-namespace app\core\middlewares;
+namespace app\core\Middlewares;
 
-use app\core\App;
+use app\core\Auth;
 use app\core\exception\ForbiddenException;
 
 class EnrollmentMiddleware extends BaseMiddleware
 {
-    public function execute()
+    public function handle($request, $response)
     {
-        if (App::isGuest()) {
+        if (Auth::isGuest()) {
             throw new ForbiddenException();
         }
     }

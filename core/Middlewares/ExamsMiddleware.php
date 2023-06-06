@@ -1,22 +1,19 @@
 <?php
 
-namespace app\core\middlewares;
+namespace app\core\Middlewares;
 
-use app\core\App;
+use app\core\Auth;
 use app\core\exception\ForbiddenException;
 
 class ExamsMiddleware extends BaseMiddleware
 {
-   
-    public function execute()
+    public function handle($request, $response)
     {
-        $request = App::$app->request;
         $uri = $request->getUri();
 
-        if ($uri === '/exams' || $uri === '/exams/registerexam' || $uri === '/exams/unregisterexam' && App::isStudent()) {
+        if ($uri === '/exams' || $uri === '/exams/registerexam' || $uri === '/exams/unregisterexam' && Auth::isStudent()) {
             return;
-        }
-        elseif(App::isAdmin() || App::isDocent()){
+        } elseif (Auth::isAdmin() || Auth::isTeacher()) {
             return;
         }
 

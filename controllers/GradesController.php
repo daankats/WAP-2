@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\core\App;
 use app\core\Controller;
+use app\core\Middlewares\AuthMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\models\CourseModel;
@@ -15,10 +16,11 @@ use app\models\GradesModel;
 use app\models\RegisterModel;
 
 class GradesController extends Controller {
-    
+
     public function __construct()
     {
-       
+        parent::__construct();
+        $this->registerMiddleware(new AuthMiddleware(['index']));
     }
     
     public function index()
@@ -35,8 +37,9 @@ class GradesController extends Controller {
             $registered = true;
         }
     }
-    $this->layout = 'main';
-    return $this->render('/grades/index', [
+
+    $this->view->title = 'Grades';
+    $this->view->render('/grades/index', [
         'grades' => $grades,
         'courses' => $courses,
         'users' => $users,
@@ -46,7 +49,7 @@ class GradesController extends Controller {
         'exams' => $exams,
         'isAdmin' => App::isAdmin(),
         'isDocent' => App::isDocent(),
-    ]);
+    ], 'auth');
 }
 
     

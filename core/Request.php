@@ -43,4 +43,9 @@ class Request
 
         return $body;
     }
+
+    public function getUri()
+    {
+        return $_SERVER['REQUEST_URI'];
+    }
 }

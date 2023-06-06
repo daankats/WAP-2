@@ -1,13 +1,12 @@
 <?php
 use app\core\App;
-
-$this->title = 'Cursussen';
+use app\core\Auth;
 
 ?>
 
 <h1><?= $this->title ?></h1>
 
-<?php if (App::isDocent() || App::isAdmin()): ?>
+<?php if (Auth::isTeacher() || Auth::isAdmin()): ?>
     <p><a href="/courses/create" class="btn btn-primary">Voeg cursus toe</a></p>
 <?php endif ?>
 
@@ -29,13 +28,13 @@ $this->title = 'Cursussen';
             <td><?= $course->getCreator() ?></td>
             <td><?= date('d-m-Y H:i:s', strtotime($course->created_at)) ?></td>
             <td>
-                <?php if (App::isDocent() || App::isAdmin()): ?>
+                <?php if (Auth::isTeacher() || Auth::isAdmin()): ?>
                     <a href="/courses/edit?id=<?= $course->id ?>" class="btn btn-sm btn-primary">Wijzigen</a>
                     <form action="/courses/delete" method="post" style="display:inline">
                         <input type="hidden" name="id" value="<?= $course->id ?>">
                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Weet u zeker dat u deze cursus wilt verwijderen?')">Verwijderen</button>
                     </form>
-                <?php elseif(App::isStudent()): ?>
+                <?php elseif(Auth::isStudent()): ?>
                     <?php if (!$course->isEnrolled($course->id)): ?>
                         <form action="/courses/enroll" method="post" style="display:inline">
                             <input type="hidden" name="course_id" value="<?= $course->id ?>">

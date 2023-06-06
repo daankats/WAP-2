@@ -1,23 +1,33 @@
 <?php
 
-namespace app\core\middlewares;
+namespace app\core\Middlewares;
 
 use app\core\App;
+use app\core\Auth;
 use app\core\exception\ForbiddenException;
+
 
 class CourseMiddleware extends BaseMiddleware
 {
-    public function execute()
+    public function handle($request, $response)
     {
-        $request = App::$app->request;
         $uri = $request->getUri();
 
-        if ($uri === '/courses' || $uri === '/courses/enroll' || $uri === '/courses/leave' && App::isStudent()) {
+        if (Auth::isGuest()) {
+            // Gebruiker is niet ingelogd, doorverwijzen naar de inlogpagina
+            $response->redirect('/login');
             return;
-        }elseif(App::isAdmin() || App::isDocent()){
+        }
+
+        if (($uri === '/courses' || $uri === '/courses/enroll' || $uri === '/courses/leave') && Auth::isStudent()) {
+            // Gebruiker is student en heeft toegang tot de specifieke routes
+            return;
+        } elseif (Auth::isAdmin() || Auth::isTeacher()) {
+            // Gebruiker is admin of docent en heeft toegang tot alle routes
             return;
         }
 
         throw new ForbiddenException();
     }
 }
+
