@@ -44,4 +44,20 @@ class Session
     {
         session_write_close();
     }
+
+
+    public function getFlash($key)
+    {
+        if (isset($_SESSION['flash'][$key])) {
+            $value = $_SESSION['flash'][$key];
+            unset($_SESSION['flash'][$key]);
+            return $value;
+        }
+        return null;
+    }
+
+    public function setFlash(string $string, string $string1): void
+    {
+        $_SESSION['flash'][$string] = $string1;
+    }
 }

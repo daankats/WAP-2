@@ -14,7 +14,6 @@ $response = new Response();
 $router = new Router();
 $session = new Session();
 
-// Inlogproces
 $user = null;
 $primaryValue = $session->getSessionUser();
 if ($primaryValue) {

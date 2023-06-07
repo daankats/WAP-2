@@ -48,27 +48,38 @@ class AuthController extends Controller
         return $this->view;
     }
 
-
-
     public function register(Request $request)
+    {
+        $user = new UserModel();
+        $this->view->title = 'Register';
+        $this->view->render('register', [
+            'model' => $user
+        ], 'main');
+
+        return $this->view;
+    }
+
+    public function registerPost(Request $request)
     {
         $user = new UserModel();
 
         if ($request->getMethod() === 'POST') {
+            var_dump($request->getBody());
             $user->loadData($request->getBody());
-
+            var_dump($user);
             if ($user->validate() && $user->register()) {
+                var_dump($user);
+                App::$app->session->setFlash('success', 'Registratie succesvol. U kunt nu inloggen.');
                 return $this->redirect('/dashboard');
+            } else {
+                App::$app->session->setFlash('error', 'Er zijn fouten opgetreden bij de registratie. Controleer uw gegevens en probeer het opnieuw.');
             }
         }
 
-        $this->view->title = 'Register';
-        $this->view->render('register', [
-            'model' => $user
-        ]);
-
-        return $this->view;
+        return $this->redirect('/register');
     }
+
+
 
     public function logout()
     {

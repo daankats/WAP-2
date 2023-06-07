@@ -3,6 +3,7 @@ namespace app\models;
 
 use app\core\App;
 use app\database\DbModel;
+use app\utils\Validation;
 
 class GradesModel extends DbModel
 {
@@ -17,6 +18,14 @@ class GradesModel extends DbModel
     public string $student_id = '';
 
 
+    public function rules(): array
+    {
+        return [
+            'user_id' => [Validation::RULE_REQUIRED],
+            'exam_id' => [Validation::RULE_REQUIRED],
+            'grade' => [Validation::RULE_REQUIRED],
+        ];
+    }
     public static function tableName(): string
     {
         return 'grades';
@@ -43,7 +52,7 @@ class GradesModel extends DbModel
 
     public static function findAllObjects(): array
     {
-        $db = self::getDb();
+        $db = (new GradesModel)->getDb();
         $sql = "SELECT * FROM " . self::tableName();
         $statement = $db->prepare($sql);
         $statement->execute();
@@ -56,7 +65,7 @@ class GradesModel extends DbModel
 
     public function update()
     {
-        $db = self::getDb();
+        $db = (new GradesModel)->getDb();
         $sql = "UPDATE " . self::tableName() . " SET grade = :grade WHERE id = :id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':grade', $this->grade);
@@ -67,7 +76,7 @@ class GradesModel extends DbModel
 
     public static function findAll($user_id)
     {   
-        $db = self::getDb();
+        $db = (new GradesModel)->getDb();
         $sql = "SELECT * FROM " . self::tableName() . " WHERE exam_id = :exam_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':exam_id', $user_id['exam_id']);
@@ -82,7 +91,7 @@ class GradesModel extends DbModel
     
     public function findById(int $id)
     {
-        $db = self::getDb();
+        $db = (new GradesModel)->getDb();
         $sql = "SELECT * FROM " . self::tableName() . " WHERE user_id = :user_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':user_id', $id);

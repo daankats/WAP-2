@@ -2,9 +2,10 @@
 
 namespace app\database;
 
+use app\core\Model;
 use PDO;
 
-abstract class DbModel
+abstract class DbModel extends Model
 {
     protected static function getDb(): PDO
     {
@@ -72,8 +73,21 @@ abstract class DbModel
         return $statement->fetchObject(static::class) ?: null;
     }
 
+    public function loadData($data)
+    {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->{$key} = $value;
+            } else {
+                echo "Property {$key} does not exist in the model";
+            }
+        }
+        return $this;
+    }
+
     public static function prepare($sql)
     {
         return self::getDb()->prepare($sql);
     }
 }
+

@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\database\DbModel;
 use app\core\app;
+use app\utils\Validation;
 
 
 class RegisterModel extends DbModel 
@@ -14,6 +15,13 @@ class RegisterModel extends DbModel
     public string $created_at = '';
     public $user_id;
 
+    public function rules(): array
+    {
+        return [
+            'student_id' => [Validation::RULE_REQUIRED],
+            'exam_id' => [Validation::RULE_REQUIRED],
+        ];
+    }
     public static function tableName(): string
     {
         return 'registrations';
@@ -38,7 +46,7 @@ class RegisterModel extends DbModel
     
     public static function findAllObjects(): array
     {
-        $db = self::getDb();
+        $db = (new RegisterModel)->getDb();
         $sql = "SELECT * FROM registrations";
         $statement = $db->prepare($sql);
         $statement->execute();
@@ -50,7 +58,7 @@ class RegisterModel extends DbModel
     }
     public static function findAllObjectsByStudentId($student_id): array
     {
-        $db = self::getDb();
+        $db = (new RegisterModel)->getDb();
         $sql = "SELECT * FROM registrations WHERE student_id = :student_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':student_id', $student_id);
@@ -64,7 +72,7 @@ class RegisterModel extends DbModel
 
     public function isRegistered($exam_id, $student_id)
     {
-        $db = self::getDb();
+        $db = (new RegisterModel)->getDb();
         $sql = "SELECT * FROM registrations WHERE exam_id = :exam_id AND student_id = :student_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':exam_id', $exam_id);
@@ -79,7 +87,7 @@ class RegisterModel extends DbModel
 
     public function delete()
     {
-        $db = self::getDb();
+        $db = (new RegisterModel)->getDb();
         $sql = "DELETE FROM registrations WHERE exam_id = :exam_id AND student_id = :student_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':exam_id', $this->exam_id);
@@ -90,7 +98,7 @@ class RegisterModel extends DbModel
 
     public function getRegisteredExams($student_id)
     {
-        $db = self::getDb();
+        $db = (new RegisterModel)->getDb();
         $sql = "SELECT * FROM registrations WHERE student_id = :student_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':student_id', $student_id);
@@ -104,7 +112,7 @@ class RegisterModel extends DbModel
 
     public static function findAll()
     {
-        $db = self::getDb();
+        $db = (new RegisterModel)->getDb();
         $sql = "SELECT * FROM registrations";
         $statement = $db->prepare($sql);
         $statement->execute();

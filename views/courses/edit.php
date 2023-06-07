@@ -31,7 +31,7 @@ if (!$model) {
             </div>
         <?php endif; ?>
 
-        <form method="post">
+        <form method="post" action="/courses/update?id=<?= $id ?>">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" required id="name" name="name" class="form-control" value="<?= $model->name ?>">

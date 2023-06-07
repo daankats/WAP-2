@@ -4,7 +4,7 @@ namespace app\models;
 
 use app\database\DbModel;
 use app\core\App;
-use app\models\UserModel;
+use app\utils\Validation;
 
 class CourseModel extends DbModel
 {
@@ -15,6 +15,14 @@ class CourseModel extends DbModel
     public string $created_at = '';
     public string $updated_by = '';
     public string $updated_at = '';
+
+    public function rules(): array
+    {
+        return [
+            'name' => [Validation::RULE_REQUIRED],
+            'code' => [Validation::RULE_REQUIRED],
+        ];
+    }
 
     public function primaryKey(): string
     {
@@ -64,7 +72,7 @@ class CourseModel extends DbModel
 
     public function delete()
     {
-        $db = $this->getDb();
+        $db = self::getDb();
         $SQL = "DELETE FROM courses WHERE id = :id";
         $stmt = $db->prepare($SQL);
         $stmt->bindValue(':id', $this->id);

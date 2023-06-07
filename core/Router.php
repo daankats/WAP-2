@@ -48,7 +48,7 @@ class Router
 
         // Call the callback
         if ($callback instanceof \Closure) {
-            $callback($request);
+            $callback($request, new Response());
         } else {
             $controller = $callback[0];
             $method = $callback[1];
@@ -59,10 +59,11 @@ class Router
                 $controller = new $controller;
             }
 
-            // Call the method with the $request as argument
-            $controller->$method($request);
+            // Call the method with the $request and $response as arguments
+            $controller->$method($request, new Response());
         }
     }
+
 
     public function getMiddlewares($middleware): array
     {

@@ -3,7 +3,6 @@
 namespace app\models;
 
 use app\core\Model;
-use app\models\UserModel;
 use app\core\Auth;
 use app\utils\Validation;
 

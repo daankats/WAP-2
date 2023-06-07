@@ -14,16 +14,25 @@ class Auth
 
     public static function isStudent(): bool
     {
+        if (self::isGuest()) {
+            return false;
+        }
         return App::$app->user->role === 'student';
     }
 
     public static function isAdmin(): bool
     {
+        if (self::isGuest()) {
+            return false;
+        }
         return App::$app->user->role === 'beheerder';
     }
 
     public static function isTeacher(): bool
     {
+        if (self::isGuest()) {
+            return false;
+        }
         return App::$app->user->role === 'docent';
     }
 
@@ -41,3 +50,4 @@ class Auth
         App::$app->session->remove('user');
     }
 }
+

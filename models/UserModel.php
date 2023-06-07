@@ -5,6 +5,7 @@ namespace app\models;
 use app\core\Auth;
 use app\database\DbModel;
 use app\core\App;
+use app\utils\Validation;
 
 /**
  * Class UserModel
@@ -15,16 +16,27 @@ class UserModel extends DbModel
     public int $id = 0;
     public string $created_at = '';
     public string $firstName = '';
+    public string $username = '';
     public string $lastName = '';
+
     public string $email = '';
     public string $status = '';
     public string $password = '';
     public string $confirmPassword = '';
     public string $role = '';
 
-    /**
-     * @inheritDoc
-     */
+    public function rules(): array
+    {
+        return [
+            'username' => [Validation::RULE_REQUIRED],
+            'email' => [Validation::RULE_REQUIRED, Validation::RULE_EMAIL],
+            'password' => [Validation::RULE_REQUIRED],
+            'confirmPassword' => [Validation::RULE_REQUIRED],
+        ];
+    }
+
+
+
     public static function tableName(): string
     {
         return 'users';
@@ -84,16 +96,16 @@ class UserModel extends DbModel
 
 
     public function register(): bool
-{
-    if (Auth::isAdmin()) {
-        $this->status = 'active';
-        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-        return $this->save();
-    } else {
-        
-        return false;
+    {
+        if ($this->validateConfirmPassword()) { // Voer wachtwoordvalidatie uit
+            $this->status = 'active';
+            $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+            return $this->save();
+        }
+
+        return false; // Wachtwoordvalidatie is mislukt
     }
-}
+
 
     /**
      * Summary of getDisplayName
@@ -114,7 +126,7 @@ class UserModel extends DbModel
 
     public static function findAllObjects(): array
     {
-        $db =self::getDb();
+        $db = (new UserModel)->getDb();
         $sql = "SELECT * FROM users";
         $statement = $db->prepare($sql);
         $statement->execute();
@@ -127,7 +139,7 @@ class UserModel extends DbModel
 
     public static function Delete($id)
     {
-        $db = self::getDb();
+        $db = (new UserModel)->getDb();
         $sql = "DELETE FROM users WHERE id = :id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':id', $id);

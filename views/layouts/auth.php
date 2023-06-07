@@ -5,6 +5,7 @@ use app\core\App;
 
 $app = App::$app;
 $user = $app->user;
+$session = $app->session;
 
 ?>
 
@@ -89,7 +90,18 @@ $user = $app->user;
                 </div>
             </div>
             <div class="col-auto col-md-9 col-xl-10 py-md-3 pl-md-5 bd-content">
-                <!-- Main content -->
+                <!-- Flash messages -->
+                <?php if ($session->getFlash('success')) : ?>
+                    <div class="alert alert-success">
+                        <?= $session->getFlash('success') ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($session->getFlash('error')) : ?>
+                    <div class="alert alert-danger">
+                        <?= $session->getFlash('error') ?>
+                    </div>
+                <?php endif; ?>
                 {{content}}
             </div>
         </div>

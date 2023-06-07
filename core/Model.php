@@ -7,22 +7,6 @@ use app\utils\Validation;
 
 abstract class Model
 {
-    protected function getDb()
-    {
-        return Database::getInstance();
-    }
-
-    public function loadData($data)
-    {
-        foreach ($data as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->{$key} = $value;
-            } else {
-                echo "Property {$key} does not exist in the model";
-            }
-        }
-        return $this;
-    }
 
     abstract public function rules(): array;
 
@@ -38,25 +22,9 @@ abstract class Model
 
     public array $errors = [];
 
-    public string $email = '';
-
-    public string $password = '';
-
     public function validate()
     {
         $this->errors = [];
-
-        if (empty($this->email)) {
-            $this->addError('email', 'Email is required.');
-        }
-
-        if (empty($this->password)) {
-            $this->addError('password', 'Password is required.');
-        }
-
-        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-            $this->addError('email', 'Email must be a valid email address.');
-        }
 
         foreach ($this->rules() as $attribute => $rules) {
             $value = $this->{$attribute};
@@ -68,7 +36,7 @@ abstract class Model
                 } elseif (is_array($rule)) {
                     $ruleName = $rule[0];
                     $params = array_slice($rule, 1);
-    
+
                     if (is_callable($ruleName)) {
                         if (!$ruleName($value, $params)) {
                             $this->addError($attribute, 'Custom validation rule failed.');
@@ -86,7 +54,7 @@ abstract class Model
                 }
             }
         }
-    
+
         return empty($this->errors);
     }
 
@@ -95,3 +63,4 @@ abstract class Model
         $this->errors[$attribute][] = $message;
     }
 }
+

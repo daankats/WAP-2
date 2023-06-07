@@ -48,4 +48,10 @@ class Request
     {
         return $_SERVER['REQUEST_URI'];
     }
+
+    public function getQueryParams(): array
+    {
+        return $_GET;
+    }
 }
+

@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\database\DbModel;
 use app\core\App;
+use app\utils\Validation;
 
 class EnrollmentModel extends DbModel
 {
@@ -14,6 +15,15 @@ class EnrollmentModel extends DbModel
     public string $created_at = '';
     public string $updated_at = '';
     public $user_id;
+
+    public function rules(): array
+    {
+        return [
+            'student_id' => [Validation::RULE_REQUIRED],
+            'course_id' => [Validation::RULE_REQUIRED],
+            'status' => [Validation::RULE_REQUIRED],
+        ];
+    }
 
     public static function tableName(): string
     {
@@ -41,7 +51,7 @@ class EnrollmentModel extends DbModel
 
     public static function findAllObjects(): array
     {
-        $db = self::getDb();
+        $db = (new EnrollmentModel)->getDb();
         $sql = "SELECT * FROM enrollment";
         $statement = $db->prepare($sql);
         $statement->execute();
@@ -54,7 +64,7 @@ class EnrollmentModel extends DbModel
 
     public function delete()
     {
-        $db = self::getDb();
+        $db = (new EnrollmentModel)->getDb();
         $sql = "DELETE FROM enrollment WHERE id = :id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':id', $this->id);
