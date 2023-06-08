@@ -4,13 +4,13 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\core\Request;
+use app\core\Response;
 use app\core\View;
 use app\models\UserModel;
 use app\models\LoginModel;
 use app\core\middlewares\AuthMiddleware;
 use app\core\Auth;
 use app\core\App;
-
 
 
 class AuthController extends Controller
@@ -48,50 +48,34 @@ class AuthController extends Controller
         return $this->view;
     }
 
-    public function register(Request $request)
+    public function register(Request $request, Response $response)
     {
         $user = new UserModel();
-        $this->view->title = 'Register';
-        $this->view->render('register', [
-            'model' => $user
-        ], 'main');
+        $user->loadData($request->getBody());
 
-        return $this->view;
-    }
+        if ($request->isPost()) {
+            $isValidationSuccessful = $user->validate();
 
-    public function registerPost(Request $request)
-    {
-        $user = new UserModel();
-
-        if ($request->getMethod() === 'POST') {
-            var_dump($request->getBody());
-            $user->loadData($request->getBody());
-            var_dump($user);
-            if ($user->validate() && $user->register()) {
-                var_dump($user);
-                App::$app->session->setFlash('success', 'Registratie succesvol. U kunt nu inloggen.');
-                return $this->redirect('/dashboard');
+            if ($isValidationSuccessful && $user->register()) {
+                App::$app->session->setFlash('success', 'Account created successfully.');
+                return $response->redirect('/dashboard');
             } else {
-                App::$app->session->setFlash('error', 'Er zijn fouten opgetreden bij de registratie. Controleer uw gegevens en probeer het opnieuw.');
+                App::$app->session->setFlash('error', 'Er is een fout opgetreden. Probeer het opnieuw.');
             }
         }
 
-        return $this->redirect('/register');
+        return $this->view->render('register', [
+            'model' => $user
+        ], 'auth');
     }
 
 
 
     public function logout()
     {
-        $this->auth->logout();
-        return $this->redirect('/');
+        App::$app->user = null;
+        App::$app->session->remove('user');
+        return $this->redirect('/login');
     }
 
-    public function profile(Request $request)
-    {
-        $this->view->title = 'Profiel';
-        $this->view->render('profile');
-
-        return $this->view;
-    }
 }

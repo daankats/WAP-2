@@ -44,10 +44,5 @@ class Auth
         App::$app->session->set('user', $primaryValue);
     }
 
-    public static function logout()
-    {
-        App::$app->user = null;
-        App::$app->session->remove('user');
-    }
 }
 

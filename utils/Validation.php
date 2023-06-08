@@ -41,7 +41,6 @@ class Validation
         return $value === $params[$attribute];
     }
 
-
     public static function unique($value, $params)
     {
         $className = $params['class'];
@@ -54,6 +53,7 @@ class Validation
         $record = $statement->fetchObject();
         return !$record;
     }
+
 
     public static function getErrorMessage($rule)
     {

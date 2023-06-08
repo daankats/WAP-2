@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\core\App;
+use app\core\Auth;
 use app\core\Controller;
 use app\core\middlewares\AdminMiddleware;
 use app\core\Request;
@@ -38,10 +39,10 @@ class AdminController extends Controller
 
     public function edit(Request $request, Response $response)
     {
-        $id = $request->get('id');
+        $id = $request->getQueryParams()['id'] ?? null;
         $user = UserModel::findOne(['id' => $id]);
 
-        if (!$user) {
+        if (!Auth::isAdmin()) {
             $response->redirect('/admin');
         }
 

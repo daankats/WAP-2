@@ -3,7 +3,6 @@
 namespace app\models;
 
 use app\database\DbModel;
-use app\core\app;
 use app\utils\Validation;
 
 
@@ -46,7 +45,7 @@ class RegisterModel extends DbModel
     
     public static function findAllObjects(): array
     {
-        $db = (new RegisterModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations";
         $statement = $db->prepare($sql);
         $statement->execute();
@@ -58,7 +57,7 @@ class RegisterModel extends DbModel
     }
     public static function findAllObjectsByStudentId($student_id): array
     {
-        $db = (new RegisterModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations WHERE student_id = :student_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':student_id', $student_id);
@@ -72,7 +71,7 @@ class RegisterModel extends DbModel
 
     public function isRegistered($exam_id, $student_id)
     {
-        $db = (new RegisterModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations WHERE exam_id = :exam_id AND student_id = :student_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':exam_id', $exam_id);
@@ -87,7 +86,7 @@ class RegisterModel extends DbModel
 
     public function delete()
     {
-        $db = (new RegisterModel)->getDb();
+        $db = self::getDb();
         $sql = "DELETE FROM registrations WHERE exam_id = :exam_id AND student_id = :student_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':exam_id', $this->exam_id);
@@ -98,7 +97,7 @@ class RegisterModel extends DbModel
 
     public function getRegisteredExams($student_id)
     {
-        $db = (new RegisterModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations WHERE student_id = :student_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':student_id', $student_id);
@@ -112,7 +111,7 @@ class RegisterModel extends DbModel
 
     public static function findAll()
     {
-        $db = (new RegisterModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM registrations";
         $statement = $db->prepare($sql);
         $statement->execute();

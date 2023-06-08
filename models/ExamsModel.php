@@ -101,7 +101,7 @@ class ExamsModel extends DbModel
 
     public function getCreator(): ?string
     {
-        $db = (new ExamsModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT firstname, lastname FROM users WHERE id = :id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':id', $this->created_by);
@@ -117,7 +117,7 @@ class ExamsModel extends DbModel
 
     public static function findAllByUserId()
     {   
-        $db = (new ExamsModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM exams WHERE created_by = :user_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':user_id', App::$app->user->id);
@@ -128,7 +128,7 @@ class ExamsModel extends DbModel
     
     public function isEnrolled($course_id)
     {
-        $db = (new ExamsModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM enrollment WHERE student_id = :student_id AND course_id = :course_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':student_id', App::$app->user->id);
@@ -147,7 +147,7 @@ class ExamsModel extends DbModel
 
     public function delete()
     {
-        $db = (new ExamsModel)->getDb();
+        $db = self::getDb();
         $SQL = "DELETE FROM exams WHERE id = :id";
         $stmt = $db->prepare($SQL);
         $stmt->bindValue(':id', $this->id);

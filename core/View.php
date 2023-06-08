@@ -2,13 +2,12 @@
 
 namespace app\core;
 
-use AllowDynamicProperties;
-
-#[AllowDynamicProperties] class View
+class View
 {
     protected string $layout = 'main';
+    public string $title = '';
 
-    public function render($view, $data = [], $layout = 'main')
+    public function render($view, $data = [], $layout = 'main'): void
     {
         $this->layout = $layout;
         extract($data);

@@ -22,41 +22,38 @@ abstract class Model
 
     public array $errors = [];
 
-    public function validate()
+
+    public function validate(): bool
     {
         $this->errors = [];
 
         foreach ($this->rules() as $attribute => $rules) {
             $value = $this->{$attribute};
             foreach ($rules as $rule) {
-                if (is_callable($rule)) {
-                    if (!$rule($value)) {
-                        $this->addError($attribute, 'Custom validation rule failed.');
-                    }
-                } elseif (is_array($rule)) {
+                $ruleName = $rule;
+                $params = [];
+
+                if (is_array($rule)) {
                     $ruleName = $rule[0];
                     $params = array_slice($rule, 1);
+                }
 
-                    if (is_callable($ruleName)) {
-                        if (!$ruleName($value, $params)) {
-                            $this->addError($attribute, 'Custom validation rule failed.');
-                        }
-                    } elseif (method_exists(Validation::class, $ruleName)) {
-                        $validationMethod = [Validation::class, $ruleName];
-                        if (!call_user_func($validationMethod, $value, $params)) {
-                            $this->addError($attribute, 'Validation rule failed.');
-                        }
+                $validationMethod = [Validation::class, $ruleName];
+                if (is_callable($validationMethod)) {
+                    if (!call_user_func($validationMethod, $value, $params)) {
+                        $this->addError($attribute, Validation::getErrorMessage($ruleName));
                     }
-                } elseif (method_exists(Validation::class, $rule)) {
-                    if (!call_user_func([Validation::class, $rule], $value)) {
-                        $this->addError($attribute, 'Validation rule failed.');
-                    }
+                } else {
+                    throw new \Exception("Validation rule '{$ruleName}' is not a valid callback.");
                 }
             }
         }
 
         return empty($this->errors);
     }
+
+
+
 
     public function addError(string $attribute, string $message)
     {

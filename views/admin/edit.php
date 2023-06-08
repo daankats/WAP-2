@@ -22,19 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form method="post">
     <div class="form-group">
         <label for="firstName">Voornaam</label>
-        <input type="text" required id="firstName" name="firstName" value="<?= $user->firstName ?>" required class="form-control">
+        <input type="text"  id="firstName" name="firstName" value="<?= $user->firstName ?>" required class="form-control">
     </div>
     <div class="form-group">
         <label for="lastName">Achternaam</label>
-        <input type="text" required id="lastName" name="lastName" value="<?= $user->lastName ?>" required class="form-control">
+        <input type="text"  id="lastName" name="lastName" value="<?= $user->lastName ?>" required class="form-control">
     </div>
     <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" required id="email" name="email" value="<?= $user->email ?>" required class="form-control">
+        <input type="email"  id="email" name="email" value="<?= $user->email ?>" required class="form-control">
     </div>
     <div class="form-group">
         <label for="password">Wachtwoord</label>
-        <input type="password" required id="password" name="password" value="<?= $user->password ?>" class="form-control">
+        <input type="password"  id="password" name="password" value="<?= $user->password ?>" class="form-control">
     </div>
     <div class="form-group">
         <label for="role">Rol</label>

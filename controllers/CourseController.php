@@ -119,11 +119,11 @@ class CourseController extends Controller
 
         if ($course->validate() && $course->update()) {
             $response->redirect('/courses');
-            return;
+
         } else {
             $exception = new \Exception("Failed to update the course.");
             $this->view->render('/_error', ['exception' => $exception]);
-            return;
+
         }
     }
 

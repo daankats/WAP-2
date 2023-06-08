@@ -3,6 +3,7 @@
 namespace app\core;
 
 use app\core\middlewares\BaseMiddleware;
+use JetBrains\PhpStorm\NoReturn;
 
 class Controller
 {
@@ -24,7 +25,7 @@ class Controller
         return $this->middlewares;
     }
 
-    public function redirect(string $url)
+    protected function redirect(string $url): void
     {
         header('Location: ' . $url);
         exit;

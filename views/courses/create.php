@@ -3,6 +3,7 @@
 $this->title = 'Cursus aanmaken';
 
 use app\core\App;
+use app\core\Auth;
 use app\models\CourseModel;
 
 $session = App::$app->session;
@@ -12,7 +13,7 @@ $model = new CourseModel();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $model->loadData($_POST);
 
-    if (App::isAdmin() || App::isDocent()) {
+    if (Auth::isAdmin() || Auth::isTeacher()) {
         if ($model->validate() && $model->save()) {
             $session->setFlash('success', 'Course created successfully.');
             header('Location: /course');
@@ -38,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="" method="post">
             <div class="form-group">
                 <label for="name">Course Name</label>
-                <input type="text" required id="name" name="name" class="form-control" value="<?= $model->name ?>">
+                <input type="text" required id="name" name="name" class="form-control" value="<?= $model->name ?>" re>
                     
             </div>
             <div class="form-group">

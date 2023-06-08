@@ -51,7 +51,7 @@ class EnrollmentModel extends DbModel
 
     public static function findAllObjects(): array
     {
-        $db = (new EnrollmentModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM enrollment";
         $statement = $db->prepare($sql);
         $statement->execute();
@@ -64,7 +64,7 @@ class EnrollmentModel extends DbModel
 
     public function delete()
     {
-        $db = (new EnrollmentModel)->getDb();
+        $db = self::getDb();
         $sql = "DELETE FROM enrollment WHERE id = :id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':id', $this->id);

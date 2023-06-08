@@ -28,11 +28,6 @@ class CourseModel extends DbModel
     {
         return 'id';
     }
-
-    public function __construct()
-    {
-    }
-
     public static function tableName(): string
     {
         return 'courses';

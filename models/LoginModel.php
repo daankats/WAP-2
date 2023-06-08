@@ -4,10 +4,11 @@ namespace app\models;
 
 use app\core\Model;
 use app\core\Auth;
+use app\database\DbModel;
 use app\utils\Validation;
 
 
-class LoginModel extends Model
+class LoginModel extends DbModel
 {
     public string $email = '';
     public string $password = '';
@@ -44,5 +45,21 @@ class LoginModel extends Model
 
         Auth::login($user);
         return true;
+    }
+
+    public static function tableName(): string
+    {
+return 'users';
+    }
+
+    public function attributes(): array
+    {
+return ['email', 'password'];
+    }
+
+    public function primaryKey(): string
+    {
+return 'id';
+
     }
 }

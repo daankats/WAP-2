@@ -90,18 +90,23 @@ $session = $app->session;
                 </div>
             </div>
             <div class="col-auto col-md-9 col-xl-10 py-md-3 pl-md-5 bd-content">
-                <!-- Flash messages -->
-                <?php if ($session->getFlash('success')) : ?>
-                    <div class="alert alert-success">
-                        <?= $session->getFlash('success') ?>
-                    </div>
-                <?php endif; ?>
+                <?php
+                $successMessages = $app->session->getFlash('success');
+                if (!empty($successMessages)) {
+                    foreach ($successMessages as $message) {
+                        echo '<div class="alert alert-success">' . $message . '</div>';
+                    }
+                }
 
-                <?php if ($session->getFlash('error')) : ?>
-                    <div class="alert alert-danger">
-                        <?= $session->getFlash('error') ?>
-                    </div>
-                <?php endif; ?>
+                $errorMessages = $app->session->getFlash('error');
+                if (!empty($errorMessages)) {
+                    foreach ($errorMessages as $message) {
+                        echo '<div class="alert alert-danger">' . $message . '</div>';
+                    }
+                }
+                ?>
+
+
                 {{content}}
             </div>
         </div>

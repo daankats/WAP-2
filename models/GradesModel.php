@@ -52,7 +52,7 @@ class GradesModel extends DbModel
 
     public static function findAllObjects(): array
     {
-        $db = (new GradesModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM " . self::tableName();
         $statement = $db->prepare($sql);
         $statement->execute();
@@ -65,7 +65,7 @@ class GradesModel extends DbModel
 
     public function update()
     {
-        $db = (new GradesModel)->getDb();
+        $db = self::getDb();
         $sql = "UPDATE " . self::tableName() . " SET grade = :grade WHERE id = :id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':grade', $this->grade);
@@ -76,7 +76,7 @@ class GradesModel extends DbModel
 
     public static function findAll($user_id)
     {   
-        $db = (new GradesModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM " . self::tableName() . " WHERE exam_id = :exam_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':exam_id', $user_id['exam_id']);
@@ -91,7 +91,7 @@ class GradesModel extends DbModel
     
     public function findById(int $id)
     {
-        $db = (new GradesModel)->getDb();
+        $db = self::getDb();
         $sql = "SELECT * FROM " . self::tableName() . " WHERE user_id = :user_id";
         $statement = $db->prepare($sql);
         $statement->bindValue(':user_id', $id);
