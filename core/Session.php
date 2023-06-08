@@ -62,6 +62,4 @@ class Session
         }
         $_SESSION['flash'][$key][] = $message;
     }
-
-
 }

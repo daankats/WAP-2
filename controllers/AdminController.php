@@ -15,7 +15,8 @@ class AdminController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $adminMiddleware = new AdminMiddleware(['index', 'edit', 'delete']);
+        $this->registerMiddleware(new AdminMiddleware(['create', 'edit', 'update', 'delete']));
+
     }
 
 
@@ -28,37 +29,62 @@ class AdminController extends Controller
         ], 'admin');
     }
 
-    public function middlewares(): array
-    {
-        return [
-            'admin' => [
-                AdminMiddleware::class
-            ]
-        ];
-    }
-
     public function edit(Request $request, Response $response)
     {
-        $id = $request->getQueryParams()['id'] ?? null;
+        $id = $request->getQueryParams()['id'];
         $user = UserModel::findOne(['id' => $id]);
 
         if (!Auth::isAdmin()) {
             $response->redirect('/admin');
         }
 
-        if ($request->isPost()) {
-            $data = $request->getBody();
-            $user->loadData($data);
-
-            if ($user->save()) {
-                App::$app->session->setFlash('success', 'UserModel updated successfully');
-                $response->redirect('/admin');
-            }
+        if ($user === null) {
+            $exception = new \Exception("Course not found.");
+            $this->view->render('/_error', [], $exception);
+            return;
         }
+
         $this->view->title = 'Admin';
         $this->view->render('/admin/edit', [
-            'user' => $user
-        ], 'admin');
+            'model' => $user,
+        ], 'auth');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function updateUser(Request $request, Response $response)
+    {
+        $id = $request->getQueryParams()['id'] ?? null;
+        if ($id === null) {
+            echo "id is null";
+            return;
+        }
+
+        $user = UserModel::findOne(['id' => $id]);
+
+        if ($user === null) {
+            $exception = new \Exception("User not found.");
+            $this->view->render('/_error', ['exception' => $exception]);
+            return;
+        }
+
+        $user->scenario = 'update';
+        $user->loadData($request->getBody());
+        if ($user->validate()) {
+            echo "Validation passed";
+        } else {
+            var_dump($user->errors);
+        }
+
+        if ($user->validate() && $user->update()) {
+            $response->redirect('/admin');
+
+        } else {
+            $exception = new \Exception("Failed to update the user.");
+            $this->view->render('/_error', ['exception' => $exception]);
+
+        }
     }
 
     public function delete(Request $request, Response $response)

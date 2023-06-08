@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use app\core\Auth;
 use app\database\DbModel;
 use app\core\App;
 use app\utils\Validation;
@@ -21,20 +20,32 @@ class UserModel extends DbModel
     public string $password = '';
     public string $confirmPassword = '';
     public string $role = '';
+    public string $updated_by = '';
+    public string $updated_at = '';
+    public string $scenario = '';
 
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'email' => [
                 Validation::RULE_REQUIRED,
                 Validation::RULE_EMAIL,
-                [Validation::RULE_UNIQUE, 'class' => UserModel::class, 'attribute' => 'email']
             ],
-            'password' => [Validation::RULE_REQUIRED],
-            'confirmPassword' => [Validation::RULE_REQUIRED],
+            'password' => [Validation::RULE_REQUIRED, [Validation::RULE_MIN, 'min' => 8]],
+            'firstName' => [Validation::RULE_REQUIRED],
+            'lastName' => [Validation::RULE_REQUIRED],
+            'role' => [Validation::RULE_REQUIRED],
         ];
+
+        if ($this->scenario === 'register') {
+            $rules['confirmPassword'][] = [Validation::RULE_REQUIRED];
+            $rules['email'][] = [Validation::RULE_UNIQUE, 'class' => UserModel::class, 'attribute' => 'email'];
+        }
+
+        return $rules;
     }
+
 
 
     public static function tableName(): string
@@ -84,17 +95,16 @@ class UserModel extends DbModel
         return false;
     }
 
-    public function displayName(): string {
-        return $this->firstName . ' ' . $this->lastName;
-    }
-    public function getRole(): string
+    public function update()
     {
-        return $this->role;
+        $this->updated_by = App::$app->user->id;
+        $this->updated_at = date('Y-m-d H:i:s');
+        return parent::update();
     }
 
-    public function setRole(string $role): void
+    public function displayName(): string
     {
-        $this->role = $role;
+        return $this->firstName . ' ' . $this->lastName;
     }
 
     public static function findAllObjects(): array
@@ -119,18 +129,13 @@ class UserModel extends DbModel
         $statement->execute();
     }
 
-    public function setUser($data) {
-        $this->email = $data['email'] ?? $this->email;
-        $this->password = $data['password'] ?? $this->password;
-        $this->role = $data['role'] ?? $this->role;
-    }
-
     public function getFullName(): string
     {
         return $this->firstName . ' ' . $this->lastName;
     }
 
-    public function getUser($id){
+    public function getUser($id)
+    {
         $db = self::getDb();
         $sql = "SELECT * FROM users WHERE id = :id";
         $statement = $db->prepare($sql);
@@ -139,7 +144,4 @@ class UserModel extends DbModel
         $user = $statement->fetchObject(static::class);
         return $user;
     }
-
-
-
 }

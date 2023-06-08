@@ -11,7 +11,6 @@ use app\core\middlewares\CourseMiddleware;
 use app\models\CourseModel;
 use app\models\EnrollmentModel;
 use app\models\UserModel;
-use app\core\Model;
 
 class CourseController extends Controller
 {
@@ -82,7 +81,7 @@ class CourseController extends Controller
     }
 
 
-    public function edit(Request $request, Response $response)
+    public function edit(Request $request)
     {
         $id = $request->getQueryParams()['id'];
         $course = CourseModel::findOne(['id' => $id]);
@@ -97,13 +96,12 @@ class CourseController extends Controller
             'model' => $course,
         ], 'auth');
     }
-
     public function updateCourse(Request $request, Response $response)
     {
         $id = $request->getQueryParams()['id'] ?? null;
         if ($id === null) {
             // Foutbehandeling, bijvoorbeeld:
-           echo "id is null";
+            echo "id is null";
             return;
         }
 
@@ -126,8 +124,6 @@ class CourseController extends Controller
 
         }
     }
-
-
 
 
     public function delete(Request $request, Response $response)

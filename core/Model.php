@@ -2,7 +2,6 @@
 
 namespace app\core;
 
-use app\database\Database;
 use app\utils\Validation;
 
 abstract class Model
@@ -15,13 +14,7 @@ abstract class Model
         return [];
     }
 
-    public function getLabel($attribute)
-    {
-        return $this->labels()[$attribute] ?? $attribute;
-    }
-
     public array $errors = [];
-
 
     public function validate(): bool
     {
@@ -52,12 +45,8 @@ abstract class Model
         return empty($this->errors);
     }
 
-
-
-
     public function addError(string $attribute, string $message)
     {
         $this->errors[$attribute][] = $message;
     }
 }
-

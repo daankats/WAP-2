@@ -5,21 +5,26 @@ use app\core\App;
 <title><?= $this->title ?> </title>
 
 <?php
-$model = new \app\models\UserModel();
+$session = App::$app->session;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $model->loadData($_POST);
-
-    if ($model->validate() && $model->update()) {
-        App::$app->session->setFlash('success', 'UserModel updated successfully.');
-        header('Location: /users');
-        exit;
-    }
+$id = $_GET['id'] ?? null;
+if (!$id) {
+    $session->setFlash('error', 'user ID not provided.');
+    header('Location: /courses');
+    exit;
 }
+
+$user = \app\models\UserModel::findOne(['id' => $id]);
+if (!$user) {
+    $session->setFlash('error', 'User not found.');
+    header('Location: /courses');
+    exit;
+}
+
 ?>
 
 <h1>Gebruiker wijzigen</h1>
-<form method="post">
+<form method="post" action="/admin/update?id=<?= $id ?>">
     <div class="form-group">
         <label for="firstName">Voornaam</label>
         <input type="text"  id="firstName" name="firstName" value="<?= $user->firstName ?>" required class="form-control">

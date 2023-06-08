@@ -1,5 +1,4 @@
 <?php
-$this->title = 'Cursus aanpassen';
 
 use app\core\App;
 use app\models\CourseModel;

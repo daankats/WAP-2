@@ -13,6 +13,7 @@ use app\core\Middlewares\AuthMiddleware;
 // SITE
 $app->router->get('/', [HomeController::class, 'index']);
 $app->router->get('/dashboard', [DashboardController::class, 'index'], AuthMiddleware::class);
+
 // AUTH
 $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);
@@ -24,6 +25,7 @@ $app->router->get('/profile', [ProfileController::class, 'index'], AuthMiddlewar
 // ADMIN
 $app->router->get('/admin', [AdminController::class, 'index'], AuthMiddleware::class);
 $app->router->get('/admin/edit', [AdminController::class, 'edit'], AuthMiddleware::class);
+$app->router->post('/admin/update', [AdminController::class, 'updateUser'], AuthMiddleware::class);
 $app->router->post('/admin/delete', [AdminController::class, 'delete'], AuthMiddleware::class);
 
 // COURSES
@@ -43,7 +45,7 @@ $app->router->post('/courses/delete', [CourseController::class, 'delete'], AuthM
 $app->router->get('/exams', [ExamsController::class, 'index']);
 $app->router->get('/exams/create', [ExamsController::class, 'create'], AuthMiddleware::class);
 $app->router->post('/exams/create', [ExamsController::class, 'create'], AuthMiddleware::class);
-$app->router->get('/exams/edit', [ExamsController::class, 'update'], AuthMiddleware::class);
+$app->router->get('/exams/edit', [ExamsController::class, 'edit'], AuthMiddleware::class);
 $app->router->post('/exams/update', [ExamsController::class, 'update'], AuthMiddleware::class);
 $app->router->get('/exams/delete', [ExamsController::class, 'delete'], AuthMiddleware::class);
 $app->router->post('/exams/delete', [ExamsController::class, 'delete'], AuthMiddleware::class);

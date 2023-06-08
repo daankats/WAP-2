@@ -28,7 +28,7 @@ $this->title = 'Admin dashboard';
                 <td><button class="btn btn-primary"><a style="color:white;" href="<?= '/admin/edit?id=' . $user->id ?>">Wijzigen</a></button>
                 <form method="post" action="/admin/delete">
     <input type="hidden" name="id" value="<?= $user->id ?>">
-    <button class="btn btn-danger" type="submit">Verwijderen</button>
+    <button class="btn btn-danger" type="submit" onclick="return confirm('Weet u zeker dat u deze gebruiker wilt verwijderen?')">Verwijderen</button>
 </form></td>
 
             </tr>

@@ -67,23 +67,49 @@ class ExamsController extends Controller {
         }
         $response->redirect('/exams');
     }
-    
-    public function update(Request $request, Response $response)
+
+    public function edit(Request $request)
     {
-        $id = $_GET['id'];
+        $id = $request->getQueryParams()['id'];
         $exam = ExamsModel::findOne(['id' => $id]);
 
-        if ($exam !== null && $request->isPost()) {
-            $exam->loadData($_POST);
-            if ($exam->validate() && $exam->update()) {
-                $response->redirect('/exams');
-                return;
-            } 
+        if ($exam === null) {
+            $exception = new \Exception("Exam not found.");
+            $this->view->render('/_error', [], $exception);
+            return;
         }
-        $this->view->title = 'Update Exam';
+
         $this->view->render('/exams/edit', [
             'model' => $exam,
         ], 'auth');
+    }
+    
+    public function update(Request $request, Response $response)
+    {
+        $id = $request->getQueryParams()['id'] ?? null;
+        if ($id === null) {
+            echo "id is null";
+            return;
+        }
+
+        $exam = ExamsModel::findOne(['id' => $id]);
+
+        if ($exam === null) {
+            $exception = new \Exception("Exam not found.");
+            $this->view->render('/_error', ['exception' => $exception]);
+            return;
+        }
+
+        $exam->loadData($request->getBody());
+
+        if ($exam->validate() && $exam->update()) {
+            $response->redirect('/exams');
+
+        } else {
+            $exception = new \Exception("Failed to update the Exam.");
+            $this->view->render('/_error', ['exception' => $exception]);
+
+        }
     }
 
     public function registerExam()
@@ -91,7 +117,7 @@ class ExamsController extends Controller {
         $register = new RegisterModel();
         $user = UserModel::findOne(['id' => App::$app->user->id]);
         
-        if ($user == !Auth::isStudent()) {
+        if ($user == Auth::isStudent()) {
             $register->student_id = $user->id;
             if ($register->loadData($_POST) && $register->validate()) {
                 $register->exam_id = $_POST['exam_id'];

@@ -51,6 +51,7 @@ class AuthController extends Controller
     public function register(Request $request, Response $response)
     {
         $user = new UserModel();
+        $user->scenario = 'register';
         $user->loadData($request->getBody());
 
         if ($request->isPost()) {

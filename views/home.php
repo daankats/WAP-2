@@ -12,11 +12,40 @@ use app\core\Auth;
                 $displayName = App::$app->user->displayName();
                 echo $displayName;
             } else {
-                echo 'Gast';
-            } ?></h3>
+                echo 'bij WAP-2';
+            } ?>  </h3>
 
 
 <p>
-    Om de database te configureren, dien je de inhoud van het bestand .env.example te bekijken en op basis daarvan een nieuw bestand genaamd .env aan te maken met de juiste gegevens. Daarna dien je het bestand migrations.php uit te voeren met PHP om de database en tabellen aan te maken.
-    Vervolgens moet je een account aanmaken in de database en deze voorzien van de rol 'beheerder'. Met dit account kun je andere gebruikers aanmaken.
+    als student kan je hier je hier inschrijven voor cursussen en je cijfers bekijken. <br> Voor je cursus krijg je ook examens, in dit systeem kun je je ook registreren voor een examen als je bent ingeschreven voor de bijbehorende cursus.
 </p>
+<p>
+    als docent kun je hier je cursussen en examens beheren. <br> Je kunt ook de cijfers van je studenten invoeren en bekijken.
+</p>
+<p>
+    als beheerder kun je hier de docenten en studenten beheren. <br> Je kunt ook de cursussen en examens beheren.
+</p>
+<?php if (Auth::isGuest()) : ?>
+<button class="btn btn-sm btn-success" onclick="window.location.href='/login'">Login</button>
+<button  class="btn btn-sm btn-primary" onclick="window.location.href='/register'">Register</button>
+<?php endif; ?>
+
+<?php if (Auth::isStudent()) : ?>
+    <button class="btn btn-sm btn-success" onclick="window.location.href='/courses'">Courses</button>
+    <button  class="btn btn-sm btn-success" onclick="window.location.href='/grades'">Grades</button>
+<?php endif; ?>
+
+<?php if (Auth::isTeacher()) : ?>
+    <button  class="btn btn-sm btn-success" onclick="window.location.href='/courses'">Courses</button>
+    <button  class="btn btn-sm btn-success" onclick="window.location.href='/exams'">Exams</button>
+    <button  class="btn btn-sm btn-success" onclick="window.location.href='/grades'">Grades</button>
+<?php endif; ?>
+
+<?php if (Auth::isAdmin()) : ?>
+    <button class="btn btn-sm btn-success" onclick="window.location.href='/users'">Users</button>
+    <button class="btn btn-sm btn-primary" onclick="window.location.href='/courses'">Courses</button>
+    <button class="btn btn-sm btn-primary" onclick="window.location.href='/exams'">Exams</button>
+    <button class="btn btn-sm btn-primary" onclick="window.location.href='/grades'">Grades</button>
+    <button class="btn btn-sm btn-danger" onclick="window.location.href='/admin'">Admin paneel</button>
+<?php endif; ?>
+

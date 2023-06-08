@@ -3,7 +3,6 @@
 
 namespace app\core;
 
-use app\database\Database;
 use app\models\UserModel;
 use app\core\Request;
 use app\core\Response;
@@ -27,7 +26,6 @@ class App
         $this->response = $response;
         $this->session = $session;
         $this->user = $user;
-        
     }
 
     public function run()

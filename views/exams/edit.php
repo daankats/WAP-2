@@ -31,7 +31,7 @@ if (!$model) {
                 <?= $session->getFlash('error') ?>
             </div>
         <?php endif; ?>
-        <form action="" method="post">
+        <form method="post" action="/exams/update?id=<?= $id ?>">
             <div class="form-group">
                 <label for="name">Naam</label>
                 <input type="text" id="name" name="name" value="<?= $model->name ?>" class="form-control">
