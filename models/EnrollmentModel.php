@@ -22,6 +22,7 @@ class EnrollmentModel extends DbModel
             'student_id' => [Validation::RULE_REQUIRED],
             'course_id' => [Validation::RULE_REQUIRED],
             'status' => [Validation::RULE_REQUIRED],
+
         ];
     }
 

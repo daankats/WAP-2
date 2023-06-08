@@ -11,6 +11,7 @@ use app\core\middlewares\CourseMiddleware;
 use app\models\CourseModel;
 use app\models\EnrollmentModel;
 use app\models\UserModel;
+use app\models\ExamsModel;
 
 class CourseController extends Controller
 {
@@ -57,6 +58,7 @@ class CourseController extends Controller
                     $course->created_by = $user->id;
                     $course->created_at = date('Y-m-d H:i:s');
                     if ($course->validate() && $course->save()) {
+                        App::$app->session->setFlash('success', 'Cursus succesvol aangemaakt.');
                         $response->redirect('/courses');
                         return;
                     }
@@ -87,7 +89,7 @@ class CourseController extends Controller
         $course = CourseModel::findOne(['id' => $id]);
 
         if ($course === null) {
-            $exception = new \Exception("Course not found.");
+            $exception = new \Exception("Cursus niet gevonden.");
             $this->view->render('/_error', [], $exception);
             return;
         }
@@ -96,6 +98,7 @@ class CourseController extends Controller
             'model' => $course,
         ], 'auth');
     }
+
     public function updateCourse(Request $request, Response $response)
     {
         $id = $request->getQueryParams()['id'] ?? null;
@@ -108,7 +111,7 @@ class CourseController extends Controller
         $course = CourseModel::findOne(['id' => $id]);
 
         if ($course === null) {
-            $exception = new \Exception("Course not found.");
+            $exception = new \Exception("Cursus niet gevonden.");
             $this->view->render('/_error', ['exception' => $exception]);
             return;
         }
@@ -116,15 +119,13 @@ class CourseController extends Controller
         $course->loadData($request->getBody());
 
         if ($course->validate() && $course->update()) {
+            App::$app->session->setFlash('success', 'Cursus succesvol bijgewerkt.');
             $response->redirect('/courses');
-
         } else {
-            $exception = new \Exception("Failed to update the course.");
+            $exception = new \Exception("Het bijwerken van de cursus is mislukt.");
             $this->view->render('/_error', ['exception' => $exception]);
-
         }
     }
-
 
     public function delete(Request $request, Response $response)
     {
@@ -132,15 +133,23 @@ class CourseController extends Controller
         $course = CourseModel::findOne(['id' => $courseId]);
 
         if (Auth::isTeacher() || Auth::isAdmin()) {
-            if ($course->delete()) {
-                $response->redirect('/courses');
-                return;
-            }
-        }
+            $associatedExam = ExamsModel::findOne(['course_id' => $courseId]);
 
-        $this->view->render('/courses/delete', [
-            'model' => $course,
-        ], 'auth');
+            if ($associatedExam) {
+                App::$app->session->setFlash('error', 'Er is een examen gekoppeld aan deze cursus. Verwijder eerst het examen.');
+            } else {
+                if ($course->delete()) {
+                    App::$app->session->setFlash('success', 'Cursus succesvol verwijderd.');
+                    $response->redirect('/courses');
+                    return;
+                } else {
+                    App::$app->session->setFlash('error', 'Verwijderen mislukt. Probeer het opnieuw.');
+                }
+            }
+        } else {
+            App::$app->session->setFlash('error', 'Je hebt geen toegang tot deze pagina.');
+        }
+        $response->redirect('/courses');
     }
 
     public function enroll(Request $request, Response $response)
@@ -151,7 +160,7 @@ class CourseController extends Controller
         $enrollment->course_id = $courseId;
 
         if ($enrollment->save()) {
-            App::$app->session->setFlash('success', 'You have successfully enrolled in the course!');
+            App::$app->session->setFlash('success', 'Je bent succesvol ingeschreven voor de cursus!');
             $response->redirect('/courses');
         } else {
             $response->setStatusCode(500);
@@ -164,7 +173,7 @@ class CourseController extends Controller
         $enrollment = EnrollmentModel::findOne(['course_id' => $courseId, 'student_id' => App::$app->user->id]);
 
         if ($enrollment->delete()) {
-            App::$app->session->setFlash('success', 'You have successfully unenrolled from the course!');
+            App::$app->session->setFlash('success', 'Je bent succesvol uitgeschreven voor de cursus!');
             $response->redirect('/courses');
         } else {
             $response->setStatusCode(500);

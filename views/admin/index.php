@@ -3,7 +3,7 @@
 $this->title = 'Admin dashboard';
 ?>
 
-<h1><?= $this->title; ?></h1>
+<h1 class="text-center"><?= $this->title; ?></h1>
 
     <div class="row p-3">
         <div class="col-12">

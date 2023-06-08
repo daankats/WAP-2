@@ -31,9 +31,10 @@ class Validation
 
     public static function max($value, $params)
     {
-        $maxLength = $params['max'] ?? PHP_INT_MAX;
-        return strlen($value) <= $maxLength;
+        $maxValue = $params['max'] ?? PHP_INT_MAX;
+        return $value <= $maxValue;
     }
+
 
     public static function match($value, $params)
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace app\models;
 
 use app\core\App;
@@ -23,9 +24,12 @@ class GradesModel extends DbModel
         return [
             'user_id' => [Validation::RULE_REQUIRED],
             'exam_id' => [Validation::RULE_REQUIRED],
-            'grade' => [Validation::RULE_REQUIRED],
+            'grade' => [[Validation::RULE_REQUIRED], [Validation::RULE_MAX, 'max' => 10], [Validation::RULE_MIN, 'min' => 1]],
         ];
     }
+
+
+
     public static function tableName(): string
     {
         return 'grades';
@@ -75,7 +79,7 @@ class GradesModel extends DbModel
     }
 
     public static function findAll($user_id)
-    {   
+    {
         $db = self::getDb();
         $sql = "SELECT * FROM " . self::tableName() . " WHERE exam_id = :exam_id";
         $statement = $db->prepare($sql);
@@ -87,8 +91,8 @@ class GradesModel extends DbModel
         }
         return $grades;
     }
-    
-    
+
+
     public function findById(int $id)
     {
         $db = self::getDb();
@@ -102,7 +106,4 @@ class GradesModel extends DbModel
         }
         return $grades;
     }
-    
-    
-
 }

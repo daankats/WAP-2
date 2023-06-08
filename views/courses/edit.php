@@ -20,7 +20,7 @@ if (!$model) {
 }
 
 ?>
-
+<h1 class="text-center">Cursus bewerken</h1>
 <div class="row">
     <div class="col-md-6 offset-md-3">
         <h1 class="text-center"><?= $this->title ?></h1>

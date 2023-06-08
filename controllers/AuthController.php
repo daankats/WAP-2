@@ -33,13 +33,14 @@ class AuthController extends Controller
             $loginModel->loadData($request->getBody());
 
             if ($loginModel->validate() && $loginModel->login()) {
+                App::$app->session->setFlash('success', 'Succesvol ingelogd.');
                 return $this->redirect('/dashboard');
             } else {
-                $errorMessage = 'Invalid credentials. Please try again.';
+                $errorMessage = 'Ongeldige inloggegevens. Probeer het opnieuw.';
             }
         }
 
-        $this->view->title = 'Login'; // Set the title
+        $this->view->title = 'Inloggen'; // Set the title
         $this->view->render('login', [
             'model' => $loginModel,
             'errorMessage' => $errorMessage,
@@ -58,19 +59,22 @@ class AuthController extends Controller
             $isValidationSuccessful = $user->validate();
 
             if ($isValidationSuccessful && $user->register()) {
-                App::$app->session->setFlash('success', 'Account created successfully.');
+                App::$app->session->setFlash('success', 'Account succesvol aangemaakt.');
                 return $response->redirect('/dashboard');
             } else {
                 App::$app->session->setFlash('error', 'Er is een fout opgetreden. Probeer het opnieuw.');
             }
         }
-
-        return $this->view->render('register', [
-            'model' => $user
-        ], 'auth');
+        if (App::$app->user) {
+            return $this->view->render('register', [
+                'model' => $user
+            ], 'auth');
+        } else {
+            return $this->view->render('register', [
+                'model' => $user
+            ], 'main');
+        }
     }
-
-
 
     public function logout()
     {
@@ -78,5 +82,4 @@ class AuthController extends Controller
         App::$app->session->remove('user');
         return $this->redirect('/login');
     }
-
 }

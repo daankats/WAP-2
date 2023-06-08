@@ -23,7 +23,7 @@ if (!$user) {
 
 ?>
 
-<h1>Gebruiker wijzigen</h1>
+<h1 class="text-center">Gebruiker wijzigen</h1>
 <form method="post" action="/admin/update?id=<?= $id ?>">
     <div class="form-group">
         <label for="firstName">Voornaam</label>

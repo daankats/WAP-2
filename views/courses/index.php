@@ -4,7 +4,7 @@ use app\core\Auth;
 
 ?>
 
-<h1><?= $this->title ?></h1>
+<h1 class="text-center"><?= $this->title ?></h1>
 
 <?php if (Auth::isTeacher() || Auth::isAdmin()): ?>
     <p><a href="/courses/create" class="btn btn-primary">Voeg cursus toe</a></p>

@@ -5,7 +5,7 @@ use app\core\Validation;
 
 ?>
 
-<h1>Inloggen</h1>
+<h1 class="text-center">Inloggen</h1>
 
 <?php if (!empty($model->errors)) : ?>
     <div class="alert alert-danger">
@@ -19,6 +19,9 @@ use app\core\Validation;
     </div>
 <?php endif; ?>
 
+<div class="alert alert-info">
+    <p>Geen account? <a href="/register">Registreer hier</a>.</p>
+</div>
 <form method="post">
     <div class="form-group">
         <label for="email">E-mail</label>

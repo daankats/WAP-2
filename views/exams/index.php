@@ -9,7 +9,7 @@ $registerModel = new RegisterModel();
 $user = UserModel::findOne(['id' => App::$app->user->id]);
 ?>
 
-<h1>Examens</h1>
+<h1 class="text-center">Examens</h1>
 
 <?php if (Auth::isTeacher() || Auth::isAdmin()) : ?>
     <a href="/exams/create" class="btn btn-primary mb-3">Voeg examen toe</a>

@@ -5,8 +5,6 @@ use app\models\RegisterModel;
 use app\models\UserModel;
 use app\models\GradesModel;
 
-$this->title = 'Cijfer toevoegen';
-
 $exam_id = $_GET['id'];
 
 $exam = ExamsModel::findOne(['id' => $exam_id]);
@@ -23,7 +21,7 @@ if (!empty($errors)): ?>
     </div>
 <?php endif; ?>
 
-<h1>Examen: <?= $exam->name ?></h1>
+<h1 class="text-center">Examen: <?= $exam->name ?></h1>
 <a href="/exams" class="btn btn-primary mb-3">Terug</a>
 <table class="table">
     <thead>

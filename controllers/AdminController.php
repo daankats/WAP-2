@@ -16,9 +16,7 @@ class AdminController extends Controller
     {
         parent::__construct();
         $this->registerMiddleware(new AdminMiddleware(['create', 'edit', 'update', 'delete']));
-
     }
-
 
     public function index()
     {
@@ -39,7 +37,7 @@ class AdminController extends Controller
         }
 
         if ($user === null) {
-            $exception = new \Exception("Course not found.");
+            $exception = new \Exception("Gebruiker niet gevonden.");
             $this->view->render('/_error', [], $exception);
             return;
         }
@@ -50,9 +48,7 @@ class AdminController extends Controller
         ], 'auth');
     }
 
-    /**
-     * @throws \Exception
-     */
+
     public function updateUser(Request $request, Response $response)
     {
         $id = $request->getQueryParams()['id'] ?? null;
@@ -64,7 +60,7 @@ class AdminController extends Controller
         $user = UserModel::findOne(['id' => $id]);
 
         if ($user === null) {
-            $exception = new \Exception("User not found.");
+            $exception = new \Exception("Gebruiker niet gevonden.");
             $this->view->render('/_error', ['exception' => $exception]);
             return;
         }
@@ -72,18 +68,18 @@ class AdminController extends Controller
         $user->scenario = 'update';
         $user->loadData($request->getBody());
         if ($user->validate()) {
-            echo "Validation passed";
+            echo "Validatie geslaagd";
         } else {
             var_dump($user->errors);
         }
 
         if ($user->validate() && $user->update()) {
+            App::$app->session->setFlash('success', 'Gebruiker succesvol bijgewerkt.');
             $response->redirect('/admin');
-
         } else {
-            $exception = new \Exception("Failed to update the user.");
+            App::$app->session->setFlash('error', 'Kon de gebruiker niet bijwerken.');
+            $exception = new \Exception("Kon de gebruiker niet bijwerken.");
             $this->view->render('/_error', ['exception' => $exception]);
-
         }
     }
 
@@ -91,9 +87,13 @@ class AdminController extends Controller
     {
         $id = $request->getBody()['id'] ?? null;
         if (!$id) {
-            throw new \Exception("ID is required");
+            throw new \Exception("ID is verplicht");
         }
-        UserModel::delete($id);
+        if (UserModel::delete($id)) {
+            App::$app->session->setFlash('success', 'Gebruiker succesvol verwijderd.');
+        } else {
+            App::$app->session->setFlash('error', 'Kon de gebruiker niet verwijderen.');
+        }
         $response->redirect('/admin');
     }
 }
