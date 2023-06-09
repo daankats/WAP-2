@@ -13,8 +13,7 @@ class AdminMiddleware extends BaseMiddleware
     {
         if (Auth::isGuest() || !Auth::isAdmin()) {
             // Gebruiker is niet ingelogd, doorverwijzen naar de inlogpagina
-            $response->redirect('/login');
-            return $response;
+            throw new ForbiddenException();
         }
 
         // Voer de volgende middleware of controller actie uit

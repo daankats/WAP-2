@@ -41,7 +41,6 @@ use app\core\Auth;
     <p>
         als beheerder kun je hier de docenten en studenten beheren. <br> Je kunt ook de cursussen en examens beheren.
     </p>
-    <button class="btn btn-sm btn-success" onclick="window.location.href='/users'">Gebruikers</button>
     <button class="btn btn-sm btn-primary" onclick="window.location.href='/courses'">Cursussen</button>
     <button class="btn btn-sm btn-primary" onclick="window.location.href='/exams'">Examens</button>
     <button class="btn btn-sm btn-danger" onclick="window.location.href='/admin'">Admin paneel</button>

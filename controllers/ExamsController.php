@@ -20,7 +20,7 @@ class ExamsController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->registerMiddleware(new ExamsMiddleware(['index', 'create', 'edit', 'delete', 'update', 'view', 'grade', 'updategrade', 'addgrade', 'addGrades']));
+        $this->registerMiddleware(new ExamsMiddleware(['create', 'edit', 'delete', 'update', 'view', 'grade', 'updategrade', 'addgrade', 'addGrades']));
     }
 
     public function index()

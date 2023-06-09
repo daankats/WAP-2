@@ -29,9 +29,15 @@ class Router
         $route = $this->routes[$method][$path] ?? null;
 
         if ($route === null) {
-            // Handle route not found
-            return;
+            if ($path !== '/404') {
+                App::$app->response->redirect('/404');
+            } else {
+                // Render the 404 view
+                $view = new View();
+                echo $view->render('404');
+            }
         }
+
 
         $middlewares = $this->getMiddlewares($route['middleware']);
         $resolvedMiddlewares = $this->resolveMiddlewares($middlewares);

@@ -47,7 +47,8 @@ $currentUrl = $_SERVER['REQUEST_URI'];
 
     <div class="container-fluid m-3 ">
         <div class="row">
-            <div class="col-auto col-md-3 col-xl-2 px-0 min-vh-100">
+            <div class="col-auto custom-menu col-md-3 col-xl-2 px-0 min-vh-100">
+                <h3 class="text-center">Menu</h3>
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto custom-nav-links">
                     <li class="nav-item">
@@ -61,7 +62,7 @@ $currentUrl = $_SERVER['REQUEST_URI'];
                             <li class="nav-item">
                                 <a class="nav-link <?php echo ($currentUrl == '/myprogress') ? 'active' : ''; ?>" aria-current="page" href="/myprogress">Mijn voortgang</a>
                             </li>
-                        <?php elseif (Auth::isTeacher()) : ?>
+                        <?php elseif (Auth::isTeacher()  || Auth::isAdmin()) : ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo ($currentUrl == '/exams/results') ? 'active' : ''; ?>" aria-current="page" href="/exams/results">Resultaten</a>
                             </li>
@@ -80,7 +81,7 @@ $currentUrl = $_SERVER['REQUEST_URI'];
                 </ul>
             </div>
         <?php endif; ?>
-        <div class="col-auto col-md-9 col-xl-10 py-md-3 pl-md-5 bd-content">
+        <div class="col-auto col-md-9 col-xl-10 bd-content">
             <?php
             $successMessages = $app->session->getFlash('success');
             if (!empty($successMessages)) {

@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
+
     <title>Error</title>
     <style>
         body {
@@ -28,11 +26,10 @@
         }
     </style>
 </head>
-<body>
+
 <div class="container">
     <h1>Error</h1>
     <p>An error occurred:</p>
     <p><?php echo $exception->getMessage(); ?></p>
 </div>
-</body>
-</html>
+

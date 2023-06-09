@@ -7,7 +7,7 @@
     transition: all 0.3s ease-in-out;
     margin: 5px;
     background-color: orange;
-    max-width: 200px;
+
 }
 
 .custom-nav-links .nav-link.active {
@@ -29,9 +29,20 @@
 }
 
 .custom-box{
-    border: 1px solid #ddd;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
     background-color: white;
+}
+.custom-menu{
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: white;
+}
+.nav{
+    padding: 20px;
+}
+.alert{
+    margin: 20px;
 }
