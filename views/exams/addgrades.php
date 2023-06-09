@@ -9,7 +9,7 @@ $exam_id = $_GET['id'];
 
 $exam = ExamsModel::findOne(['id' => $exam_id]);
 
-$registrations = RegisterModel::findAll();
+$registrations = RegisterModel::findAllObjectsByExamId($exam_id);
 
 
 
@@ -27,32 +27,32 @@ if (!empty($errors)): ?>
     <thead>
         <tr>
             <th>Student</th>
-            <th>Exam</th>
-            <th>Grade</th>
+            <th>Examen</th>
+            <th>Cijfer</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($registrations as $registration) : ?>
-            <?php $student = UserModel::findOne(['id' => $registration->student_id]) ?>
+    <?php foreach ($registrations as $registration) : ?>
+        <?php
+        $student = UserModel::findOne(['id' => $registration->student_id]);
+        $grade = GradesModel::findOne(['exam_id' => $exam->id, 'user_id' => $student->id]);
+        ?>
+        <tr>
+            <td><?= $student->firstName . ' ' . $student->lastName ?></td>
+            <td><?= $exam->name ?></td>
 
-            <?php
-            $grade = GradesModel::findOne(['exam_id' => $exam->id, 'user_id' => $student->id]);
-            ?>
-            <tr>
-                <td><?= $student->firstName . ' ' . $student->lastName ?></td>
-                <td><?= $exam->name ?></td>
-
-                <td>
-                    <form action="<?= isset($grade->grade) ? '/exams/updategrade' : '/exams/addgrades' ?>" method="post">
+            <td>
+                <form action="<?= isset($grade->grade) ? '/exams/updategrade' : '/exams/addgrades' ?>" method="post">
                     <input type="hidden" name="id" required value="<?= $grade->id ?? 0 ?>">
-                        <input type="hidden" name="exam_id" required value="<?= $exam->id ?>">
-                        <input type="hidden" name="student_id" required value="<?= $student->id ?>">
-                        <input type="text" min="1" max="2" step="0.1" name="grade" required value="<?= isset($grade->grade) ? $grade->grade : '' ?>">
-                        <button type="submit" class="btn btn-primary"><?= isset($grade->grade) ? 'Cijfer wijzigen' : 'Cijfer toevoegen' ?></button>
-                    </form>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
+                    <input type="hidden" name="exam_id" required value="<?= $exam->id ?>">
+                    <input type="hidden" name="student_id" required value="<?= $student->id ?>">
+                    <input type="text" min="1" max="2" step="0.1" name="grade" required value="<?= isset($grade->grade) ? $grade->grade : '' ?>">
+                    <button type="submit" class="btn btn-primary"><?= isset($grade->grade) ? 'Cijfer wijzigen' : 'Cijfer toevoegen' ?></button>
+                </form>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+
 </table>

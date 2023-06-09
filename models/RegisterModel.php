@@ -69,6 +69,20 @@ class RegisterModel extends DbModel
         return $users;
     }
 
+    public static function findAllObjectsByExamId($exam_id): array
+    {
+        $db = self::getDb();
+        $sql = "SELECT * FROM registrations WHERE exam_id = :exam_id";
+        $statement = $db->prepare($sql);
+        $statement->bindValue(':exam_id', $exam_id);
+        $statement->execute();
+        $users = [];
+        while ($row = $statement->fetchObject(static::class)) {
+            $users[] = $row;
+        }
+        return $users;
+    }
+
     public function isRegistered($exam_id, $student_id)
     {
         $db = self::getDb();

@@ -40,7 +40,7 @@ if (!$model) {
                 <input type="text" required id="code" name="code" class="form-control" value="<?= $model->code ?>">
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">Bijwerken</button>
             </div>
         </form>
     </div>
