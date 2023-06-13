@@ -24,6 +24,7 @@ class Database implements DatabaseConnection
         }
     }
 
+
     public function getPdo(): PDO
     {
         return $this->pdo;

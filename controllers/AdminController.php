@@ -89,11 +89,15 @@ class AdminController extends Controller
         if (!$id) {
             throw new \Exception("ID is verplicht");
         }
-        if (UserModel::delete($id)) {
+
+        $userModel = new UserModel();
+        $user = $userModel->findOne(['id' => $id]);
+        if ($user && $user->delete()) {
             App::$app->session->setFlash('success', 'Gebruiker succesvol verwijderd.');
         } else {
             App::$app->session->setFlash('error', 'Kon de gebruiker niet verwijderen.');
         }
+
         $response->redirect('/admin');
     }
 }
