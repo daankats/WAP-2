@@ -5,8 +5,6 @@ use app\models\UserModel;
 use app\models\GradesModel;
 use app\core\Auth;
 
-$this->title = 'Tentamenresultaten';
-
 $exams = [];
 
 if (Auth::isAdmin()) {
@@ -24,7 +22,7 @@ if (!empty($errors)): ?>
     </div>
 <?php endif; ?>
 
-<h1>Tentamenresultaten</h1>
+<h1 class="text-center">Tentamenresultaten</h1>
 <a href="/exams" class="btn btn-primary mb-3">Terug</a>
 
 <form method="GET" action="">

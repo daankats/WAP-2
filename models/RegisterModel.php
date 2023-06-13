@@ -43,18 +43,7 @@ class RegisterModel extends DbModel
         ];
     }
     
-    public static function findAllObjects(): array
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM registrations";
-        $statement = $db->prepare($sql);
-        $statement->execute();
-        $users = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $users[] = $row;
-        }
-        return $users;
-    }
+
     public static function findAllObjectsByStudentId($student_id): array
     {
         $db = self::getDb();
@@ -97,43 +86,4 @@ class RegisterModel extends DbModel
         }
         return false;
     }
-
-    public function delete()
-    {
-        $db = self::getDb();
-        $sql = "DELETE FROM registrations WHERE exam_id = :exam_id AND student_id = :student_id";
-        $statement = $db->prepare($sql);
-        $statement->bindValue(':exam_id', $this->exam_id);
-        $statement->bindValue(':student_id', $this->student_id);
-        $statement->execute();
-        return true;
-    }
-
-    public function getRegisteredExams($student_id)
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM registrations WHERE student_id = :student_id";
-        $statement = $db->prepare($sql);
-        $statement->bindValue(':student_id', $student_id);
-        $statement->execute();
-        $exams = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $exams[] = $row;
-        }
-        return $exams;
-    }
-
-    public static function findAll()
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM registrations";
-        $statement = $db->prepare($sql);
-        $statement->execute();
-        $registrations = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $registrations[] = $row;
-        }
-        return $registrations;
-    }
-
 }

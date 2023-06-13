@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app\models;
 
@@ -36,7 +36,7 @@ class CourseModel extends DbModel
     public function attributes(): array
     {
         return ['name', 'code', 'created_by', 'created_at', 'updated_by', 'updated_at'];
-    }    
+    }
 
 
     public function labels(): array
@@ -62,54 +62,8 @@ class CourseModel extends DbModel
         $this->updated_at = date('Y-m-d H:i:s');
         return parent::update();
     }
-    
-       
-
-    public function delete()
-    {
-        $db = self::getDb();
-        $SQL = "DELETE FROM courses WHERE id = :id";
-        $stmt = $db->prepare($SQL);
-        $stmt->bindValue(':id', $this->id);
-        return $stmt->execute();
-    }
 
 
-    public static function findAllObjects(): array
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM courses";
-        $statement = $db->prepare($sql);
-        $statement->execute();
-        $users = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $users[] = $row;
-        }
-        return $users;
-    }
-    
-    public static function findCourseByCode($code)
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM courses WHERE code = :code";
-        $statement = $db->prepare($sql);
-        $statement->bindValue(':code', $code);
-        $statement->execute();
-        $row = $statement->fetchObject(static::class);
-        return $row;
-    }
-    
-    public static function findCourseById($id)
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM courses WHERE id = :id";
-        $statement = $db->prepare($sql);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-        $row = $statement->fetchObject(static::class);
-        return $row;
-    }
-    
     public function isEnrolled($course_id)
     {
         $db = self::getDb();
@@ -119,9 +73,9 @@ class CourseModel extends DbModel
         $statement->bindValue(':course_id', $course_id);
         $statement->execute();
         $row = $statement->fetchObject();
-        return $row !== false; 
+        return $row !== false;
     }
-    
+
     public function getCreator(): ?string
     {
         $db = self::getDb();
@@ -130,19 +84,19 @@ class CourseModel extends DbModel
         $statement->bindValue(':id', $this->created_by);
         $statement->execute();
         $row = $statement->fetchObject();
-    
+
         if (!$row) {
             return null;
         }
-    
+
         $user = new UserModel();
         $user->firstName = $row->firstname;
         $user->lastName = $row->lastname;
-    
+
         return $user->getFullName();
     }
-    
-    
+
+
     public function getEnrolledStudents()
     {
         $db = self::getDb();
@@ -156,6 +110,4 @@ class CourseModel extends DbModel
         }
         return $users;
     }
-    
-    
 }

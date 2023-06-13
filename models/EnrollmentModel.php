@@ -50,26 +50,4 @@ class EnrollmentModel extends DbModel
         ];
     }
 
-    public static function findAllObjects(): array
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM enrollment";
-        $statement = $db->prepare($sql);
-        $statement->execute();
-        $users = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $users[] = $row;
-        }
-        return $users;
-    }
-
-    public function delete()
-    {
-        $db = self::getDb();
-        $sql = "DELETE FROM enrollment WHERE id = :id";
-        $statement = $db->prepare($sql);
-        $statement->bindValue(':id', $this->id);
-        $statement->execute();
-        return true;
-    }
 }

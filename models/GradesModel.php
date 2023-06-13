@@ -54,19 +54,6 @@ class GradesModel extends DbModel
         ];
     }
 
-    public static function findAllObjects(): array
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM " . self::tableName();
-        $statement = $db->prepare($sql);
-        $statement->execute();
-        $users = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $users[] = $row;
-        }
-        return $users;
-    }
-
     public function update()
     {
         $db = self::getDb();

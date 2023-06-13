@@ -5,12 +5,12 @@ namespace app\database;
 use Exception;
 use PDO;
 
-class Database
+class Database implements DatabaseConnection
 {
-    private static ?Database $instance = null;
+    private static ?DatabaseConnection $instance = null;
     private PDO $pdo;
 
-    private function __construct()
+    protected function __construct()
     {
         try {
             $this->pdo = new PDO(
@@ -24,10 +24,15 @@ class Database
         }
     }
 
-    public static function getInstance(): Database
+    public function getPdo(): PDO
+    {
+        return $this->pdo;
+    }
+
+    public static function create(): DatabaseConnection
     {
         if (self::$instance === null) {
-            self::$instance = new Database();
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -55,8 +60,5 @@ class Database
         return null;
     }
 
-    public function getPdo(): PDO
-    {
-        return $this->pdo;
-    }
+   
 }

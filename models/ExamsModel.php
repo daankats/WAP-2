@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app\models;
 
@@ -18,7 +18,7 @@ class ExamsModel extends DbModel
     public string $exam_place = '';
     public string $exam_duration = '';
     public string $start_time = '';
-    public int $duration = 0; 
+    public int $duration = 0;
     public string $updated_at = '';
     public int $updated_by = 0;
     public $user_id;
@@ -34,7 +34,7 @@ class ExamsModel extends DbModel
             'exam_duration' => [Validation::RULE_REQUIRED],
         ];
     }
-    
+
     public function primaryKey(): string
     {
         return 'id';
@@ -64,13 +64,6 @@ class ExamsModel extends DbModel
         ];
     }
 
-    public static function findAllObjects()
-    {
-        $statement = DbModel::prepare("SELECT * FROM " . static::tableName());
-        $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
-    }
-
 
     public function getCourses()
     {
@@ -86,8 +79,8 @@ class ExamsModel extends DbModel
     {
         $course = CourseModel::findOne(['id' => $this->course_id]);
         return $course->name;
-    }    
-    
+    }
+
 
     public function save()
     {
@@ -107,16 +100,16 @@ class ExamsModel extends DbModel
         $statement->bindValue(':id', $this->created_by);
         $statement->execute();
         $row = $statement->fetchObject();
-    
+
         if (!$row) {
             return null;
         }
-    
+
         return $row->firstname . ' ' . $row->lastname;
     }
 
     public static function findAllByUserId()
-    {   
+    {
         $db = self::getDb();
         $sql = "SELECT * FROM exams WHERE created_by = :user_id";
         $statement = $db->prepare($sql);
@@ -124,8 +117,8 @@ class ExamsModel extends DbModel
         $statement->execute();
         return $statement->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
-    
-    
+
+
     public function isEnrolled($course_id)
     {
         $db = self::getDb();
@@ -137,7 +130,7 @@ class ExamsModel extends DbModel
         $row = $statement->fetchObject();
         return $row !== false;
     }
-    
+
     public function update()
     {
         $this->updated_by = App::$app->user->id;
@@ -147,12 +140,10 @@ class ExamsModel extends DbModel
 
     public function delete()
     {
-        $db = self::getDb();
-        $SQL = "DELETE FROM exams WHERE id = :id";
-        $stmt = $db->prepare($SQL);
-        $stmt->bindValue(':id', $this->id);
-        return $stmt->execute();
+        $registrations = RegisterModel::findAllObjectsByExamId($this->id);
+        foreach ($registrations as $registration) {
+            $registration->delete();
+        }
+        return parent::delete();
     }
-    
-    
 }

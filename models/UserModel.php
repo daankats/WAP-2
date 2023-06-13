@@ -47,7 +47,6 @@ class UserModel extends DbModel
     }
 
 
-
     public static function tableName(): string
     {
         return 'users';
@@ -107,41 +106,8 @@ class UserModel extends DbModel
         return $this->firstName . ' ' . $this->lastName;
     }
 
-    public static function findAllObjects(): array
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM " . self::tableName();
-        $statement = $db->prepare($sql);
-        $statement->execute();
-        $users = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $users[] = $row;
-        }
-        return $users;
-    }
-
-    public static function Delete($id)
-    {
-        $db = self::getDb();
-        $sql = "DELETE FROM users WHERE id = :id";
-        $statement = $db->prepare($sql);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-    }
-
     public function getFullName(): string
     {
         return $this->firstName . ' ' . $this->lastName;
-    }
-
-    public function getUser($id)
-    {
-        $db = self::getDb();
-        $sql = "SELECT * FROM users WHERE id = :id";
-        $statement = $db->prepare($sql);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-        $user = $statement->fetchObject(static::class);
-        return $user;
     }
 }

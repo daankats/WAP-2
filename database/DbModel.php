@@ -9,12 +9,17 @@ abstract class DbModel extends Model
 {
     protected static function getDb(): PDO
     {
-        return Database::getInstance()->getPdo();
+        return DbConnection::getConnection()->getPdo();
     }
 
     abstract public static function tableName(): string;
     abstract public function attributes(): array;
     abstract public function primaryKey(): string;
+
+    public static function prepare($sql)
+    {
+        return self::getDb()->prepare($sql);
+    }
 
     public function save()
     {
@@ -58,6 +63,29 @@ abstract class DbModel extends Model
         return $statement->execute();
     }
 
+    public function delete()
+    {
+        $tableName = static::tableName();
+        $primaryKey = $this->primaryKey();
+        $statement = self::getDb()->prepare("DELETE FROM $tableName WHERE $primaryKey = :id");
+        $statement->bindValue(":id", $this->{$primaryKey});
+        return $statement->execute();
+    }
+
+    public static function findAllObjects(): array
+    {
+        $tableName = static::tableName();
+        $db = self::getDb();
+        $sql = "SELECT * FROM $tableName";
+        $statement = $db->prepare($sql);
+        $statement->execute();
+        $objects = [];
+        while ($row = $statement->fetchObject(static::class)) {
+            $objects[] = $row;
+        }
+        return $objects;
+    }
+
     public static function findOne($where)
     {
         $tableName = static::tableName();
@@ -90,8 +118,5 @@ abstract class DbModel extends Model
         return $this;
     }
 
-    public static function prepare($sql)
-    {
-        return self::getDb()->prepare($sql);
-    }
+
 }

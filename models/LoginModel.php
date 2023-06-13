@@ -29,6 +29,21 @@ class LoginModel extends DbModel
         ];
     }
 
+    public static function tableName(): string
+    {
+        return 'users';
+    }
+
+    public function attributes(): array
+    {
+        return ['email', 'password'];
+    }
+
+    public function primaryKey(): string
+    {
+        return 'id';
+    }
+
     public function login(): bool
     {
         $user = UserModel::findOne(['email' => $this->email]);
@@ -45,21 +60,5 @@ class LoginModel extends DbModel
 
         Auth::login($user);
         return true;
-    }
-
-    public static function tableName(): string
-    {
-return 'users';
-    }
-
-    public function attributes(): array
-    {
-return ['email', 'password'];
-    }
-
-    public function primaryKey(): string
-    {
-return 'id';
-
     }
 }
