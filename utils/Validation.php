@@ -2,7 +2,7 @@
 
 namespace app\utils;
 
-use app\database\Database;
+use app\database\DbConnection;
 
 class Validation
 {
@@ -42,17 +42,18 @@ class Validation
         return $value === $params[$attribute];
     }
 
-    public static function unique($value, $params, $db)
-{
-    $className = $params['class'];
-    $uniqueAttr = $params['attribute'];
-    $tableName = $className::tableName();
-    $statement = $db->getPdo()->prepare("SELECT * FROM $tableName WHERE $uniqueAttr = :attr");
-    $statement->bindValue(":attr", $value);
-    $statement->execute();
-    $record = $statement->fetchObject();
-    return !$record;
-}
+    public static function unique($value, $params)
+    {
+        $db = DbConnection::getConnection();
+        $className = $params['class'];
+        $uniqueAttr = $params['attribute'];
+        $tableName = $className::tableName();
+        $statement = $db->getPdo()->prepare("SELECT * FROM $tableName WHERE $uniqueAttr = :attr");
+        $statement->bindValue(":attr", $value);
+        $statement->execute();
+        $record = $statement->fetchObject();
+        return !$record;
+    }
 
 
 
