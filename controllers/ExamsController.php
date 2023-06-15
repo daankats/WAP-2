@@ -130,11 +130,11 @@ class ExamsController extends Controller
         $user = UserModel::findOne(['id' => App::$app->user->id]);
 
         if ($user == Auth::isStudent()) {
-            $register->student_id = $user->id;
+            $register->student_id =App::$app->user->id;
 
             if ($register->loadData($_POST) && $register->validate()) {
                 $register->exam_id = $_POST['exam_id'];
-                $register->student_id = $user->id;
+                $register->student_id = App::$app->user->id;
 
                 if ($register->save()) {
                     App::$app->session->setFlash('success', 'Je hebt je succesvol ingeschreven voor het examen.');
@@ -182,7 +182,7 @@ class ExamsController extends Controller
 
         if (!$exam) {
             $response->setStatusCode(404);
-            $this->view->render('/error/404');
+            $this->view->render('/404');
             return;
         }
 
@@ -237,7 +237,7 @@ class ExamsController extends Controller
     {
         $user = UserModel::findOne(['id' => App::$app->user->id]);
         $exams = new Examsmodel();
-        $exams = ExamsModel::findAllByUserId($user->id);
+        $exams = ExamsModel::findAllByUserId();
         $this->view->title = 'Examenuitslagen';
         $this->view->render('/exams/results', [
             'exams' => $exams,
