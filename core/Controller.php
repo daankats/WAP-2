@@ -3,7 +3,7 @@
 namespace app\core;
 
 use app\core\middlewares\BaseMiddleware;
-use JetBrains\PhpStorm\NoReturn;
+
 
 class Controller
 {

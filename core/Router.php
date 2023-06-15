@@ -32,7 +32,7 @@ class Router
             if ($path !== '/404') {
                 App::$app->response->redirect('/404');
             } else {
-                // Render the 404 view
+
                 $view = new View();
                 echo $view->render('404');
             }
@@ -45,27 +45,25 @@ class Router
         $response = $this->executeMiddlewares($resolvedMiddlewares, $request, new Response());
 
         if ($response !== null) {
-            // Middleware returned a response
+
             $response->send();
             return;
         }
 
         $callback = $route['callback'];
 
-        // Call the callback
+
         if ($callback instanceof \Closure) {
             $callback($request, new Response());
         } else {
             $controller = $callback[0];
             $method = $callback[1];
 
-            // Check if the controller is a string (class name) or an object
+
             if (is_string($controller)) {
-                // Create an instance of the controller class
+
                 $controller = new $controller;
             }
-
-            // Call the method with the $request and $response as arguments
             $controller->$method($request, new Response());
         }
     }
