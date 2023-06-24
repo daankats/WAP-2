@@ -7,7 +7,7 @@ Simpel PHP framework voor het vak Web Application Programming 2.
 ## Setup DB
 1. Maak een database aan.
 2. Importeer de database.sql file in de database.
-3. Maak een .env file aan in de root van het project.
+3. Maak een .env file aan in de root van het project. (Of kopieer de .env.example)
 4. Voeg de volgende variabelen toe aan de .env file:
 
 DB_HOST=localhost
