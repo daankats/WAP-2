@@ -49,6 +49,7 @@ $currentUrl = $_SERVER['REQUEST_URI'];
     <div class="container-fluid m-3 ">
         <div class="row">
             <div class="col-auto custom-menu col-md-3 col-xl-2 px-0 min-vh-100">
+                <h3 class="text-center">Menu</h3>
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto custom-nav-links">
                     <li class="nav-item">
