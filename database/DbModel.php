@@ -7,18 +7,46 @@ use PDO;
 
 abstract class DbModel extends Model
 {
+    abstract public static function tableName(): string;
+
+    abstract public function attributes(): array;
+
     protected static function getDb(): PDO
     {
         return DbConnection::getConnection()->getPdo();
     }
 
-    abstract public static function tableName(): string;
-    abstract public function attributes(): array;
-    abstract public function primaryKey(): string;
-
-    public static function prepare($sql)
+    public static function findAllObjects(): array
     {
-        return self::getDb()->prepare($sql);
+        $tableName = static::tableName();
+        $db = self::getDb();
+        $sql = "SELECT * FROM $tableName";
+        $statement = $db->prepare($sql);
+        $statement->execute();
+        $objects = [];
+        while ($row = $statement->fetchObject(static::class)) {
+            $objects[] = $row;
+        }
+        return $objects;
+    }
+
+    public static function findOne($where)
+    {
+        $tableName = static::tableName();
+        $conditionStr = implode(' AND ', array_map(fn ($attr) => "$attr = :$attr", array_keys($where)));
+        $query = "SELECT * FROM $tableName WHERE $conditionStr";
+
+        $db = self::getDb();
+        $statement = $db->prepare($query);
+
+        foreach ($where as $key => $value) {
+            $statement->bindValue(":$key", $value);
+        }
+
+        $statement->execute();
+        $result = $statement->fetchObject(static::class);
+
+        return ($result !== false) ? $result : null;
     }
 
     public function save()
@@ -63,6 +91,8 @@ abstract class DbModel extends Model
         return $statement->execute();
     }
 
+    abstract public function primaryKey(): string;
+
     public function delete()
     {
         $tableName = static::tableName();
@@ -71,40 +101,6 @@ abstract class DbModel extends Model
         $statement->bindValue(":id", $this->{$primaryKey});
         return $statement->execute();
     }
-
-    public static function findAllObjects(): array
-    {
-        $tableName = static::tableName();
-        $db = self::getDb();
-        $sql = "SELECT * FROM $tableName";
-        $statement = $db->prepare($sql);
-        $statement->execute();
-        $objects = [];
-        while ($row = $statement->fetchObject(static::class)) {
-            $objects[] = $row;
-        }
-        return $objects;
-    }
-
-    public static function findOne($where)
-    {
-        $tableName = static::tableName();
-        $conditionStr = implode(' AND ', array_map(fn ($attr) => "$attr = :$attr", array_keys($where)));
-        $query = "SELECT * FROM $tableName WHERE $conditionStr";
-
-        $db = self::getDb();
-        $statement = $db->prepare($query);
-
-        foreach ($where as $key => $value) {
-            $statement->bindValue(":$key", $value);
-        }
-
-        $statement->execute();
-        $result = $statement->fetchObject(static::class);
-
-        return ($result !== false) ? $result : null;
-    }
-
 
     public function loadData($data)
     {
@@ -117,6 +113,4 @@ abstract class DbModel extends Model
         }
         return $this;
     }
-
-
 }

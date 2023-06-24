@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group">
                 <label for="name">Course Name</label>
                 <input type="text" required id="name" name="name" class="form-control" value="<?= $model->name ?>" re>
-                    
+
             </div>
             <div class="form-group">
                 <label for="code">Course Code</label>

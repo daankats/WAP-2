@@ -1,4 +1,5 @@
 <?php
+
 /** @var $model \app\models\UserModel
  */
 
@@ -15,33 +16,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($model->validate() && $model->register()) {
         $session->setFlash('success', 'Account created successfully.');
         return $this->redirect('/dashboard');
-    } else{
+    } else {
         $session->setFlash('error', 'Er is een fout opgetreden. Probeer het opnieuw.');
     }
 }
 ?>
 <h1>Nieuwe gebruiker aanmaken</h1>
 <!-- create register form -->
-<form method="POST" >
+<form method="POST">
     <div class="form-group">
         <label for="firstName">Voornaam</label>
-        <input type="text" class="form-control"  id="firstName" name="firstName" value="<?= $model->firstName; ?>" required>
+        <input type="text" class="form-control" id="firstName" name="firstName" value="<?= $model->firstName; ?>" required>
     </div>
     <div class="form-group">
         <label for="lastName">Achternaam</label>
-        <input type="text" class="form-control"  id="lastName" name="lastName" value="<?= $model->lastName ?>" required>
+        <input type="text" class="form-control" id="lastName" name="lastName" value="<?= $model->lastName ?>" required>
     </div>
     <div class="form-group">
         <label for="email">Emailadres</label>
-        <input type="email" class="form-control"   id="email" name="email" value="<?= $model->email ?>" required>
+        <input type="email" class="form-control" id="email" name="email" value="<?= $model->email ?>" required>
     </div>
     <div class="form-group">
         <label for="password">Wachtwoord</label>
-        <input type="password" class="form-control"  id="password" name="password" value="<?= $model->password ?>" required>
+        <input type="password" class="form-control" id="password" name="password" value="<?= $model->password ?>" required>
     </div>
     <div class="form-group">
         <label for="confirmPassword">Wachtwoord bevestigen</label>
-        <input type="password" class="form-control"  id="confirmPassword" name="confirmPassword" value="<?= $model->confirmPassword ?>" required>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" value="<?= $model->confirmPassword ?>" required>
     </div>
     <div class="form-group">
         <label for="role">Rol</label>

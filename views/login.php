@@ -1,4 +1,5 @@
 <?php
+
 /** @var $model \app\models\UserModel */
 
 use app\core\Validation;

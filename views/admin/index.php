@@ -5,11 +5,11 @@ $this->title = 'Admin dashboard';
 
 <h1 class="text-center"><?= $this->title; ?></h1>
 
-    <div class="row p-3">
-        <div class="col-12">
+<div class="row p-3">
+    <div class="col-12">
         <a href="/register" class="btn btn-primary">Nieuwe gebruiker toevoegen</a>
     </div>
-    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -26,10 +26,11 @@ $this->title = 'Admin dashboard';
                 <td><?= $user->email ?></td>
                 <td><?= $user->role ?></td>
                 <td><button class="btn btn-primary"><a style="color:white;" href="<?= '/admin/edit?id=' . $user->id ?>">Wijzigen</a></button>
-                <form method="post" action="/admin/delete">
-    <input type="hidden" name="id" value="<?= $user->id ?>">
-    <button class="btn btn-danger" type="submit" onclick="return confirm('Weet u zeker dat u deze gebruiker wilt verwijderen?')">Verwijderen</button>
-</form></td>
+                    <form method="post" action="/admin/delete">
+                        <input type="hidden" name="id" value="<?= $user->id ?>">
+                        <button class="btn btn-danger" type="submit" onclick="return confirm('Weet u zeker dat u deze gebruiker wilt verwijderen?')">Verwijderen</button>
+                    </form>
+                </td>
 
             </tr>
         <?php endforeach; ?>
