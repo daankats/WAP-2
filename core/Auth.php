@@ -43,6 +43,4 @@ class Auth
         $primaryValue = $user->{$primaryKey};
         App::$app->session->set('user', $primaryValue);
     }
-
 }
-

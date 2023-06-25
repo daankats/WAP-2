@@ -20,7 +20,7 @@ class ExamsController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->registerMiddleware(new ExamsMiddleware(['create', 'edit', 'delete', 'update', 'view', 'grade', 'updategrade', 'addgrade', 'addGrades']));
+        $this->registerMiddleware(new ExamsMiddleware());
     }
 
     public function index()
@@ -130,7 +130,7 @@ class ExamsController extends Controller
         $user = UserModel::findOne(['id' => App::$app->user->id]);
 
         if ($user == Auth::isStudent()) {
-            $register->student_id =App::$app->user->id;
+            $register->student_id = App::$app->user->id;
 
             if ($register->loadData($_POST) && $register->validate()) {
                 $register->exam_id = $_POST['exam_id'];

@@ -15,7 +15,7 @@ class ProgressController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->registerMiddleware(new AuthMiddleware(['myProgress']));
+        $this->registerMiddleware(new AuthMiddleware());
     }
     public function myProgress()
     {
@@ -38,6 +38,4 @@ class ProgressController extends Controller
             'user' => $user,
         ], 'auth');
     }
-    
-    
 }

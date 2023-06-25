@@ -25,7 +25,7 @@ class Controller
         return $this->middlewares;
     }
 
-    protected function redirect(string $url): void
+    protected function redirect(string $url)
     {
         header('Location: ' . $url);
         exit;

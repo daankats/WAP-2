@@ -21,7 +21,7 @@ class AuthController extends Controller
     {
         $this->auth = new Auth();
         parent::__construct();
-        $this->registerMiddleware(new AuthMiddleware(['profile', 'register', 'logout']));
+        $this->registerMiddleware(new AuthMiddleware());
     }
 
     public function login(Request $request): View

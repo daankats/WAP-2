@@ -15,7 +15,7 @@ class AdminController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->registerMiddleware(new AdminMiddleware(['create', 'edit', 'update', 'delete']));
+        $this->registerMiddleware(new AdminMiddleware());
     }
 
     public function index()

@@ -10,6 +10,6 @@ class EnrollmentController extends Controller
 {
     public function __construct()
     {
-        $this->registerMiddleware(new EnrollmentMiddleware(['enroll']));
+        $this->registerMiddleware(new EnrollmentMiddleware());
     }
 }

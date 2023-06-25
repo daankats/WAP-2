@@ -49,5 +49,4 @@ class EnrollmentModel extends DbModel
             'status' => 'Status'
         ];
     }
-
 }

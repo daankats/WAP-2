@@ -15,7 +15,5 @@ class HomeController extends Controller
         } else {
             $this->view->render('home', [], 'main');
         }
-       
     }
 }
-

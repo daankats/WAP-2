@@ -6,7 +6,7 @@ use app\database\DbModel;
 use app\utils\Validation;
 
 
-class RegisterModel extends DbModel 
+class RegisterModel extends DbModel
 {
     public int $id = 0;
     public int $student_id = 0;
@@ -42,21 +42,21 @@ class RegisterModel extends DbModel
             'student_id' => 'Student ID'
         ];
     }
-    
 
-//    public static function findAllObjectsByStudentId($student_id): array
-//    {
-//        $db = self::getDb();
-//        $sql = "SELECT * FROM registrations WHERE student_id = :student_id";
-//        $statement = $db->prepare($sql);
-//        $statement->bindValue(':student_id', $student_id);
-//        $statement->execute();
-//        $users = [];
-//        while ($row = $statement->fetchObject(static::class)) {
-//            $users[] = $row;
-//        }
-//        return $users;
-//    }
+
+    //    public static function findAllObjectsByStudentId($student_id): array
+    //    {
+    //        $db = self::getDb();
+    //        $sql = "SELECT * FROM registrations WHERE student_id = :student_id";
+    //        $statement = $db->prepare($sql);
+    //        $statement->bindValue(':student_id', $student_id);
+    //        $statement->execute();
+    //        $users = [];
+    //        while ($row = $statement->fetchObject(static::class)) {
+    //            $users[] = $row;
+    //        }
+    //        return $users;
+    //    }
 
     public static function findAllObjectsByExamId($exam_id): array
     {

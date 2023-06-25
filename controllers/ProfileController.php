@@ -13,7 +13,7 @@ class ProfileController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->registerMiddleware(new AuthMiddleware(['index']));
+        $this->registerMiddleware(new AuthMiddleware());
     }
     public function index()
     {

@@ -18,7 +18,7 @@ class CourseController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->registerMiddleware(new CourseMiddleware(['create', 'edit', 'update', 'delete']));
+        $this->registerMiddleware(new CourseMiddleware());
     }
 
     public function index()

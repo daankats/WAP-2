@@ -54,4 +54,3 @@ class Request
         return $_GET;
     }
 }
-

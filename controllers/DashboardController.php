@@ -14,7 +14,7 @@ class DashboardController extends Controller
     {
         $this->auth = new Auth();
         parent::__construct();
-        $this->registerMiddleware(new AuthMiddleware(['index']));
+        $this->registerMiddleware(new AuthMiddleware());
     }
     public function index()
     {
@@ -22,4 +22,3 @@ class DashboardController extends Controller
         $this->view->render('dashboard', [], 'auth');
     }
 }
-

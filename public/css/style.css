@@ -1,48 +1,47 @@
 /*buttons*/
 
 .custom-nav-links .nav-link {
-    font-size: 1.1em;
-    font-weight: 600;
-    border-radius: 3px;
-    transition: all 0.3s ease-in-out;
-    margin: 5px;
-    background-color: orange;
-
+  font-size: 1.1em;
+  font-weight: 600;
+  border-radius: 3px;
+  transition: all 0.3s ease-in-out;
+  margin: 5px;
+  background-color: orange;
 }
 
 .custom-nav-links .nav-link.active {
-    background-color: grey;
+  background-color: grey;
 }
 .custom-nav-links .nav-link:hover {
-    font-size: 1.1em;
-    font-weight: 600;
-    border-radius: 3px;
-    transition: all 0.3s ease-in-out;
-    margin: 5px;
-    background-color: grey;
+  font-size: 1.1em;
+  font-weight: 600;
+  border-radius: 3px;
+  transition: all 0.3s ease-in-out;
+  margin: 5px;
+  background-color: grey;
 }
-.custom-nav-links .nav-link{
-    color: white !important;
+.custom-nav-links .nav-link {
+  color: white !important;
 }
-.custom-nav-links .nav-link:hover{
-    color: white !important;
+.custom-nav-links .nav-link:hover {
+  color: white !important;
 }
 
-.custom-box{
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: white;
+.custom-box {
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: white;
 }
-.custom-menu{
-    border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 10px;
-    background-color: white;
+.custom-menu {
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+  background-color: white;
 }
-.nav{
-    padding: 20px;
+.nav {
+  padding: 20px;
 }
-.alert{
-    margin: 20px;
+.alert {
+  margin: 20px;
 }

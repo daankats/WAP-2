@@ -60,6 +60,4 @@ class Database implements DatabaseConnection
 
         return null;
     }
-
-   
 }
