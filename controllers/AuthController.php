@@ -8,7 +8,7 @@ use app\core\Response;
 use app\core\View;
 use app\models\UserModel;
 use app\models\LoginModel;
-use app\core\middlewares\AuthMiddleware;
+use app\core\Middlewares\AuthMiddleware;
 use app\core\Auth;
 use app\core\App;
 
@@ -40,7 +40,7 @@ class AuthController extends Controller
             }
         }
 
-        $this->view->title = 'Inloggen'; // Set the title
+        $this->view->title = 'Inloggen';
         $this->view->render('login', [
             'model' => $loginModel,
             'errorMessage' => $errorMessage,

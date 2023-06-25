@@ -5,7 +5,7 @@ namespace app\controllers;
 use app\core\App;
 use app\core\Auth;
 use app\core\Controller;
-use app\core\middlewares\AdminMiddleware;
+use app\core\Middlewares\AdminMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\models\UserModel;

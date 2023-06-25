@@ -4,7 +4,7 @@ namespace app\controllers;
 
 
 use app\core\Controller;
-use app\core\middlewares\EnrollmentMiddleware;
+use app\core\Middlewares\EnrollmentMiddleware;
 
 class EnrollmentController extends Controller
 {

@@ -7,7 +7,7 @@ use app\core\Auth;
 use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
-use app\core\middlewares\CourseMiddleware;
+use app\core\Middlewares\CourseMiddleware;
 use app\models\CourseModel;
 use app\models\EnrollmentModel;
 use app\models\UserModel;

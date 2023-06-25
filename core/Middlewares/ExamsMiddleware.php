@@ -3,7 +3,7 @@
 namespace app\core\Middlewares;
 
 use app\core\Auth;
-use app\core\middlewares\BaseMiddleware;
+use app\core\Middlewares\BaseMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\core\exception\ForbiddenException;

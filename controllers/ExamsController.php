@@ -11,7 +11,7 @@ use app\models\CourseModel;
 use app\models\EnrollmentModel;
 use app\models\ExamsModel;
 use app\models\UserModel;
-use app\core\middlewares\ExamsMiddleware;
+use app\core\Middlewares\ExamsMiddleware;
 use app\models\GradesModel;
 use app\models\RegisterModel;
 
