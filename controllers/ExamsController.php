@@ -5,15 +5,16 @@ namespace app\controllers;
 use app\core\App;
 use app\core\Auth;
 use app\core\Controller;
+use app\core\middlewares\ExamsMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\models\CourseModel;
 use app\models\EnrollmentModel;
 use app\models\ExamsModel;
-use app\models\UserModel;
-use app\core\Middlewares\ExamsMiddleware;
 use app\models\GradesModel;
 use app\models\RegisterModel;
+use app\models\UserModel;
+use Exception;
 
 class ExamsController extends Controller
 {
@@ -86,7 +87,7 @@ class ExamsController extends Controller
         $exam = ExamsModel::findOne(['id' => $id]);
 
         if ($exam === null) {
-            $exception = new \Exception("Examen niet gevonden.");
+            $exception = new Exception("Examen niet gevonden.");
             $this->view->render('/_error', [], $exception);
             return;
         }
@@ -94,34 +95,6 @@ class ExamsController extends Controller
         $this->view->render('/exams/edit', [
             'model' => $exam,
         ], 'auth');
-    }
-
-    public function update(Request $request, Response $response)
-    {
-        $id = $request->getQueryParams()['id'] ?? null;
-
-        if ($id === null) {
-            echo "id is null";
-            return;
-        }
-
-        $exam = ExamsModel::findOne(['id' => $id]);
-
-        if ($exam === null) {
-            $exception = new \Exception("Examen niet gevonden.");
-            $this->view->render('/_error', ['exception' => $exception]);
-            return;
-        }
-
-        $exam->loadData($request->getBody());
-
-        if ($exam->validate() && $exam->update()) {
-            App::$app->session->setFlash('success', 'Examen succesvol bijgewerkt.');
-            $response->redirect('/exams');
-        } else {
-            $exception = new \Exception("Kan het examen niet bijwerken.");
-            $this->view->render('/_error', ['exception' => $exception]);
-        }
     }
 
     public function registerExam()
@@ -252,7 +225,7 @@ class ExamsController extends Controller
         var_dump($_POST);
 
         if (!$grade) {
-            throw new \Exception('Beoordeling niet gevonden');
+            throw new Exception('Beoordeling niet gevonden');
         }
 
         $grade->loadData($request->getBody());
@@ -266,5 +239,33 @@ class ExamsController extends Controller
 
         header('Location: /exams/addgrades?id=' . $grade->exam_id);
         exit;
+    }
+
+    public function update(Request $request, Response $response)
+    {
+        $id = $request->getQueryParams()['id'] ?? null;
+
+        if ($id === null) {
+            echo "id is null";
+            return;
+        }
+
+        $exam = ExamsModel::findOne(['id' => $id]);
+
+        if ($exam === null) {
+            $exception = new Exception("Examen niet gevonden.");
+            $this->view->render('/_error', ['exception' => $exception]);
+            return;
+        }
+
+        $exam->loadData($request->getBody());
+
+        if ($exam->validate() && $exam->update()) {
+            App::$app->session->setFlash('success', 'Examen succesvol bijgewerkt.');
+            $response->redirect('/exams');
+        } else {
+            $exception = new Exception("Kan het examen niet bijwerken.");
+            $this->view->render('/_error', ['exception' => $exception]);
+        }
     }
 }

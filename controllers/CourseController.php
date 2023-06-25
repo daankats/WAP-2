@@ -5,13 +5,14 @@ namespace app\controllers;
 use app\core\App;
 use app\core\Auth;
 use app\core\Controller;
+use app\core\middlewares\CourseMiddleware;
 use app\core\Request;
 use app\core\Response;
-use app\core\Middlewares\CourseMiddleware;
 use app\models\CourseModel;
 use app\models\EnrollmentModel;
-use app\models\UserModel;
 use app\models\ExamsModel;
+use app\models\UserModel;
+use Exception;
 
 class CourseController extends Controller
 {
@@ -89,7 +90,7 @@ class CourseController extends Controller
         $course = CourseModel::findOne(['id' => $id]);
 
         if ($course === null) {
-            $exception = new \Exception("Cursus niet gevonden.");
+            $exception = new Exception("Cursus niet gevonden.");
             $this->view->render('/_error', [], $exception);
             return;
         }
@@ -111,7 +112,7 @@ class CourseController extends Controller
         $course = CourseModel::findOne(['id' => $id]);
 
         if ($course === null) {
-            $exception = new \Exception("Cursus niet gevonden.");
+            $exception = new Exception("Cursus niet gevonden.");
             $this->view->render('/_error', ['exception' => $exception]);
             return;
         }
@@ -122,34 +123,9 @@ class CourseController extends Controller
             App::$app->session->setFlash('success', 'Cursus succesvol bijgewerkt.');
             $response->redirect('/courses');
         } else {
-            $exception = new \Exception("Het bijwerken van de cursus is mislukt.");
+            $exception = new Exception("Het bijwerken van de cursus is mislukt.");
             $this->view->render('/_error', ['exception' => $exception]);
         }
-    }
-
-    public function delete(Request $request, Response $response)
-    {
-        $courseId = $request->getBody()['id'];
-        $course = CourseModel::findOne(['id' => $courseId]);
-
-        if (Auth::isTeacher() || Auth::isAdmin()) {
-            $associatedExam = ExamsModel::findOne(['course_id' => $courseId]);
-
-            if ($associatedExam) {
-                App::$app->session->setFlash('error', 'Er is een examen gekoppeld aan deze cursus. Verwijder eerst het examen.');
-            } else {
-                if ($course->delete()) {
-                    App::$app->session->setFlash('success', 'Cursus succesvol verwijderd.');
-                    $response->redirect('/courses');
-                    return;
-                } else {
-                    App::$app->session->setFlash('error', 'Verwijderen mislukt. Probeer het opnieuw.');
-                }
-            }
-        } else {
-            App::$app->session->setFlash('error', 'Je hebt geen toegang tot deze pagina.');
-        }
-        $response->redirect('/courses');
     }
 
     public function enroll(Request $request, Response $response)
@@ -178,5 +154,30 @@ class CourseController extends Controller
         } else {
             $response->setStatusCode(500);
         }
+    }
+
+    public function delete(Request $request, Response $response)
+    {
+        $courseId = $request->getBody()['id'];
+        $course = CourseModel::findOne(['id' => $courseId]);
+
+        if (Auth::isTeacher() || Auth::isAdmin()) {
+            $associatedExam = ExamsModel::findOne(['course_id' => $courseId]);
+
+            if ($associatedExam) {
+                App::$app->session->setFlash('error', 'Er is een examen gekoppeld aan deze cursus. Verwijder eerst het examen.');
+            } else {
+                if ($course->delete()) {
+                    App::$app->session->setFlash('success', 'Cursus succesvol verwijderd.');
+                    $response->redirect('/courses');
+                    return;
+                } else {
+                    App::$app->session->setFlash('error', 'Verwijderen mislukt. Probeer het opnieuw.');
+                }
+            }
+        } else {
+            App::$app->session->setFlash('error', 'Je hebt geen toegang tot deze pagina.');
+        }
+        $response->redirect('/courses');
     }
 }

@@ -2,11 +2,10 @@
 
 namespace app\controllers;
 
-use app\core\Controller;
-use app\core\Middlewares\AuthMiddleware;
-use app\core\Request;
-use app\models\UserModel;
 use app\core\App;
+use app\core\Controller;
+use app\core\middlewares\AuthMiddleware;
+use app\models\UserModel;
 
 class ProfileController extends Controller
 {
@@ -15,6 +14,7 @@ class ProfileController extends Controller
         parent::__construct();
         $this->registerMiddleware(new AuthMiddleware());
     }
+
     public function index()
     {
         $user = UserModel::findOne(['id' => App::$app->user->id]);

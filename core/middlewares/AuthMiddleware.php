@@ -1,9 +1,8 @@
 <?php
 
-namespace app\core\Middlewares;
+namespace app\core\middlewares;
 
 use app\core\Auth;
-use app\core\exception\ForbiddenException;
 use app\core\Request;
 use app\core\Response;
 

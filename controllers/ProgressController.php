@@ -2,13 +2,12 @@
 
 namespace app\controllers;
 
-use app\core\Controller;
-use app\core\Middlewares\AuthMiddleware;
-use app\core\Middlewares\CourseMiddleware;
-use app\models\GradesModel;
-use app\models\ExamsModel;
-use app\models\UserModel;
 use app\core\App;
+use app\core\Controller;
+use app\core\middlewares\AuthMiddleware;
+use app\models\ExamsModel;
+use app\models\GradesModel;
+use app\models\UserModel;
 
 class ProgressController extends Controller
 {
@@ -17,6 +16,7 @@ class ProgressController extends Controller
         parent::__construct();
         $this->registerMiddleware(new AuthMiddleware());
     }
+
     public function myProgress()
     {
         $user = UserModel::findOne(['id' => App::$app->user->id]);

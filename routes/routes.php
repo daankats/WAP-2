@@ -1,18 +1,17 @@
 <?php
 
-use app\core\App;
-use app\controllers\HomeController;
-use app\controllers\AuthController;
 use app\controllers\AdminController;
+use app\controllers\AuthController;
 use app\controllers\CourseController;
-use app\controllers\ProfileController;
-use app\controllers\ExamsController;
-use app\controllers\ProgressController;
 use app\controllers\DashboardController;
-use app\core\Middlewares\AuthMiddleware;
-use app\core\Middlewares\ExamsMiddleware;
-use app\core\Middlewares\AdminMiddleware;
-use app\core\Middlewares\CourseMiddleware;
+use app\controllers\ExamsController;
+use app\controllers\HomeController;
+use app\controllers\ProfileController;
+use app\controllers\ProgressController;
+use app\core\middlewares\AdminMiddleware;
+use app\core\middlewares\AuthMiddleware;
+use app\core\middlewares\CourseMiddleware;
+use app\core\middlewares\ExamsMiddleware;
 
 // SITE
 $app->router->get('/', [HomeController::class, 'index']);

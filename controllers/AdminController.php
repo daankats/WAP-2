@@ -5,10 +5,11 @@ namespace app\controllers;
 use app\core\App;
 use app\core\Auth;
 use app\core\Controller;
-use app\core\Middlewares\AdminMiddleware;
+use app\core\middlewares\AdminMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\models\UserModel;
+use Exception;
 
 class AdminController extends Controller
 {
@@ -37,7 +38,7 @@ class AdminController extends Controller
         }
 
         if ($user === null) {
-            $exception = new \Exception("Gebruiker niet gevonden.");
+            $exception = new Exception("Gebruiker niet gevonden.");
             $this->view->render('/_error', [], $exception);
             return;
         }
@@ -60,7 +61,7 @@ class AdminController extends Controller
         $user = UserModel::findOne(['id' => $id]);
 
         if ($user === null) {
-            $exception = new \Exception("Gebruiker niet gevonden.");
+            $exception = new Exception("Gebruiker niet gevonden.");
             $this->view->render('/_error', ['exception' => $exception]);
             return;
         }
@@ -78,7 +79,7 @@ class AdminController extends Controller
             $response->redirect('/admin');
         } else {
             App::$app->session->setFlash('error', 'Kon de gebruiker niet bijwerken.');
-            $exception = new \Exception("Kon de gebruiker niet bijwerken.");
+            $exception = new Exception("Kon de gebruiker niet bijwerken.");
             $this->view->render('/_error', ['exception' => $exception]);
         }
     }
@@ -87,7 +88,7 @@ class AdminController extends Controller
     {
         $id = $request->getBody()['id'] ?? null;
         if (!$id) {
-            throw new \Exception("ID is verplicht");
+            throw new Exception("ID is verplicht");
         }
 
         $userModel = new UserModel();

@@ -2,15 +2,15 @@
 
 namespace app\controllers;
 
+use app\core\App;
+use app\core\Auth;
 use app\core\Controller;
+use app\core\middlewares\AuthMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\core\View;
-use app\models\UserModel;
 use app\models\LoginModel;
-use app\core\Middlewares\AuthMiddleware;
-use app\core\Auth;
-use app\core\App;
+use app\models\UserModel;
 
 
 class AuthController extends Controller

@@ -1,12 +1,11 @@
 <?php
 
-namespace app\core\Middlewares;
+namespace app\core\middlewares;
 
 use app\core\Auth;
-use app\core\Middlewares\BaseMiddleware;
+use app\core\exception\ForbiddenException;
 use app\core\Request;
 use app\core\Response;
-use app\core\exception\ForbiddenException;
 
 class ExamsMiddleware extends BaseMiddleware
 {
@@ -20,9 +19,9 @@ class ExamsMiddleware extends BaseMiddleware
             return null;
         } elseif (Auth::isGuest()) {
             throw new ForbiddenException();
-        }else{
+        } else {
             throw new ForbiddenException();
-        }  
+        }
 
     }
 }

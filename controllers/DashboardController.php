@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\core\Auth;
 use app\core\Controller;
-use app\core\Middlewares\AuthMiddleware;
+use app\core\middlewares\AuthMiddleware;
 
 class DashboardController extends Controller
 {
@@ -16,6 +16,7 @@ class DashboardController extends Controller
         parent::__construct();
         $this->registerMiddleware(new AuthMiddleware());
     }
+
     public function index()
     {
         $this->view->title = 'Dashboard';
