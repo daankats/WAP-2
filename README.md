@@ -28,6 +28,18 @@ Zorg dat PHP en mysql is geinstalleerd
 1. Zorg ervoor dat de apache rewrite module is ingeschakeld.
 2. Zorg ervoor dat de apache vhost is ingesteld op de public folder van het project.
 
+
+### Runnen
+1. Zorg ervoor dat de apache server is gestart.
+2. Zorg ervoor dat de mysql server is gestart.
+3. Zorg ervoor dat de .env file is aangemaakt en de variabelen zijn ingevuld.
+4. Zorg ervoor dat de composer vendor map is aangemaakt.
+5. Zorg ervoor dat de database is aangemaakt en de database.sql is geimporteerd.
+6. Zorg ervoor dat de apache vhost is ingesteld op de public folder van het project.
+7. Ga naar de url van de apache vhost.
+
+Of gebruik php -S localhost:8080 in the terminal in public map van het project.
+
 ## Test Accounts 
 ### Admin
 Email: admin@admin.nl
