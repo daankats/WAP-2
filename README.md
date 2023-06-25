@@ -17,6 +17,9 @@ DB_PASS=database_password
 
 5. Pas de variabelen aan naar de juiste waarden.
 
+## Composer install/update
+Zorg dat je composer update gebruikt om de benodige vendor map aan te maken
+
 ## Setup Apache ( Niet altijd nodig )
 1. Zorg ervoor dat de apache rewrite module is ingeschakeld.
 2. Zorg ervoor dat de apache vhost is ingesteld op de public folder van het project.
